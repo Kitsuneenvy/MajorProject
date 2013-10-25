@@ -1,0 +1,343 @@
+using UnityEngine;
+using System.Collections;
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+public class MissionReader : MonoBehaviour {
+	
+	//A star gameobject
+	AstarPath aStarGrid;
+	
+	//holds current position of the astar grid
+	Vector3 currentPosition; 
+	
+	//whether new mission
+	bool newMission = true;
+	
+	//which mission to be created
+	bool tutorial = false;
+	bool mission1 = true;
+	bool mission2 = false;
+	public bool mission3 = false;
+	public bool mission4 = false;
+	public bool mission5 = false;
+	public bool flipped = false;
+	
+	//has file been read and positions assigned
+	bool layoutCompleted = false;
+	
+	//name of text file containing mission data
+	string textFileName = "";
+	
+	//holds lines from text file
+	List<string> fileLines = new List<string>();
+	
+	//holds unit variables
+	List<int> unitInfo = new List<int>();
+	
+	//main camera object
+	public GameObject mainCamera;
+	
+	int counter = 0;
+	
+	//Holds Units
+	GameObject tempUnit = null;
+	
+	//holds temporary vector of gridSquare for unit to be placed on
+	Vector3 tempPosition;
+	
+	// Use this for initialization
+	void Start () {
+		if(Application.loadedLevelName == "Tutorial"){
+			tutorial = true;
+			mission1 = false;
+		}
+		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+		if(newMission == true)
+		{
+			newMission = false;
+			layoutCompleted = false;
+			Read();
+			
+		}
+		if(Input.GetKeyDown(KeyCode.A))
+		{
+			newMission = true;
+			if(counter == 1)
+			{
+				mission2 = true;
+			}
+			if(counter == 2)
+			{
+				mission3 = true;
+			}
+			if(counter == 3)
+			{
+				mission4 = true;
+			}
+			if(counter == 4)
+			{
+				mission5 = true;
+			}
+			layoutCompleted = false;
+		}
+		
+	}
+	
+	void Read()
+	{
+		layoutCompleted = false;
+		//mission number
+		if(mission1)
+		{
+			//location of mission data
+			textFileName = "Assets/MissionFiles/Mission1.mis";
+			
+			//set new mission to false
+			mission1 = false;
+			newMission = false;
+			counter++;
+		}
+		if(mission2)
+		{
+			textFileName = "Assets/MissionFiles/Mission2.mis";
+			
+			//set new mission to false
+			mission2 = false;
+			newMission = false;
+			
+			counter++;
+		}
+		if(mission3)
+		{
+			textFileName = "Assets/MissionFiles/Mission3.mis";
+			
+			//set new mission to false
+			newMission = false;
+
+			counter++;
+		}
+		if(mission4)
+		{
+			textFileName = "Assets/MissionFiles/Mission4.mis";
+			
+			//set new mission to false
+			newMission = false;
+			
+			
+			counter++;
+		}
+		if(mission5)
+		{
+			textFileName = "Assets/MissionFiles/Mission5.mis";
+			
+			//set new mission to false
+			newMission = false;
+			
+		}
+		if(tutorial){
+			textFileName = "Assets/MissionFiles/Tutorial.mis";
+		}
+		
+		//create streamreader
+		StreamReader reader = new StreamReader(textFileName);
+		
+		
+		int lineCounter = 0;
+		
+		//set current position
+		currentPosition = aStarGrid.transform.position;
+		
+		//go through and add all lines from file to list
+		foreach(string line in File.ReadAllLines(textFileName))
+		{
+			fileLines.Add(line);
+			lineCounter++;
+		}
+		for(int i = 0; i<fileLines.Count; i++)
+		{
+			if(fileLines[i].Contains("-G"))
+			{
+				int counter = i;
+				
+				//set positions x,y,z
+				currentPosition.x = int.Parse(fileLines[counter+1]);
+				currentPosition.y = int.Parse(fileLines[counter+2]);
+				currentPosition.z = int.Parse(fileLines[counter+3]);
+				//move graph
+				aStarGrid.astarData.gridGraph.center = currentPosition;
+				//move collider
+				aStarGrid.transform.position = currentPosition;
+				//set node width and depth
+				aStarGrid.astarData.gridGraph.width = int.Parse(fileLines[counter+4]);
+				aStarGrid.astarData.gridGraph.depth = int.Parse(fileLines[counter+5]);
+				if(mission3)
+				{
+					aStarGrid.astarData.gridGraph.rotation.y = 13;
+					mission3 = false;
+				}
+				if(mission4)
+				{
+					aStarGrid.astarData.gridGraph.rotation.y = 155;
+					mission4 = false;
+					flipped = true;
+				}
+				if(mission5)
+				{
+					aStarGrid.astarData.gridGraph.rotation.y = 180;
+					mission5 = false;
+				}
+				aStarGrid.astarData.gridGraph.UpdateSizeFromWidthDepth();
+				aStarGrid.astarData.gridGraph.Scan();
+			}
+			if(fileLines[i].Contains("-Pre="))
+			{
+				//pre battle text
+				string pre = fileLines[i].ToString();
+				pre.Substring(5,pre.Length-5);
+			}
+			if(fileLines[i].Contains("-Post="))
+			{
+				//post battle text
+				string post = fileLines[i].ToString();
+				post.Substring(6,post.Length-6);
+			}
+			
+			//layout completed
+			layoutCompleted = true;
+			mainCamera.GetComponent<CameraMovement>().moveCamera = true;
+				
+			}
+		}
+	
+	//returns newMission true/false
+	public bool returnNewMission()
+	{
+		return newMission;
+	}
+	
+	//returns layoutCompleted true/false
+	public bool returnLayoutCompleted()
+	{
+		return layoutCompleted;
+	}
+	
+	void CalculateGridPosition()
+	{
+		//total X * (Yc - 1) + Xc
+		int gridSquareNumber = aStarGrid.astarData.gridGraph.width * (unitInfo[2] - 1) + unitInfo[1];
+		tempPosition = tempUnit.transform.position;
+		tempPosition.x = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.x;
+		tempPosition.z = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.z;
+		tempPosition.y = 60;
+		tempUnit.transform.position = tempPosition;
+		//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
+		tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
+		tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
+		tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
+		//clear unit info
+		unitInfo.Clear();
+		tempUnit = null;
+	}
+	
+	public void PositionUnits()
+	{
+		//iterator for unit type, positions and allegiance
+		int splitLineIterator = 0;
+		
+		for(int i = 0; i<fileLines.Count; i++)
+		{
+			if(fileLines[i].Contains("+U"))
+				{
+					//set unit positions
+					for(int j = i+1; j <fileLines.Count;j++)
+					{
+						string[] splitLine = fileLines[j].Split(new string[] {"(",",",")"},System.StringSplitOptions.RemoveEmptyEntries);
+						
+						foreach(string line in splitLine)
+						{
+							if(!line.Contains("(") && !line.Contains(",") && !line.Contains(")"))
+							{
+								splitLineIterator++;
+								
+								unitInfo.Add(int.Parse(line));
+								
+								if(splitLineIterator == 4)
+								{
+									//if unit friendly
+									if(unitInfo[3] == 0)
+									{
+										if(unitInfo[0] == 0)//speed
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "PlayerUnit";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 1)//attack
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "PlayerUnit";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 2)//defence
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "PlayerUnit";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 3)//healer
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "PlayerUnit";
+											CalculateGridPosition();
+										}
+									}
+									//if unit enemy
+									else if(unitInfo[3]== 1)
+									{
+										if(unitInfo[0] == 0)//speed
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "Enemy";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 1)//attack
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "Enemy";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 2)//defence
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "Enemy";
+											CalculateGridPosition();
+										}
+										else if(unitInfo[0] == 3)//healer
+										{
+											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+											tempUnit.tag = "Enemy";
+											CalculateGridPosition();
+										}
+									}
+									
+									//reset iterator
+									splitLineIterator = 0;
+									unitInfo.Clear();
+								}
+							}
+							
+						}
+					}
+					//clear list
+					fileLines.Clear();
+			}
+		}
+	}
+}
