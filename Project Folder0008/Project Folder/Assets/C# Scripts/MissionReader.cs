@@ -71,18 +71,34 @@ public class MissionReader : MonoBehaviour {
 			newMission = true;
 			if(counter == 1)
 			{
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
 				mission2 = true;
 			}
 			if(counter == 2)
 			{
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
 				mission3 = true;
 			}
 			if(counter == 3)
 			{
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
 				mission4 = true;
 			}
 			if(counter == 4)
 			{
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
 				mission5 = true;
 			}
 			layoutCompleted = false;
@@ -145,9 +161,6 @@ public class MissionReader : MonoBehaviour {
 			textFileName = "Assets/MissionFiles/Tutorial.mis";
 		}
 		
-		//create streamreader
-		StreamReader reader = new StreamReader(textFileName);
-		
 		
 		int lineCounter = 0;
 		
@@ -184,7 +197,7 @@ public class MissionReader : MonoBehaviour {
 				}
 				if(mission4)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 155;
+					aStarGrid.astarData.gridGraph.rotation.y = 145;
 					mission4 = false;
 					flipped = true;
 				}
@@ -209,11 +222,11 @@ public class MissionReader : MonoBehaviour {
 				post.Substring(6,post.Length-6);
 			}
 			
-			//layout completed
+			}
+		//layout completed
 			layoutCompleted = true;
 			mainCamera.GetComponent<CameraMovement>().moveCamera = true;
 				
-			}
 		}
 	
 	//returns newMission true/false

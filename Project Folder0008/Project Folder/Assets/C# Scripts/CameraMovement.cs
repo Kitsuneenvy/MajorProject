@@ -50,8 +50,8 @@ public class CameraMovement : MonoBehaviour {
 		//	{
 				xLeft = (int)astarPath.astarData.gridGraph.center.x - 27;
 				xRight = (int)astarPath.astarData.gridGraph.center.x + 27;
-				zFront = (int)astarPath.astarData.gridGraph.center.z + (((int)astarPath.astarData.gridGraph.depth * 5)/2) -3;
-				zBack = (int)astarPath.astarData.gridGraph.center.z - (((int)astarPath.astarData.gridGraph.depth * 5)/2) - 9;
+				zFront = (int)astarPath.astarData.gridGraph.center.z + (((int)astarPath.astarData.gridGraph.depth * 5)/2) -5;
+				zBack = (int)astarPath.astarData.gridGraph.center.z - (((int)astarPath.astarData.gridGraph.depth * 5)/2) - 5;
 		//	}
 			
 			
@@ -60,47 +60,57 @@ public class CameraMovement : MonoBehaviour {
 		
 		//Move camera as long as no drop down menu is created
 		if(!dropDownMenuObject.cameraLock){
-			//moves camera left
-		if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x > xLeft ){
-
-			this.transform.Translate(Vector3.left);		
-		}
-			//moves camera right
-		if(Input.mousePosition.x>=Screen.width-Screen.width/50 && this.transform.position.x < xRight){
-			
-			this.transform.Translate(Vector3.right);
-		}
-			//moves camera down
-		if(Input.mousePosition.y<=Screen.height/50 && this.transform.position.z > zBack){
-				
-				if(missionReader.flipped)
-				{
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,1)));
+			if(!missionReader.flipped){
+				//moves camera left
+				if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x > xLeft ){
+		
+					this.transform.Translate(Vector3.left);		
 				}
-				else
-				{
+					//moves camera right
+				if(Input.mousePosition.x>=Screen.width-Screen.width/50 && this.transform.position.x < xRight){
+					
+					this.transform.Translate(Vector3.right);
+				}
+					//moves camera down
+				if(Input.mousePosition.y<=Screen.height/50 && this.transform.position.z > zBack){
+						
 					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-1)));
 				}
-			
-		}
-			//moves camera up
-		if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z < zFront ){
-				
-				if(missionReader.flipped)
-				{
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-1)));
-				}
-				else
-				{
+					//moves camera up
+				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z < zFront ){
+						
 					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,1)));
 				}
-			
-		}
+		
+			}
+			else{
+				//moves camera left
+				if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x < (xRight + 5 )){
+		
+					this.transform.Translate(Vector3.left);		
+				}
+					//moves camera right
+				if(Input.mousePosition.x>=Screen.width-Screen.width/50 && this.transform.position.x > (xLeft - 2)){
+					
+					this.transform.Translate(Vector3.right);
+				}
+					//moves camera down
+				if(Input.mousePosition.y<=Screen.height/50 && this.transform.position.z < (zFront + 10)){
+						
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,1)));
+		
+				}
+					//moves camera up
+				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z > zBack ){
+							
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-1)));
+				}
+			}
 			//zooms in camera
 		if(Input.GetAxis("Mouse ScrollWheel")>0&&this.transform.position.y>75){
 			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.down));
 		}
-			//zooms out camrea
+			//zooms out camera
 		if(Input.GetAxis("Mouse ScrollWheel")<0&&this.transform.position.y<100){
 			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.up));
 		}
