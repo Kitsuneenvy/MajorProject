@@ -4,7 +4,9 @@ using System.Collections;
 public class Offset : MonoBehaviour {
 	float storeX = 0;
 	float storeY = 0;
-
+	
+	int count = 0;
+	
 	// Use this for initialization
 	void Start () {
 	
@@ -56,6 +58,20 @@ public class Offset : MonoBehaviour {
 		if(name == "NextButton"){
 			this.transform.localScale = new Vector3(GameObject.Find("NarrativePanel").transform.localScale.y/300,GameObject.Find("NarrativePanel").transform.localScale.y/300,1);
 			this.transform.localPosition = new Vector3(Screen.width/6f, -Screen.height/5,0);
+		}
+		if(name == "Objectives")
+		{
+			this.transform.localPosition = new Vector3(-Screen.width/6, -Screen.height/20,0);
+		}
+		if(name == "Checkbox")
+		{
+			this.transform.localPosition = new Vector3(-Screen.width/5, -Screen.height/10,0);
+			this.transform.FindChild("Label").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
+			if(count != 1)
+			{
+				count++;
+				Debug.Log(GameObject.Find("A*").GetComponent<MissionReader>().objective);
+			}
 		}
 	
 	}

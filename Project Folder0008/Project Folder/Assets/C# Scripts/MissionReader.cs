@@ -24,6 +24,7 @@ public class MissionReader : MonoBehaviour {
 	public bool mission5 = false;
 	public bool flipped = false;
 	public bool rotate = false;
+	public string objective = "";
 	int rotationY = 0; //how much to rotate enemies by
 	
 	//has file been read and positions assigned
@@ -59,6 +60,7 @@ public class MissionReader : MonoBehaviour {
 			mission1 = false;
 		}
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
+		objective = "Kill All Enemies";
 	}
 	
 	// Update is called once per frame
@@ -72,10 +74,11 @@ public class MissionReader : MonoBehaviour {
 			
 		}
 		if(Input.GetKeyDown(KeyCode.A))
-		{
+		{	
 			newMission = true;
 			if(counter == 1)
 			{
+				objective = "Reach one tile \n right of fence";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
 				aStarGrid.Scan();
@@ -84,6 +87,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			if(counter == 2)
 			{
+				objective = "Rout Enemies";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
 				aStarGrid.Scan();
@@ -92,6 +96,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			if(counter == 3)
 			{
+				objective = "Defend chef";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
 				aStarGrid.Scan();
@@ -100,6 +105,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			if(counter == 4)
 			{
+				objective = "Stop the florist \n from escaping";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
 				aStarGrid.Scan();
