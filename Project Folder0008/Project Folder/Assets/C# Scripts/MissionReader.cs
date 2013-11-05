@@ -23,6 +23,8 @@ public class MissionReader : MonoBehaviour {
 	public bool mission4 = false;
 	public bool mission5 = false;
 	public bool flipped = false;
+	public bool rotate = false;
+	int rotationY = 0; //how much to rotate enemies by
 	
 	//has file been read and positions assigned
 	bool layoutCompleted = false;
@@ -35,6 +37,9 @@ public class MissionReader : MonoBehaviour {
 	
 	//holds unit variables
 	List<int> unitInfo = new List<int>();
+	
+	//holds all units
+	List<GameObject> allUnits = new List<GameObject>();
 	
 	//main camera object
 	public GameObject mainCamera;
@@ -108,6 +113,14 @@ public class MissionReader : MonoBehaviour {
 	
 	void Read()
 	{
+		if(allUnits.Count != 0)
+		{
+			foreach(GameObject unit in allUnits)
+			{
+				Destroy(unit);
+			}
+			allUnits.Clear();
+		}
 		layoutCompleted = false;
 		//mission number
 		if(mission1)
@@ -127,7 +140,6 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission2 = false;
 			newMission = false;
-			
 			counter++;
 		}
 		if(mission3)
@@ -136,7 +148,6 @@ public class MissionReader : MonoBehaviour {
 			
 			//set new mission to false
 			newMission = false;
-
 			counter++;
 		}
 		if(mission4)
@@ -145,8 +156,6 @@ public class MissionReader : MonoBehaviour {
 			
 			//set new mission to false
 			newMission = false;
-			
-			
 			counter++;
 		}
 		if(mission5)
@@ -194,16 +203,17 @@ public class MissionReader : MonoBehaviour {
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 13;
 					mission3 = false;
+					rotate = true;
 				}
 				if(mission4)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 145;
+					aStarGrid.astarData.gridGraph.rotation.y = 325;
 					mission4 = false;
 					flipped = true;
 				}
 				if(mission5)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 180;
+					aStarGrid.astarData.gridGraph.rotation.y = 360;
 					mission5 = false;
 				}
 				aStarGrid.astarData.gridGraph.UpdateSizeFromWidthDepth();
@@ -267,89 +277,108 @@ public class MissionReader : MonoBehaviour {
 		for(int i = 0; i<fileLines.Count; i++)
 		{
 			if(fileLines[i].Contains("+U"))
+			{
+				//set unit positions
+				for(int j = i+1; j <fileLines.Count;j++)
 				{
-					//set unit positions
-					for(int j = i+1; j <fileLines.Count;j++)
+					string[] splitLine = fileLines[j].Split(new string[] {"(",",",")"},System.StringSplitOptions.RemoveEmptyEntries);
+					
+					foreach(string line in splitLine)
 					{
-						string[] splitLine = fileLines[j].Split(new string[] {"(",",",")"},System.StringSplitOptions.RemoveEmptyEntries);
-						
-						foreach(string line in splitLine)
+						if(!line.Contains("(") && !line.Contains(",") && !line.Contains(")"))
 						{
-							if(!line.Contains("(") && !line.Contains(",") && !line.Contains(")"))
-							{
-								splitLineIterator++;
-								
-								unitInfo.Add(int.Parse(line));
-								
-								if(splitLineIterator == 4)
-								{
-									//if unit friendly
-									if(unitInfo[3] == 0)
-									{
-										if(unitInfo[0] == 0)//speed
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "PlayerUnit";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 1)//attack
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "PlayerUnit";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 2)//defence
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "PlayerUnit";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 3)//healer
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "PlayerUnit";
-											CalculateGridPosition();
-										}
-									}
-									//if unit enemy
-									else if(unitInfo[3]== 1)
-									{
-										if(unitInfo[0] == 0)//speed
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "Enemy";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 1)//attack
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "Enemy";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 2)//defence
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "Enemy";
-											CalculateGridPosition();
-										}
-										else if(unitInfo[0] == 3)//healer
-										{
-											tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
-											tempUnit.tag = "Enemy";
-											CalculateGridPosition();
-										}
-									}
-									
-									//reset iterator
-									splitLineIterator = 0;
-									unitInfo.Clear();
-								}
-							}
+							splitLineIterator++;
 							
+							unitInfo.Add(int.Parse(line));
+							
+							if(splitLineIterator == 4)
+							{
+								//if unit friendly
+								if(unitInfo[3] == 0)
+								{
+									if(!flipped)
+									{
+										rotationY = 0;
+									}
+									else
+									{
+										rotationY = 180;
+									}
+									if(unitInfo[0] == 0)//speed
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "PlayerUnit";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
+									}
+									else if(unitInfo[0] == 1)//attack
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "PlayerUnit";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
+									}
+									else if(unitInfo[0] == 2)//defence
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "PlayerUnit";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
+									}
+									else if(unitInfo[0] == 3)//healer
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "PlayerUnit";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
+									}
+								}
+								//if unit enemy
+								else if(unitInfo[3]== 1)
+								{
+									if(!flipped)
+									{
+										rotationY = 180;
+									}
+									else
+									{
+										rotationY = 0;
+									}
+									if(unitInfo[0] == 0)//speed
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "Enemy";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+									}
+									else if(unitInfo[0] == 1)//attack
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "Enemy";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+									}
+									else if(unitInfo[0] == 2)//defence
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "Enemy";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+									}
+									else if(unitInfo[0] == 3)//healer
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit.tag = "Enemy";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+									}
+								}
+								//add unit to list
+								allUnits.Add(tempUnit);
+								//position the unit
+								CalculateGridPosition();
+								//reset iterator
+								splitLineIterator = 0;
+								unitInfo.Clear();
+							}
 						}
+						
 					}
-					//clear list
-					fileLines.Clear();
+				}
+				//clear list
+				fileLines.Clear();
 			}
 		}
 	}

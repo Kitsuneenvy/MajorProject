@@ -8,7 +8,7 @@ public class CameraMovement : MonoBehaviour {
 	int xRight = 0;	//right
 	int zFront = 0;	//forward
 	int zBack = 0;	//back
-	
+	int RotationY = 0;
 	MissionReader missionReader;
 	AstarPath astarPath;
 	
@@ -32,11 +32,15 @@ public class CameraMovement : MonoBehaviour {
 		//if a new mission is created
 		if(missionReader.returnLayoutCompleted() && moveCamera == true)
 		{
+			if(missionReader.flipped == true)
+			{
+				RotationY = 180;
+			}
 			//set camera position to the centre of grid
 			this.transform.position = new Vector3(astarPath.astarData.gridGraph.center.x,this.transform.position.y,astarPath.astarData.gridGraph.center.z);
 			
 			//set camera rotation to that of the grid
-			this.transform.rotation = Quaternion.Euler(new Vector3(50, astarPath.astarData.gridGraph.rotation.y, astarPath.astarData.gridGraph.rotation.z));
+			this.transform.rotation = Quaternion.Euler(new Vector3(50, astarPath.astarData.gridGraph.rotation.y + RotationY, astarPath.astarData.gridGraph.rotation.z));
 			
 			//set xleft,xright,zback and zfront
 			//if(missionReader.flipped)

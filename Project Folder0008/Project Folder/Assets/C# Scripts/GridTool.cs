@@ -92,7 +92,8 @@ public class GridTool : MonoBehaviour {
 				
 				//This is mostly debug, we will be doing this with the mission creator later
 			} else if(!missionInit){
-				if(astarGrid.GetComponent<MissionReader>().flipped==true){
+				if(astarGrid.GetComponent<MissionReader>().rotate == true){
+					Debug.Log("Running");
 					gridParent.transform.rotation = Quaternion.Euler(astarGrid.GetComponent<AstarPath>().astarData.gridGraph.rotation);
 
 				}
