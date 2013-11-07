@@ -2,9 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class BeginButton : MonoBehaviour {
-
+	public GameObject saveData;
+	
 void OnClick()
 	{
-		Application.LoadLevel("Week3");	
+		saveData.GetComponent<StoreData>().DataStorage();
+		
+		Application.LoadLevel("Week6");	
 	}
 }

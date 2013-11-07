@@ -5,7 +5,6 @@ public class Offset : MonoBehaviour {
 	float storeX = 0;
 	float storeY = 0;
 	
-	int count = 0;
 	
 	// Use this for initialization
 	void Start () {
@@ -67,11 +66,6 @@ public class Offset : MonoBehaviour {
 		{
 			this.transform.localPosition = new Vector3(-Screen.width/5, -Screen.height/10,0);
 			this.transform.FindChild("Label").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
-			if(count != 1)
-			{
-				count++;
-				Debug.Log(GameObject.Find("A*").GetComponent<MissionReader>().objective);
-			}
 		}
 	
 	}

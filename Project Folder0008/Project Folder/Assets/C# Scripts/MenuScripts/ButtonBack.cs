@@ -10,8 +10,9 @@ public class ButtonBack : MonoBehaviour {
 	public GameObject loadButton;
 	public GameObject optionsButton;
 	public GameObject exitButton;
-	//instructions menu
-	public GameObject loadText;
+	//Load Menu
+	public GameObject deleteButton;
+	public GameObject loadButton2;
 	//options menu
 	public GameObject slider;
 	public GameObject checkBox;
@@ -21,6 +22,8 @@ public class ButtonBack : MonoBehaviour {
 	public GameObject tutCheckbox;
 	public GameObject commTextField;
 	public GameObject beginButton;
+	public GameObject saveFileName;
+	public GameObject saveTextField;
 	
 	void Start()
 	{
@@ -33,9 +36,15 @@ public class ButtonBack : MonoBehaviour {
 		
 		//disable back button and text
 		this.gameObject.SetActive(false);
-		if(loadText.activeSelf == true)
+		if(loadButton2.activeSelf == true)
 		{
-			loadText.SetActive(false);
+			loadButton2.SetActive(false);
+			deleteButton.SetActive(false);
+			foreach(GameObject save in loadButton.GetComponent<ButtonLoad>().returnAutoSaves())
+			{
+				Destroy(save);
+			}
+			loadButton.GetComponent<ButtonLoad>().ClearList();
 		}
 		if(slider.activeSelf == true)
 		{
@@ -50,6 +59,8 @@ public class ButtonBack : MonoBehaviour {
 			tutCheckbox.SetActive(false);
 			commTextField.SetActive(false);
 			beginButton.SetActive(false);
+			saveFileName.SetActive(false);
+			saveTextField.SetActive(false);
 		}
 		//Enable menu buttons
 		startButton.SetActive(true);

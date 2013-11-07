@@ -8,7 +8,8 @@ public class ButtonStart : MonoBehaviour {
 	public GameObject backButton;
 	public GameObject commTextField;
 	public GameObject beginButton;
-	
+	public GameObject saveFileName;
+	public GameObject saveTextfield;
 	// Use this for initialization
 	void OnClick() {
 	
@@ -24,6 +25,8 @@ public class ButtonStart : MonoBehaviour {
 		backButton.SetActive(true);
 		commTextField.SetActive(true);
 		beginButton.SetActive(true);
+		saveFileName.SetActive(true);
+		saveTextfield.SetActive(true);
 	}
 	
 

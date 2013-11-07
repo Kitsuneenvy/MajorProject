@@ -17,7 +17,7 @@ public class MissionReader : MonoBehaviour {
 	
 	//which mission to be created
 	bool tutorial = false;
-	bool mission1 = true;
+	bool mission1 = false;
 	bool mission2 = false;
 	public bool mission3 = false;
 	public bool mission4 = false;
@@ -25,6 +25,8 @@ public class MissionReader : MonoBehaviour {
 	public bool flipped = false;
 	public bool rotate = false;
 	public string objective = "";
+	
+	string autoSavedMission = "";
 	int rotationY = 0; //how much to rotate enemies by
 	
 	//has file been read and positions assigned
@@ -32,6 +34,7 @@ public class MissionReader : MonoBehaviour {
 	
 	//name of text file containing mission data
 	string textFileName = "";
+	string autoSave = "";
 	
 	//holds lines from text file
 	List<string> fileLines = new List<string>();
@@ -44,6 +47,7 @@ public class MissionReader : MonoBehaviour {
 	
 	//main camera object
 	public GameObject mainCamera;
+	public GameObject saveData;
 	
 	int counter = 0;
 	
@@ -55,12 +59,26 @@ public class MissionReader : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
 		if(Application.loadedLevelName == "Tutorial"){
 			tutorial = true;
 			mission1 = false;
 		}
-		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
-		objective = "Kill All Enemies";
+		else{
+			objective = "Kill All Enemies";
+			if(saveData.GetComponent<StoreData>().ReturnMission() != "")
+			{
+				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
+				//get mission, set whatever mission it contains to true
+				string temp = saveData.GetComponent<StoreData>().ReturnMission();
+				
+			}
+			else
+			{
+				mission1 = true;
+			}
+		}
+			
 	}
 	
 	// Update is called once per frame
@@ -133,43 +151,63 @@ public class MissionReader : MonoBehaviour {
 		{
 			//location of mission data
 			textFileName = "Assets/MissionFiles/Mission1.mis";
-			
+			autoSave ="Assets/MissionFiles/Mission1.mis";
 			//set new mission to false
 			mission1 = false;
 			newMission = false;
-			counter++;
+			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			sw.Flush();
+			sw.WriteLine("Mission1");
+			sw.Close();
+			counter = 1;
 		}
 		if(mission2)
 		{
 			textFileName = "Assets/MissionFiles/Mission2.mis";
-			
+			autoSave = "Assets/MissionFiles/Mission2.mis";
 			//set new mission to false
 			mission2 = false;
 			newMission = false;
-			counter++;
+			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			sw.Flush();
+			sw.WriteLine("Mission2");
+			sw.Close();
+			counter = 2;
 		}
 		if(mission3)
 		{
 			textFileName = "Assets/MissionFiles/Mission3.mis";
-			
+			autoSave = "Assets/MissionFiles/Mission3.mis";
 			//set new mission to false
 			newMission = false;
-			counter++;
+			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			sw.Flush();
+			sw.WriteLine("Mission2");
+			sw.Close();
+			counter = 3;
 		}
 		if(mission4)
 		{
 			textFileName = "Assets/MissionFiles/Mission4.mis";
-			
+			autoSave = "Assets/MissionFiles/Mission4.mis";
 			//set new mission to false
 			newMission = false;
-			counter++;
+			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			sw.Flush();
+			sw.WriteLine("Mission2");
+			sw.Close();
+			counter = 4;
 		}
 		if(mission5)
 		{
 			textFileName = "Assets/MissionFiles/Mission5.mis";
-			
+			autoSave = "Assets/MissionFiles/Mission5.mis";
 			//set new mission to false
 			newMission = false;
+			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			sw.Flush();
+			sw.WriteLine("Mission2");
+			sw.Close();
 			
 		}
 		if(tutorial){
