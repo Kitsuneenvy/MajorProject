@@ -5,7 +5,7 @@ using System.IO;
 public class ButtonLoad2 : MonoBehaviour {
 	
 	string file = "";
-	string mission = "";
+	string[] mission;
 	
 	public GameObject saveData;
 	// Use this for initialization

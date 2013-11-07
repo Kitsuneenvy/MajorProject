@@ -52,9 +52,9 @@ public class StoreData : MonoBehaviour {
 		}
 	}
 	
-	public void MissionToLoad(string currentMission)
+	public void MissionToLoad(string[] currentMission)
 	{
-		mission = currentMission;
+		mission = currentMission[0];
 	}
 	
 	public string ReturnMission()

@@ -47,7 +47,7 @@ public class MissionReader : MonoBehaviour {
 	
 	//main camera object
 	public GameObject mainCamera;
-	public GameObject saveData;
+	GameObject saveData;
 	
 	int counter = 0;
 	
@@ -60,18 +60,20 @@ public class MissionReader : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
+		saveData = GameObject.Find("SaveData");
 		if(Application.loadedLevelName == "Tutorial"){
 			tutorial = true;
 			mission1 = false;
 		}
 		else{
 			objective = "Kill All Enemies";
-			if(saveData.GetComponent<StoreData>().ReturnMission() != "")
+			if(saveData.GetComponent<StoreData>().ReturnMission() != "" || saveData.GetComponent<StoreData>().ReturnMission() != null)
 			{
 				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 				//get mission, set whatever mission it contains to true
 				string temp = saveData.GetComponent<StoreData>().ReturnMission();
-				
+				//temporarily
+				mission1 = true;
 			}
 			else
 			{
@@ -155,7 +157,7 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission1 = false;
 			newMission = false;
-			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
 			sw.Flush();
 			sw.WriteLine("Mission1");
 			sw.Close();
@@ -168,7 +170,7 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission2 = false;
 			newMission = false;
-			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
 			sw.Flush();
 			sw.WriteLine("Mission2");
 			sw.Close();
@@ -180,7 +182,7 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission3.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
 			sw.Flush();
 			sw.WriteLine("Mission2");
 			sw.Close();
@@ -192,7 +194,7 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission4.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
 			sw.Flush();
 			sw.WriteLine("Mission2");
 			sw.Close();
@@ -204,7 +206,7 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission5.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = File.Open("Assets/AutoSaves/"+autoSavedMission);
+			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
 			sw.Flush();
 			sw.WriteLine("Mission2");
 			sw.Close();
