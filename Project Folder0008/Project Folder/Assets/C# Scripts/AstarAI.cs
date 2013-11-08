@@ -74,7 +74,6 @@ public class AstarAI : MonoBehaviour
 
 	public void OnPathComplete (Path p)
 	{
-		Debug.Log ("Yey, we got a path back. Did it have an error? " + p.error);
 		if (!p.error) {
 			path = p;
 			//Reset the waypoint counter
@@ -86,7 +85,7 @@ public class AstarAI : MonoBehaviour
 	{
 		
 		
-		if(Vector3.Distance(this.transform.position,targetPosition)<=1){
+		if(Vector3.Distance(this.transform.position,targetPosition)<=0.5f){
 			moveUnit=false;
 		}
 		if(!moveUnit){
@@ -101,6 +100,8 @@ public class AstarAI : MonoBehaviour
 //            Debug.Log ("End Of Path Reached");
 			//attempt at moving closer
 			//Lerp closer to location
+			
+			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
 			transform.position = Vector3.Lerp (this.transform.position, targetPosition, (1 / (Vector3.Distance (this.transform.position, targetPosition))) * 0.1f);
 			return;
 		}
@@ -113,7 +114,6 @@ public class AstarAI : MonoBehaviour
 		 if(moveUnit){
 		if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
 			this.animation.Play("WalkChef");
-			Debug.Log ("Lerp true");
 			//Lerp to location of raycasted position.z
 			this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
 				
@@ -124,7 +124,6 @@ public class AstarAI : MonoBehaviour
 			}
 		} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
 			this.animation.Play("WalkChef");
-			Debug.Log ("false");
 			//Lerp to location of raycasted position.x
 			this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 				

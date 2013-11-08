@@ -124,20 +124,17 @@ public class UnitGenerics : MonoBehaviour
 			}
 				
 		}
-		if(Input.GetKeyDown(KeyCode.A)){
-			if(tag=="Enemy"){
-			
-				AIThink();
-			}
-		}
+		
 	}
 
 	public void launchAttack (GameObject target)
 	{
 		Debug.Log("attack called");
 		setAttackState (false);
+		
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
+			GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
 			this.transform.LookAt(target.transform.position);
 			GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints--;
 			UnitGenerics targetGenerics;
@@ -191,14 +188,15 @@ public class UnitGenerics : MonoBehaviour
 		current = new Vector2 (currentX, currentY);
 		RaycastHit blockCheck;
 		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
+			if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
+						adjacentSquares.Add (testGrid);
+					}
 			if(Physics.Raycast(new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z),(this.transform.position-new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z)),out blockCheck,Mathf.Infinity,unitMask.value)){
 				if(blockCheck.collider.tag == this.tag){
 					testX = testGrid.GetComponent<Grid> ().returnXY ().x;
 					testY = testGrid.GetComponent<Grid> ().returnXY ().y;
 					test = new Vector2 (testX, testY);
-					if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
-						adjacentSquares.Add (testGrid);
-					}
+					
 					if (testX > currentX) {
 						distanceX = testX - currentX;
 					} else if (testX < currentX) {
@@ -238,8 +236,10 @@ public class UnitGenerics : MonoBehaviour
 					foreach(GameObject secondTest in checkAdjacentGrids(tile)){
 						if(currentCheckTile.GetComponent<Grid>().returnUnit()!=null&&currentCheckTile.GetComponent<Grid>().returnUnit()==this.gameObject){
 							if(tilesAway< movement){
-								if(!AIThinkSquares.Contains(secondTest)){
-									AIThinkSquares.Add(secondTest);
+								if(secondTest.GetComponent<Grid>().returnUnit()==null){
+									if(!AIThinkSquares.Contains(secondTest)){
+										AIThinkSquares.Add(secondTest);
+									}
 								}
 							}	
 						} else {
@@ -371,21 +371,14 @@ public class UnitGenerics : MonoBehaviour
 		GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(chosenTarget.GetComponent<Grid>().heldUnit.gameObject,this.gameObject,highestRating.y);
 		//for simplicity
 		Grid chosenGrid = chosenTarget.GetComponent<Grid>();
-			Debug.Log(chosenGrid.returnXY().ToString());
 		foreach(GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-		if ((chosenGrid.returnXY ().x + 1 == testGrid.GetComponent<Grid> ().returnXY ().x
-				&& (chosenGrid.returnXY ().y == testGrid.GetComponent<Grid> ().returnXY ().y))
-				|| (chosenGrid.returnXY ().x == testGrid.GetComponent<Grid> ().returnXY ().x)
-				&& (chosenGrid.returnXY ().y + 1 == testGrid.GetComponent<Grid> ().returnXY ().y
-				|| chosenGrid.returnXY ().y - 1 == testGrid.GetComponent<Grid> ().returnXY ().y)
-				|| (chosenGrid.returnXY ().x - 1 == testGrid.GetComponent<Grid> ().returnXY ().x
-				&& (chosenGrid.returnXY ().y == testGrid.GetComponent<Grid> ().returnXY ().y))) {
+		if (checkAdjacentGrids(chosenGrid.gameObject).Contains(testGrid)) {
 				AITargetAdjacent.Add (testGrid);
 			}
 		}
 		} else if(AIThinkSquares.Count==0){
 			GameObject temporary = null;
-			float shortestDis = 999;
+			float shortestDis = Mathf.Infinity;
 			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
 					maxMove.Add(square);
 			}

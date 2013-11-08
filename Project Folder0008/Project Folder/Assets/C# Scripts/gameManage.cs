@@ -7,6 +7,7 @@ public class gameManage : MonoBehaviour {
 	MissionReader mReaderObject;
 	
 	bool missionOne = true;
+	bool turnEnded = false;
 	
 	GameObject temp;
 	GameObject NarrativeAnchorObject;
@@ -26,6 +27,7 @@ public class gameManage : MonoBehaviour {
 	
 	public LayerMask gridMask;
 	public LayerMask astarMask;
+	public GameObject endTurnButton;
 	
 	RaycastHit info;
 	
@@ -39,7 +41,7 @@ public class gameManage : MonoBehaviour {
 		NarrativeAnchorObject = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		//gridMask = LayerMask.NameToLayer("Grid");
 		//astarMask = LayerMask.NameToLayer("AStar");
-		playerTurn = false;	
+		playerTurn = true;	
 		mReaderObject = GameObject.FindGameObjectWithTag("Grid").GetComponent<MissionReader>();
 	}
 	
@@ -55,6 +57,9 @@ public class gameManage : MonoBehaviour {
 			} else if (narrativePanelOpen == true){
 				narrativePanelOpen = false;
 			}
+		}
+		if(Input.GetKeyDown(KeyCode.S)){
+			nextTurn();
 		}
 		if(Input.GetKey(KeyCode.Space)){
 			foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
@@ -79,16 +84,18 @@ public class gameManage : MonoBehaviour {
 			}
 			}
 			if(playerTurn==false){
+				if(turnEnded==true){
 				if(timer>0){
 					timer-=Time.deltaTime;
 				} else {
-					timer = 3;
+						
+					turnEnded = false;
+					timer = 1;
 					if(commandPoints!=0){
 						chosenTargets.Clear();
 						chosenRatings.Clear();
 						sendUnits.Clear();
 						foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
-						//	enemy.GetComponent<UnitGenerics>().setGrid(enemy.GetComponent<UnitGenerics>().onGrid);
 							enemy.GetComponent<UnitGenerics>().AIThink();
 						}
 						decideAction();
@@ -97,6 +104,7 @@ public class gameManage : MonoBehaviour {
 					}
 					
 				} 
+				}
 			}
 		
 		
@@ -161,24 +169,21 @@ public class gameManage : MonoBehaviour {
 	}
 	//This is called when the player ends their turn or the AI runs out of command points. It resets the command points and AI stuff.
 	public void nextTurn(){
-		timer = 5;
+		timer = 3;
 		commandPoints = 5;
 		if(playerTurn){
+			endTurnButton.SetActive(false);
 			chosenTargets.Clear();
 			chosenRatings.Clear();
 			sendUnits.Clear();
 			playerTurn=false;
-		} else {
-			playerTurn = true;
-		}
-		if(playerTurn){
-		}
-		else {
 			foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
 				enemy.GetComponent<UnitGenerics>().AIThink();
 			}
 			decideAction();
-			
+		} else {
+			endTurnButton.SetActive(true);
+			playerTurn = true;
 		}
 	}
 	//The AI uses this to determine the best action to take currently
@@ -187,7 +192,7 @@ public class gameManage : MonoBehaviour {
 		float count = 0;
 		int listCount = 0;
 		float max = 0;
-		float shortestDistance = 9999;
+		float shortestDistance = Mathf.Infinity;
 		GameObject moveSquare = null;
 		foreach(Vector2 rating in chosenRatings){
 			if(rating.y > max){
@@ -198,11 +203,12 @@ public class gameManage : MonoBehaviour {
 		}
 		if(chosenTargets[listCount].GetComponent<Grid>()==null){
 		foreach(GameObject square in sendUnits[listCount].GetComponent<UnitGenerics>().checkAdjacentGrids(chosenTargets[listCount].GetComponent<UnitGenerics>().onGrid.gameObject)){
+				if(square.GetComponent<Grid>().returnUnit()==null){
 			if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square)<shortestDistance){
 				shortestDistance = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square);
 				moveSquare = square;
 			}
-				
+				}
 			}
 			
 		} else {
@@ -226,5 +232,14 @@ public class gameManage : MonoBehaviour {
 	
 	public void setNarrativePanelOpen(bool newValue){
 		narrativePanelOpen = newValue;
+	}
+	
+	public void toggleTurn(){
+		Debug.Log("RAwr\n" + turnEnded.ToString());
+//		if(turnEnded == true){
+//			turnEnded = false;
+//		} else if(turnEnded == false){
+			turnEnded = true;
+//		}
 	}
 }
