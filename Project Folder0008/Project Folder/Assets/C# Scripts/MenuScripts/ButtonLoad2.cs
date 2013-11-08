@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 public class ButtonLoad2 : MonoBehaviour {
 	
 	string file = "";
-	string[] mission;
+	string mission = "";
 	
 	public GameObject saveData;
 	// Use this for initialization
@@ -19,14 +20,24 @@ public class ButtonLoad2 : MonoBehaviour {
 	}
 	
 	public void holdFile(string fileName)
-	{
+	{Debug.Log("Received");
 		file = fileName;
+		Debug.Log(file);
 	}
 	
 	void OnClick()
 	{
-		mission = File.ReadAllLines("Assets/AutoSaves/"+file);
+		foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file))
+		{
+			mission = line;
+		}
 		saveData.GetComponent<StoreData>().MissionToLoad(mission);
+		saveData.GetComponent<StoreData>().setAutoSaveName(file);
 		Application.LoadLevel("Week6");
+	}
+	
+	public string ReturnFileName()
+	{
+		return file;
 	}
 }

@@ -17,6 +17,7 @@ public class ButtonLoad : MonoBehaviour {
 	public GameObject deleteButton;
 	
 	List<GameObject> holdAutoSaves = new List<GameObject>();
+	List<string> splitString = new List<string>();
 	
 	GameObject temp = null;
 	string tempString = "";
@@ -44,19 +45,27 @@ public class ButtonLoad : MonoBehaviour {
 		deleteButton.SetActive(true);
 		loadButton2.SetActive(true);
 		//display saved games
-		foreach(string file in Directory.GetFiles("Assets/AutoSaves/"))
+		foreach(string file in Directory.GetFiles(Application.persistentDataPath+"/AutoSaves/"))
 		{
 			temp = GameObject.Instantiate(autoSave) as GameObject;
 			holdAutoSaves.Add(temp);
 			temp.transform.parent = GameObject.Find("Menu").transform;
-			tempString = file.Substring(17,file.Length-17);
+			tempString = file;
+			foreach(string split in tempString.Split('/'))
+			{Debug.Log(split);
+				if(split.Contains(".sav"))
+				{
+					if(!split.Contains("AutoSaves"))
+					{
+						tempString = split;
+					}
+				}
+			}
 			tempString = tempString.Split('.')[0];
 			temp.GetComponentInChildren<UILabel>().text = tempString;
 			temp.transform.localScale = new Vector3(1,1,0);
 			Vector3 newPosition = new Vector3(0,increaseY,0.5f);
-			//Vector3 newPosition = new Vector3(0,0,0);
 			temp.transform.position = newPosition;
-			Debug.Log(temp.transform.position.ToString());
 			increaseY -= 0.1f;
 			
 		}
