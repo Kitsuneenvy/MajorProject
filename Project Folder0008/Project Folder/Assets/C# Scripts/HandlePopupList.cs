@@ -15,7 +15,6 @@ public class HandlePopupList : MonoBehaviour {
 	}
 	void OnSelectionChange(string selectedValue){
 		if(selectedValue=="Attack"){
-			Debug.Log("Selected Attack");
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(false);
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(true);
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
@@ -27,7 +26,6 @@ public class HandlePopupList : MonoBehaviour {
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(true);
-			Debug.Log("Selected Move");
 			Destroy(GameObject.Find("Drop-down List"),0.0f);
 			}
 		} else if (selectedValue=="Cancel"){
@@ -35,7 +33,10 @@ public class HandlePopupList : MonoBehaviour {
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(false);
-			Debug.Log("Cancelled");
+			foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
+				gridObject.renderer.material = Resources.Load ("Transparent") as Material;
+				gridObject.renderer.material.color = Color.black;
+			}
 			Destroy(GameObject.Find("Drop-down List"),0.0f);
 		}
 	}
