@@ -129,9 +129,7 @@ public class UnitGenerics : MonoBehaviour
 
 	public void launchAttack (GameObject target)
 	{
-		Debug.Log("attack called");
 		setAttackState (false);
-		
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
 			GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
@@ -186,49 +184,49 @@ public class UnitGenerics : MonoBehaviour
 		currentX = onGrid.returnXY ().x;
 		currentY = onGrid.returnXY ().y;
 		current = new Vector2 (currentX, currentY);
-		RaycastHit blockCheck;
-		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
-			if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
-						adjacentSquares.Add (testGrid);
-					}
-			if(Physics.Raycast(new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z),(this.transform.position-new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z)),out blockCheck,Mathf.Infinity,unitMask.value)){
-				if(blockCheck.collider.tag == this.tag){
-					testX = testGrid.GetComponent<Grid> ().returnXY ().x;
-					testY = testGrid.GetComponent<Grid> ().returnXY ().y;
-					test = new Vector2 (testX, testY);
-					
-					if (testX > currentX) {
-						distanceX = testX - currentX;
-					} else if (testX < currentX) {
-						distanceX = currentX - testX;
-					}
-					if (testY > currentY) {
-						distanceY = testY - currentY;
-					} else if (testY < currentY) {
-						distanceY = currentY - testY;
-					}
-					if (testX == currentX) {
-						distanceX = 0;
-					}
-					if (currentY == testY) {
-						distanceY = 0;
-					}
-					if (distanceX + distanceY <= movement) {
-						if (test != current) {
-							if (testGrid.GetComponent<Grid> ().returnUnit () == null) {
-								if(!(moveableSquares.Contains(testGrid))){
-									moveableSquares.Add (testGrid);
-								}
-							}
-							if(!(AIThinkSquares.Contains(testGrid))){
-								AIThinkSquares.Add(testGrid);
-							}
-						}
-					}
-				}
-			}
-		}
-		for(int j = 0; j<3; j++){
+//		RaycastHit blockCheck;
+//		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
+//			if(Physics.Raycast(new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z),(this.transform.position-new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z)),out blockCheck,Mathf.Infinity,unitMask.value)){
+//				if(blockCheck.collider.tag == this.tag){
+//					testX = testGrid.GetComponent<Grid> ().returnXY ().x;
+//					testY = testGrid.GetComponent<Grid> ().returnXY ().y;
+//					test = new Vector2 (testX, testY);
+//					if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
+//						adjacentSquares.Add (testGrid);
+//					}
+//					if (testX > currentX) {
+//						distanceX = testX - currentX;
+//					} else if (testX < currentX) {
+//						distanceX = currentX - testX;
+//					}
+//					if (testY > currentY) {
+//						distanceY = testY - currentY;
+//					} else if (testY < currentY) {
+//						distanceY = currentY - testY;
+//					}
+//					if (testX == currentX) {
+//						distanceX = 0;
+//					}
+//					if (currentY == testY) {
+//						distanceY = 0;
+//					}
+//					if (distanceX + distanceY <= movement) {
+//						if (test != current) {
+//							if (testGrid.GetComponent<Grid> ().returnUnit () == null) {
+//								if(!(moveableSquares.Contains(testGrid))){
+//									moveableSquares.Add (testGrid);
+//								}
+//							}
+//							if(!(AIThinkSquares.Contains(testGrid))){
+//								AIThinkSquares.Add(testGrid);
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+		moveableSquares.Add(onGrid.gameObject);
+		for(int j = 0; j<movement; j++){
 			foreach(GameObject tile in moveableSquares){
 				GameObject currentCheckTile = tile;
 				int tilesAway = 0;
@@ -236,10 +234,8 @@ public class UnitGenerics : MonoBehaviour
 					foreach(GameObject secondTest in checkAdjacentGrids(tile)){
 						if(currentCheckTile.GetComponent<Grid>().returnUnit()!=null&&currentCheckTile.GetComponent<Grid>().returnUnit()==this.gameObject){
 							if(tilesAway< movement){
-								if(secondTest.GetComponent<Grid>().returnUnit()==null){
-									if(!AIThinkSquares.Contains(secondTest)){
-										AIThinkSquares.Add(secondTest);
-									}
+								if(!AIThinkSquares.Contains(secondTest)){
+									AIThinkSquares.Add(secondTest);
 								}
 							}	
 						} else {
@@ -257,6 +253,8 @@ public class UnitGenerics : MonoBehaviour
 				}
 			}
 		}
+		moveableSquares.Remove(onGrid.gameObject);
+		AIThinkSquares.Remove(onGrid.gameObject);
 	}
 
 	public void setAttackState (bool newValue)
@@ -400,10 +398,7 @@ public class UnitGenerics : MonoBehaviour
 					}
 				}
 			}
-			Debug.Log(temporary.GetComponent<Grid>().returnXY().ToString());
 			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,4);
-		
-			
 		}
 		
 	}
