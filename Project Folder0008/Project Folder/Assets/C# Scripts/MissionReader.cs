@@ -66,17 +66,39 @@ public class MissionReader : MonoBehaviour {
 			mission1 = false;
 		}
 		else{
-			objective = "Kill All Enemies";
-			if(saveData.GetComponent<StoreData>().ReturnMission() != "" || saveData.GetComponent<StoreData>().ReturnMission() != null)
+			
+			if(saveData.GetComponent<StoreData>().ReturnMission() != "" && saveData.GetComponent<StoreData>().ReturnMission() != null)
 			{
 				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 				//get mission, set whatever mission it contains to true
 				string temp = saveData.GetComponent<StoreData>().ReturnMission();
 				//temporarily
-				mission1 = true;
+				if(temp == "Mission1")
+				{
+					mission1 = true;
+				}
+				else if (temp == "Mission2")
+				{
+					
+					mission2 = true;
+				}
+				else if(temp == "Mission3")
+				{
+					mission3 = true;
+				}
+				else if (temp == "Mission4")
+				{
+					mission4 = true;
+				}
+				else if (temp == "Mission5")
+				{
+					mission5 = true;
+				}
+				
 			}
 			else
 			{
+				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 				mission1 = true;
 			}
 		}
@@ -90,6 +112,44 @@ public class MissionReader : MonoBehaviour {
 		{
 			newMission = false;
 			layoutCompleted = false;
+			if(mission1 == true)
+			{
+				objective = "Kill All Enemies";
+			}
+			else if (mission2 == true)
+			{
+				objective = "Reach one tile \n right of fence";
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
+
+			}
+			else if(mission3 == true)
+			{
+				objective = "Rout Enemies";
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
+
+			}
+			else if (mission4 == true)
+			{
+				objective = "Defend chef";
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
+			}
+			else if (mission5 = true)
+			{
+				objective = "Stop the florist \n from escaping";
+				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+				aStarGrid.astarData.AddGraph("GridGraph");
+				aStarGrid.Scan();
+				aStarGrid.astarData.gridGraph.nodeSize = 5;
+			}
 			Read();
 			
 		}
@@ -98,38 +158,22 @@ public class MissionReader : MonoBehaviour {
 			newMission = true;
 			if(counter == 1)
 			{
-				objective = "Reach one tile \n right of fence";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
+				
 				mission2 = true;
 			}
 			if(counter == 2)
 			{
-				objective = "Rout Enemies";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
+				
 				mission3 = true;
 			}
 			if(counter == 3)
 			{
-				objective = "Defend chef";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
+				
 				mission4 = true;
 			}
 			if(counter == 4)
 			{
-				objective = "Stop the florist \n from escaping";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
+				
 				mission5 = true;
 			}
 			layoutCompleted = false;
@@ -157,10 +201,13 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission1 = false;
 			newMission = false;
-			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
-			sw.Flush();
-			sw.WriteLine("Mission1");
-			sw.Close();
+			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			{//Debug.Log("EXISTS");
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+				{
+					sw.WriteLine("Mission1");
+				}
+			}
 			counter = 1;
 		}
 		if(mission2)
@@ -170,10 +217,14 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission2 = false;
 			newMission = false;
-			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
-			sw.Flush();
-			sw.WriteLine("Mission2");
-			sw.Close();
+			Debug.Log("Creating a new file");
+			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			{Debug.Log("EXISTS");
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+			{
+				sw.WriteLine("Mission2");
+			}
+			}
 			counter = 2;
 		}
 		if(mission3)
@@ -182,10 +233,10 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission3.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
-			sw.Flush();
-			sw.WriteLine("Mission2");
-			sw.Close();
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+			{
+				sw.WriteLine("Mission3");
+			}
 			counter = 3;
 		}
 		if(mission4)
@@ -194,10 +245,10 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission4.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
-			sw.Flush();
-			sw.WriteLine("Mission2");
-			sw.Close();
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+			{
+				sw.WriteLine("Mission4");
+			}
 			counter = 4;
 		}
 		if(mission5)
@@ -206,11 +257,10 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission5.mis";
 			//set new mission to false
 			newMission = false;
-			StreamWriter sw = new StreamWriter("Assets/AutoSaves/"+autoSavedMission);
-			sw.Flush();
-			sw.WriteLine("Mission2");
-			sw.Close();
-			
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+			{
+				sw.WriteLine("Mission5");
+			}
 		}
 		if(tutorial){
 			textFileName = "Assets/MissionFiles/Tutorial.mis";
@@ -245,6 +295,7 @@ public class MissionReader : MonoBehaviour {
 				//set node width and depth
 				aStarGrid.astarData.gridGraph.width = int.Parse(fileLines[counter+4]);
 				aStarGrid.astarData.gridGraph.depth = int.Parse(fileLines[counter+5]);
+				
 				if(mission3)
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 13;

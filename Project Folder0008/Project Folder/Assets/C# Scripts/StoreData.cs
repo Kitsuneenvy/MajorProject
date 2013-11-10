@@ -10,7 +10,7 @@ public class StoreData : MonoBehaviour {
 	public GameObject commField;
 	string mission = "";
 	bool saved = false;
-	
+	FileStream createdFile;
 	// Use this for initialization
 	void Start () {
 		
@@ -19,17 +19,16 @@ public class StoreData : MonoBehaviour {
 	
 	void Update()
 	{
-		if(Application.loadedLevelName != "OptionsWorking" && saved == false)
+		if(Application.loadedLevelName != "OptionsWorking" && saved == false && !File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav"))
 		{
 			saved = true;
 			CreateFile();
 		}
 	}
 	public void DataStorage()
-	{Debug.Log("RUN");
+	{
 		autoSaveName =  saveField.GetComponent<UIInput>().text;
 		commanderName = commField.GetComponent<UIInput>().text;
-		Debug.Log(autoSaveName);
 	}
 	
 	public string returnAutoSaveName()
@@ -37,28 +36,37 @@ public class StoreData : MonoBehaviour {
 		return autoSaveName;
 	}
 	
-	string returnCommName()
+	public string returnCommName()
 	{
 		return commanderName;
 	}
 	
 	void CreateFile()
 	{
-		Debug.Log(autoSaveName);
-		
-		if(!File.Exists("Assets/AutoSaves/"+autoSaveName+".sav"))
+		if(!Directory.Exists(Application.persistentDataPath+"/AutoSaves"))
 		{
-			File.Create("Assets/AutoSaves/"+autoSaveName+".sav");
+			Directory.CreateDirectory(Application.persistentDataPath+"/AutoSaves");
+		}
+		if(!File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName))
+		{
+			createdFile = File.Create(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav");
+			createdFile.Close();
 		}
 	}
 	
-	public void MissionToLoad(string[] currentMission)
+	public void MissionToLoad(string currentMission)
 	{
-		mission = currentMission[0];
+		mission = currentMission;
 	}
 	
 	public string ReturnMission()
 	{
 		return mission;
 	}
+	
+	public void setAutoSaveName(string name)
+	{
+		autoSaveName = name;
+	}
+
 }

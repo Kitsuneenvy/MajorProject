@@ -40,12 +40,19 @@ public class GridTool : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		graphObject = AstarPath.active.graphs[0] as GridGraph;
-		mReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
+		
 	}
 	//Create the grid squares
 	void Update()
 	{
+		if(mReaderObject == null)
+		{
+			mReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
+		}
+		if(AstarPath.active.graphs[0] != null && (graphObject == null || graphObject != AstarPath.active.graphs[0] as GridGraph))
+		{
+			graphObject = AstarPath.active.graphs[0] as GridGraph;
+		}
 		if(mReaderObject.returnLayoutCompleted() == true)
 		{
 			if(gridParent == null)
@@ -141,12 +148,12 @@ public class GridTool : MonoBehaviour {
 				gridColliders.Clear();
 				
 			}
-		if(mReaderObject.returnLayoutCompleted() == false){
-			if(graphObject == null)
-			{
-				graphObject = AstarPath.active.graphs[0] as GridGraph;
-			}
-		}
+//		if(mReaderObject.returnLayoutCompleted() == false){
+//			if(graphObject == null)
+//			{
+//				graphObject = AstarPath.active.graphs[0] as GridGraph;
+//			}
+//		}
 	}
 	//Return all the colliders for other logic stuff
 	public List<GameObject> returnGridColliders(){
