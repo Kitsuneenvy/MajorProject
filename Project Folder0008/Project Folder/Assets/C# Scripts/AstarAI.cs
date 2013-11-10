@@ -69,6 +69,12 @@ public class AstarAI : MonoBehaviour
 			//Start a new path to the targetPosition, return the result to the OnPathComplete function
 			seeker.StartPath (transform.position, targetPosition, OnPathComplete);
 			moveUnit = true;
+		} else {
+			foreach(GameObject gridObject in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
+				gridObject.renderer.material = Resources.Load ("Transparent") as Material;
+				gridObject.renderer.material.color = Color.black;
+			}
+			GameObject.Find("Game Manager").GetComponent<gameManage>().nextTurn();
 		}
 	}
 
