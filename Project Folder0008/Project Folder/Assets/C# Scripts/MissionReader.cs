@@ -204,7 +204,7 @@ public class MissionReader : MonoBehaviour {
 			mission1 = false;
 			newMission = false;
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
-			{Debug.Log("EXISTS");
+			{
 				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
 				{
 					sw.WriteLine("Mission1");
@@ -308,19 +308,19 @@ public class MissionReader : MonoBehaviour {
 				
 				if(mission3)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 13;
+					//aStarGrid.astarData.gridGraph.rotation.y = 13;
 					mission3 = false;
 					rotate = true;
 				}
 				if(mission4)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 325;
+					//aStarGrid.astarData.gridGraph.rotation.y = 325;
 					mission4 = false;
 					flipped = true;
 				}
 				if(mission5)
 				{
-					aStarGrid.astarData.gridGraph.rotation.y = 360;
+					//aStarGrid.astarData.gridGraph.rotation.y = 360;
 					mission5 = false;
 				}
 				aStarGrid.astarData.gridGraph.UpdateSizeFromWidthDepth();
@@ -360,26 +360,27 @@ public class MissionReader : MonoBehaviour {
 	
 	void CalculateGridPosition()
 	{
-		//total X * (Yc - 1) + Xc
-		int gridSquareNumber = aStarGrid.astarData.gridGraph.width * (unitInfo[2] - 1) + unitInfo[1];
-		tempPosition = tempUnit.transform.position;
-		tempPosition.x = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.x;
-		tempPosition.z = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.z;
-		tempPosition.y = 60;
-		if(tempUnit.name.Contains("Flower"))
-		{
-			tempPosition.y = 61.5f;
+		if(tempUnit!=null){
+			//total X * (Yc - 1) + Xc
+			int gridSquareNumber = aStarGrid.astarData.gridGraph.width * (unitInfo[2] - 1) + unitInfo[1];
+			tempPosition = tempUnit.transform.position;
+			tempPosition.x = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.x;
+			tempPosition.z = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.z;
+			tempPosition.y = 60;
+			if(tempUnit.name.Contains("Flower"))
+			{
+				tempPosition.y = 61.5f;
+			}
+			tempUnit.transform.position = tempPosition;
+			//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
+			tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
+			tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
+			tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
+			
+			//clear unit info
+			unitInfo.Clear();
+			tempUnit = null;
 		}
-		tempUnit.transform.position = tempPosition;
-		//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
-
-		tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
-		tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
-		tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
-		
-		//clear unit info
-		unitInfo.Clear();
-		tempUnit = null;
 	}
 	
 	public void PositionUnits()
@@ -500,5 +501,9 @@ public class MissionReader : MonoBehaviour {
 				fileLines.Clear();
 			}
 		}
+	foreach(GameObject unit in allUnits){
+			unit.GetComponent<UnitGenerics>().setGrid(unit.GetComponent<UnitGenerics>().onGrid);
+		}
+		aStarGrid.Scan();
 	}
 }

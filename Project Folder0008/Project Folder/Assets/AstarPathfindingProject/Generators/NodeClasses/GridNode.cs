@@ -284,7 +284,9 @@ namespace Pathfinding.Nodes
 					
 					Node node = nodes[index+neighbourOffsets[i]];
 					
-					if (!path.CanTraverse (node)) continue;
+					if(!path.CanTraverse (node)){ 
+						continue;
+					}
 					
 					NodeRun nodeR2 = node.GetNodeRun (nodeRunData);
 					
