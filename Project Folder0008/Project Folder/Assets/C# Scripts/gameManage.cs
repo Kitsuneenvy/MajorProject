@@ -85,25 +85,23 @@ public class gameManage : MonoBehaviour {
 			}
 			if(playerTurn==false){
 				if(turnEnded==true){
-				if(timer>0){
-					timer-=Time.deltaTime;
-				} else {
-						
-					turnEnded = false;
-					timer = 1;
-					if(commandPoints!=0){
-						chosenTargets.Clear();
-						chosenRatings.Clear();
-						sendUnits.Clear();
-						foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
-							enemy.GetComponent<UnitGenerics>().AIThink();
-						}
-						decideAction();
+					if(timer>0){
+						timer-=Time.deltaTime;
 					} else {
-						nextTurn();
-					}
-					
-				} 
+						turnEnded = false;
+						timer = 1;
+						if(commandPoints!=0){
+							chosenTargets.Clear();
+							chosenRatings.Clear();
+							sendUnits.Clear();
+							foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
+								enemy.GetComponent<UnitGenerics>().AIThink();
+							}
+							decideAction();
+						} else {
+							nextTurn();
+						}
+					} 
 				}
 			}
 		
@@ -236,10 +234,9 @@ public class gameManage : MonoBehaviour {
 	
 	public void toggleTurn(){
 		Debug.Log("RAwr\n" + turnEnded.ToString());
-//		if(turnEnded == true){
-//			turnEnded = false;
-//		} else if(turnEnded == false){
 			turnEnded = true;
-//		}
+	}
+	public bool returnTurn(){
+		return turnEnded;
 	}
 }
