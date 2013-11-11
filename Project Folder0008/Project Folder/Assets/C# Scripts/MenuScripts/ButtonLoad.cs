@@ -52,7 +52,7 @@ public class ButtonLoad : MonoBehaviour {
 			temp.transform.parent = GameObject.Find("Menu").transform;
 			tempString = file;
 			foreach(string split in tempString.Split('/'))
-			{Debug.Log(split);
+			{
 				if(split.Contains(".sav"))
 				{
 					if(!split.Contains("AutoSaves"))

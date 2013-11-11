@@ -20,9 +20,8 @@ public class ButtonLoad2 : MonoBehaviour {
 	}
 	
 	public void holdFile(string fileName)
-	{Debug.Log("Received");
+	{
 		file = fileName;
-		Debug.Log(file);
 	}
 	
 	void OnClick()

@@ -49,6 +49,8 @@ public class MissionReader : MonoBehaviour {
 	public GameObject mainCamera;
 	GameObject saveData;
 	
+	public GameObject flower;
+	
 	int counter = 0;
 	
 	//Holds Units
@@ -202,8 +204,8 @@ public class MissionReader : MonoBehaviour {
 			mission1 = false;
 			newMission = false;
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
-			{//Debug.Log("EXISTS");
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+			{Debug.Log("EXISTS");
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
 				{
 					sw.WriteLine("Mission1");
 				}
@@ -217,13 +219,12 @@ public class MissionReader : MonoBehaviour {
 			//set new mission to false
 			mission2 = false;
 			newMission = false;
-			Debug.Log("Creating a new file");
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
-			{Debug.Log("EXISTS");
-			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
 			{
-				sw.WriteLine("Mission2");
-			}
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				{
+					sw.WriteLine("Mission2");
+				}
 			}
 			counter = 2;
 		}
@@ -233,9 +234,12 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission3.mis";
 			//set new mission to false
 			newMission = false;
-			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 			{
-				sw.WriteLine("Mission3");
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				{
+					sw.WriteLine("Mission3");
+				}
 			}
 			counter = 3;
 		}
@@ -245,9 +249,12 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission4.mis";
 			//set new mission to false
 			newMission = false;
-			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission,false))
+			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 			{
-				sw.WriteLine("Mission4");
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				{
+					sw.WriteLine("Mission4");
+				}
 			}
 			counter = 4;
 		}
@@ -257,9 +264,12 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission5.mis";
 			//set new mission to false
 			newMission = false;
-			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 			{
-				sw.WriteLine("Mission5");
+				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				{
+					sw.WriteLine("Mission5");
+				}
 			}
 		}
 		if(tutorial){
@@ -356,11 +366,17 @@ public class MissionReader : MonoBehaviour {
 		tempPosition.x = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.x;
 		tempPosition.z = GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).transform.position.z;
 		tempPosition.y = 60;
+		if(tempUnit.name.Contains("Flower"))
+		{
+			tempPosition.y = 61.5f;
+		}
 		tempUnit.transform.position = tempPosition;
 		//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
+
 		tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
 		tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
 		tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
+		
 		//clear unit info
 		unitInfo.Clear();
 		tempUnit = null;
@@ -425,6 +441,7 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
+									
 								}
 								//if unit enemy
 								else if(unitInfo[3]== 1)
@@ -459,6 +476,11 @@ public class MissionReader : MonoBehaviour {
 									{
 										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
 										tempUnit.tag = "Enemy";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+									}
+									else if(unitInfo[0] == 4)//flower
+									{
+										tempUnit = GameObject.Instantiate(flower) as GameObject;
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
