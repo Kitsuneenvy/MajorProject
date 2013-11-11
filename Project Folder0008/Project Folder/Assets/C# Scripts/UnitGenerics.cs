@@ -225,6 +225,11 @@ public class UnitGenerics : MonoBehaviour
 //				}
 //			}
 //		}
+		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
+			if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
+				adjacentSquares.Add (testGrid);
+			}
+		}
 		moveableSquares.Add(onGrid.gameObject);
 		for(int j = 0; j<movement; j++){
 			foreach(GameObject tile in moveableSquares){
@@ -449,16 +454,16 @@ public class UnitGenerics : MonoBehaviour
 	public List<GameObject> checkAdjacentGrids(GameObject checkObj){
 		List<GameObject> returnAdjacent = new List<GameObject>();
 		RaycastHit checkHit;
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x+5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
+		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x+5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, 6,gridMask.value)){
 			returnAdjacent.Add(checkHit.collider.gameObject);
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x-5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
+		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x-5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, 6,gridMask.value)){
 			returnAdjacent.Add(checkHit.collider.gameObject);
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z+5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
+		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z+5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, 6,gridMask.value)){
 			returnAdjacent.Add(checkHit.collider.gameObject);
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z-5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
+		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z-5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+3,checkObj.transform.position.z), out checkHit, 6,gridMask.value)){
 			returnAdjacent.Add(checkHit.collider.gameObject);
 		}
 		return returnAdjacent;

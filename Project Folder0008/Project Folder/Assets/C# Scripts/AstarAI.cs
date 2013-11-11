@@ -80,6 +80,7 @@ public class AstarAI : MonoBehaviour
 
 	public void OnPathComplete (Path p)
 	{
+		
 		if (!p.error) {
 			path = p;
 			//Reset the waypoint counter
@@ -91,10 +92,13 @@ public class AstarAI : MonoBehaviour
 	{
 		
 		
-		if(Vector3.Distance(this.transform.position,targetPosition)<=0.5f){
+		if(Vector3.Distance(this.transform.position,targetPosition)<=0.2f){
 			moveUnit=false;
 		}
 		if(!moveUnit){
+			if(GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().returnTurn()==false){
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
+			}
 			this.animation.Play("IdleChef");
 		}
 		if (path == null) {
@@ -106,8 +110,6 @@ public class AstarAI : MonoBehaviour
 //            Debug.Log ("End Of Path Reached");
 			//attempt at moving closer
 			//Lerp closer to location
-			
-			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
 			transform.position = Vector3.Lerp (this.transform.position, targetPosition, (1 / (Vector3.Distance (this.transform.position, targetPosition))) * 0.1f);
 			return;
 		}
