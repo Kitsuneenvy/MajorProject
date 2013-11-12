@@ -213,13 +213,15 @@ public class gameManage : MonoBehaviour {
 			moveSquare = chosenTargets[listCount];
 		}
 		if(shortestDistance<1){
+			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
 			sendUnits[listCount].GetComponent<UnitGenerics>().launchAttack(chosenTargets[listCount]);
 		} else {
+			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
 			sendUnits[listCount].GetComponent<AstarAI>().move(moveSquare);
 		}
-		
-		
-		
+		chosenTargets.Clear();
+		sendUnits.Clear();
+		chosenRatings.Clear();
 	}
 	//Set the actions that each unit has decided is best for it in a list.
 	public void setActions(GameObject unitTarget,GameObject sendingUnit, float ratings){
@@ -233,7 +235,6 @@ public class gameManage : MonoBehaviour {
 	}
 	
 	public void toggleTurn(){
-		Debug.Log("RAwr\n" + turnEnded.ToString());
 			turnEnded = true;
 	}
 	public bool returnTurn(){

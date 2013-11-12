@@ -30,6 +30,7 @@ public class AstarAI : MonoBehaviour
 	float fracJourney;
 	float timeValue;
 	bool moveUnit = false;
+	public bool myTurn = false;
 	
 	public void Start ()
 	{
@@ -92,12 +93,15 @@ public class AstarAI : MonoBehaviour
 	{
 		
 		
-		if(Vector3.Distance(this.transform.position,targetPosition)<=0.2f){
+		if(Vector3.Distance(this.transform.position,targetPosition)<=1f){
 			moveUnit=false;
 		}
-		if(!moveUnit){
-			if(GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().returnTurn()==false){
-				GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
+		if(moveUnit==false){
+			if(myTurn == true){
+				myTurn = false;
+				if(GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().returnTurn()==false){
+					GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
+				}
 			}
 			this.animation.Play("IdleChef");
 		}
@@ -115,11 +119,11 @@ public class AstarAI : MonoBehaviour
 		}
 		//Direction to the next waypoint
 		Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized;
-		dir *= speed * Time.fixedDeltaTime;//////////DONT THINK IS REQUIRED ANYMORE CHECK LATER
+		dir *= speed * Time.fixedDeltaTime;//DONT THINK IS REQUIRED ANYMORE CHECK LATER
 		
 		//set timevalue
 		timeValue = (1 / (targetPosition - this.transform.position).magnitude);
-		 if(moveUnit){
+		 if(moveUnit== true){
 		if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
 			this.animation.Play("WalkChef");
 			//Lerp to location of raycasted position.z

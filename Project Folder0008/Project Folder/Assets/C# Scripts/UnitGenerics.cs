@@ -132,7 +132,10 @@ public class UnitGenerics : MonoBehaviour
 		setAttackState (false);
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
-			GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
+			if(this.GetComponent<AstarAI>().myTurn == true){
+				this.GetComponent<AstarAI>().myTurn = false;
+				GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
+			}
 			this.transform.LookAt(target.transform.position);
 			GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints--;
 			UnitGenerics targetGenerics;
@@ -318,7 +321,7 @@ public class UnitGenerics : MonoBehaviour
 		}
 		//Refine the squares to only the squares that have units in them, to speed it up.
 		foreach(GameObject thinkSquare in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-			if(thinkSquare.GetComponent<Grid>().heldUnit==null||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Enemy"){
+			if(thinkSquare.GetComponent<Grid>().heldUnit==null||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Enemy"||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Flower"){
 				if(AIThinkSquares.Contains(thinkSquare)){
 					AIThinkSquares.Remove(thinkSquare);
 				}
@@ -382,6 +385,7 @@ public class UnitGenerics : MonoBehaviour
 			}
 		}
 		} else if(AIThinkSquares.Count==0){
+			Debug.Log ("Running the non think ai");
 			GameObject temporary = null;
 			float shortestDis = Mathf.Infinity;
 			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
@@ -395,6 +399,22 @@ public class UnitGenerics : MonoBehaviour
 			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
 				if(square.GetComponent<Grid>().heldUnit!=null&&square.GetComponent<Grid>().heldUnit.tag=="PlayerUnit"){
 					AIThinkSquares.Add(square);
+					UnitGenerics thinkUnit = square.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
+					if(thinkUnit.health<health){
+						ratingNum = ratingNum+2;
+					}
+					if(thinkUnit.unitType==0&&unitType==2){
+						ratingNum = ratingNum+2;
+					}
+					if(thinkUnit.unitType==1&&unitType==0){
+						ratingNum = ratingNum+2;
+					}
+					if(thinkUnit.unitType==2&&unitType==1){
+						ratingNum = ratingNum+2;
+					}
+					if(thinkUnit.unitType==3&&unitType!=3){
+						ratingNum = ratingNum+3;
+					}
 				}
 			}
 			foreach(GameObject square in maxMove){
@@ -405,7 +425,7 @@ public class UnitGenerics : MonoBehaviour
 					}
 				}
 			}
-			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,4);
+			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,ratingNum-2);
 		}
 		
 	}
@@ -414,7 +434,6 @@ public class UnitGenerics : MonoBehaviour
 		int count = 0;
 		foreach(GameObject check in unitList){
 			if(check==unitToCheck){
-				//count++;
 				return ratingsList[count];
 			} else {
 				count++;
