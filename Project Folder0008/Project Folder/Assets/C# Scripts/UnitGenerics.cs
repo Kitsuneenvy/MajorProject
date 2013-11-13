@@ -473,26 +473,26 @@ public class UnitGenerics : MonoBehaviour
 	}
 	
 	public List<GameObject> checkAdjacentGrids(GameObject checkObj){
+		List<GameObject> gridList = GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders();
+		int checkIndex = gridList.IndexOf(checkObj);
 		List<GameObject> returnAdjacent = new List<GameObject>();
 		RaycastHit checkHit;
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x+5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
-			if(!returnAdjacent.Contains(checkHit.collider.gameObject)){
-				returnAdjacent.Add(checkHit.collider.gameObject);
+		if(checkIndex<=gridList.Count){
+			if(checkIndex!=0){
+				if(checkIndex%GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width!=0){
+					returnAdjacent.Add(gridList[checkIndex-1]);
+				}
 			}
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x-5, checkObj.transform.position.y,checkObj.transform.position.z) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
-			if(!returnAdjacent.Contains(checkHit.collider.gameObject)){
-				returnAdjacent.Add(checkHit.collider.gameObject);
-			}
+		if(checkIndex+GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width<gridList.Count){
+			returnAdjacent.Add(gridList[checkIndex+GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width]);
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z+5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
-			if(!returnAdjacent.Contains(checkHit.collider.gameObject)){
-				returnAdjacent.Add(checkHit.collider.gameObject);
-			}
+		if(checkIndex-GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width>0){
+			returnAdjacent.Add(gridList[checkIndex-GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width]);
 		}
-		if(Physics.Raycast(new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z),new Vector3(checkObj.transform.position.x, checkObj.transform.position.y,checkObj.transform.position.z-5) - new Vector3(checkObj.transform.position.x, checkObj.transform.position.y+4,checkObj.transform.position.z), out checkHit, Mathf.Infinity,gridMask.value)){
-			if(!returnAdjacent.Contains(checkHit.collider.gameObject)){
-				returnAdjacent.Add(checkHit.collider.gameObject);
+		if(checkIndex+1!=gridList.Count){
+			if((checkIndex+1)%GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width!=0){
+				returnAdjacent.Add(gridList[checkIndex+1]);
 			}
 		}
 		return returnAdjacent;

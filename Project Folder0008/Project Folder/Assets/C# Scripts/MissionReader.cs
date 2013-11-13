@@ -308,19 +308,19 @@ public class MissionReader : MonoBehaviour {
 				
 				if(mission3)
 				{
-					//aStarGrid.astarData.gridGraph.rotation.y = 13;
+					aStarGrid.astarData.gridGraph.rotation.y = 13;
 					mission3 = false;
 					rotate = true;
 				}
 				if(mission4)
 				{
-					//aStarGrid.astarData.gridGraph.rotation.y = 325;
+					aStarGrid.astarData.gridGraph.rotation.y = 325;
 					mission4 = false;
 					flipped = true;
 				}
 				if(mission5)
 				{
-					//aStarGrid.astarData.gridGraph.rotation.y = 360;
+					aStarGrid.astarData.gridGraph.rotation.y = 360;
 					mission5 = false;
 				}
 				aStarGrid.astarData.gridGraph.UpdateSizeFromWidthDepth();
