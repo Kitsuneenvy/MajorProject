@@ -37,6 +37,7 @@ public class UnitGenerics : MonoBehaviour
 	int ID; // Passed to this script by game manager upon initialisation
 	public int unitType; // 1 = speed, 2 = attack, 3 = defence, 4 = healer
 	MissionReader missionReaderObject;
+	SoundManager soundObject;
 	//This stuff is for AI decision rating
 	List<GameObject> unitList = new List<GameObject>();
 	List<Vector2> ratingsList = new List<Vector2>();
@@ -49,6 +50,7 @@ public class UnitGenerics : MonoBehaviour
 	// Use this for initialization if we need it
 	void Start ()
 	{
+		soundObject = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SoundManager>();
 		missionReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
 	}
 	//This function creates the unit statistics
@@ -148,8 +150,59 @@ public class UnitGenerics : MonoBehaviour
 				TempParticle.loop = false;
 				TempParticle.Play();
 				targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
-				
-				if(targetGenerics.getHealth<= 0)
+				if(Random.Range(0,100)<25){
+					switch(unitType){
+						case(0):
+						{
+							if(tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.mowerAudio[0]);
+							}
+							if(tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.frierAudio[0]);
+							}
+							soundObject.soundEffects.Play();
+							break;
+						}
+						case(1):
+						{
+							if(tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.prunerAudio[0]);
+							}
+							if(tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.ladlewightAudio[0]);
+							}
+							soundObject.soundEffects.Play();
+							break;
+						}
+						case(2):
+						{
+							if(tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.potterAudio[0]);
+							}
+							if(tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.bowlderAudio[0]);
+							}
+							soundObject.soundEffects.Play();
+							break;
+						}
+						case(3):
+						{
+							if(tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.chefAudio[0]);
+							}
+							if(tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.floristAudio[0]);
+							}
+							soundObject.soundEffects.Play();
+							break;
+						}
+						default:
+						{
+							break;
+						}
+					}
+				}
+				if(targetGenerics.getHealth()<= 0)
 				{
 					//play death animation
 					
@@ -274,6 +327,13 @@ public class UnitGenerics : MonoBehaviour
 		}
 		moveableSquares.Remove(onGrid.gameObject);
 		AIThinkSquares.Remove(onGrid.gameObject);
+		if(missionReaderObject!=null){
+			if(missionReaderObject.returnLayoutCompleted()==true){
+				foreach(GameObject unit in missionReaderObject.allUnits){
+					unit.GetComponent<UnitGenerics>().refreshMovement();
+				}
+			}
+		}
 	}
 
 	public void setAttackState (bool newValue)
@@ -519,4 +579,47 @@ public class UnitGenerics : MonoBehaviour
 		return closest;
 	}
 	//End of AI Functions
+	
+		public void refreshMovement(){
+		moveableSquares.Clear();
+		adjacentSquares.Clear();
+		AIThinkSquares.Clear();
+		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
+			if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
+				adjacentSquares.Add (testGrid);
+			}
+		}
+		moveableSquares.Add(onGrid.gameObject);
+		for(int j = 0; j<movement; j++){
+			foreach(GameObject tile in moveableSquares){
+				GameObject currentCheckTile = tile;
+				int tilesAway = 0;
+				for(int i = 0; i<4; i++){
+					foreach(GameObject secondTest in checkAdjacentGrids(tile)){
+						if(currentCheckTile.name.Contains("48")){
+						}
+						if(currentCheckTile.GetComponent<Grid>().returnUnit()!=null&&currentCheckTile.GetComponent<Grid>().returnUnit()==this.gameObject){
+							if(tilesAway< movement){
+								if(!AIThinkSquares.Contains(secondTest)){
+									AIThinkSquares.Add(secondTest);
+								}
+							}	
+						} else {
+							currentCheckTile = closestAdjacent(checkAdjacentGrids(currentCheckTile));
+							tilesAway++;
+						}
+					}
+				}
+			}
+			foreach(GameObject tile in AIThinkSquares){
+				if(tile.GetComponent<Grid>().returnUnit()==null){
+					if(!moveableSquares.Contains(tile)){
+						moveableSquares.Add(tile);
+					}
+				}
+			}
+		}
+		moveableSquares.Remove(onGrid.gameObject);
+		AIThinkSquares.Remove(onGrid.gameObject);
+	}
 }
