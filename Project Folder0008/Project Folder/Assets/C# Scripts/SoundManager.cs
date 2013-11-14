@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SoundManager : MonoBehaviour {
 	
@@ -25,6 +26,17 @@ public class SoundManager : MonoBehaviour {
 	//heal sounds
 	public AudioClip Detergent;
 	public AudioClip WateringCan;
+	
+	
+	//List of the sounds index 0 = attack, 1 = idle, 2 = dodge, 3 = death, 4 = damage, 5 = special (idle 2 or attack miss)
+	public List<AudioClip> chefAudio = new List<AudioClip>();
+	public List<AudioClip> frierAudio = new List<AudioClip>();
+	public List<AudioClip> ladlewightAudio = new List<AudioClip>();
+	public List<AudioClip> bowlderAudio = new List<AudioClip>();
+	public List<AudioClip> mowerAudio = new List<AudioClip>();
+	public List<AudioClip> floristAudio = new List<AudioClip>();
+	public List<AudioClip> prunerAudio = new List<AudioClip>();
+	public List<AudioClip> potterAudio = new List<AudioClip>();
 	
 	// Use this for initialization
 	void Start () {
