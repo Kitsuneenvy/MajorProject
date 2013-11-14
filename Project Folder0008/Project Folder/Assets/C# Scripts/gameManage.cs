@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class gameManage : MonoBehaviour {
 	Grid hoverGrid; //The grid you are hovering over.
 	MissionReader mReaderObject;
+	SoundManager soundObject;
 	
 	bool missionOne = true;
 	bool turnEnded = false;
@@ -32,6 +33,7 @@ public class gameManage : MonoBehaviour {
 	RaycastHit info;
 	
 	float timer;
+	float dialogueTimer = 15;
 	List<GameObject> chosenTargets = new List<GameObject>();
 	List<GameObject> sendUnits = new List<GameObject>();
 	List<Vector2> chosenRatings = new List<Vector2>();
@@ -43,6 +45,7 @@ public class gameManage : MonoBehaviour {
 		//astarMask = LayerMask.NameToLayer("AStar");
 		playerTurn = true;	
 		mReaderObject = GameObject.FindGameObjectWithTag("Grid").GetComponent<MissionReader>();
+		soundObject = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SoundManager>();
 	}
 	
 	// Update is called once per frame
@@ -67,6 +70,67 @@ public class gameManage : MonoBehaviour {
 			}
 		}
 		if(narrativePanelOpen==false){
+			if(dialogueTimer<=0){
+				UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
+				Debug.Log(randomUnit.tag.ToString());
+				switch(randomUnit.unitType){
+					case(0):
+						{
+							if(randomUnit.tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.mowerAudio[1]);
+							}
+							if(randomUnit.tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.frierAudio[1]);
+							}
+							soundObject.soundEffects.Play();
+							dialogueTimer = 15;
+							break;
+						}
+						case(1):
+						{
+							if(randomUnit.tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.prunerAudio[1]);
+							}
+							if(randomUnit.tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.ladlewightAudio[1]);
+							}
+							soundObject.soundEffects.Play();
+							dialogueTimer = 15;
+							break;
+						}
+						case(2):
+						{
+							if(randomUnit.tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.potterAudio[1]);
+							}
+							if(randomUnit.tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.bowlderAudio[1]);
+							}
+							soundObject.soundEffects.Play();
+							dialogueTimer = 15;
+							break;
+						}
+						case(3):
+						{
+							if(randomUnit.tag == "Enemy"){
+								soundObject.soundEffects.clip = (soundObject.floristAudio[1]);
+							}
+							if(randomUnit.tag == "PlayerUnit"){
+								soundObject.soundEffects.clip = (soundObject.chefAudio[1]);
+							}
+							soundObject.soundEffects.Play();
+							dialogueTimer = 15;
+							break;
+						}
+						default:
+						{
+							dialogueTimer = 15;
+							break;
+						}
+				}
+			} else {
+				dialogueTimer -= Time.deltaTime;
+			}
 			NarrativeAnchorObject.SetActive(false);
 			if(mReaderObject.returnLayoutCompleted() == true && this.GetComponent<GridTool>().returnGridColliders().Count > 0)
 			{
@@ -108,7 +172,7 @@ public class gameManage : MonoBehaviour {
 		
 		hoverOverGrid();
 		GameObject.Find("Command Points").GetComponent<UILabel>().text = "Command Points: " + commandPoints.ToString();
-		}else {
+		} else {
 			NarrativeAnchorObject.SetActive(true);
 		} 
 	}
