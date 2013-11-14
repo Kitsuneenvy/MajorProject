@@ -420,19 +420,19 @@ public class MissionReader : MonoBehaviour {
 									}
 									if(unitInfo[0] == 0)//speed
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Frier")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Ladle")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Bowlder")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
@@ -463,13 +463,13 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Pruner")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Potter")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
