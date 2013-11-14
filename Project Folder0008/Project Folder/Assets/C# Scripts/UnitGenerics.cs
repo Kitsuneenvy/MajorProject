@@ -36,7 +36,7 @@ public class UnitGenerics : MonoBehaviour
 	int AINumChoices;
 	int ID; // Passed to this script by game manager upon initialisation
 	public int unitType; // 1 = speed, 2 = attack, 3 = defence, 4 = healer
-	
+	MissionReader missionReaderObject;
 	//This stuff is for AI decision rating
 	List<GameObject> unitList = new List<GameObject>();
 	List<Vector2> ratingsList = new List<Vector2>();
@@ -49,7 +49,7 @@ public class UnitGenerics : MonoBehaviour
 	// Use this for initialization if we need it
 	void Start ()
 	{
-		
+		missionReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
 	}
 	//This function creates the unit statistics
 	public void Initialise (int type) 
@@ -149,7 +149,16 @@ public class UnitGenerics : MonoBehaviour
 				TempParticle.Play();
 				targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
 				
-		
+				if(targetGenerics.getHealth<= 0)
+				{
+					//play death animation
+					
+					//remove from list
+					missionReaderObject.allUnits.Remove(targetGenerics.gameObject);
+					targetGenerics.onGrid.heldUnit = null;
+					//destroy object
+					Destroy(targetGenerics.gameObject);
+				}
 			}
 			else
 			{

@@ -43,7 +43,7 @@ public class MissionReader : MonoBehaviour {
 	List<int> unitInfo = new List<int>();
 	
 	//holds all units
-	List<GameObject> allUnits = new List<GameObject>();
+	public List<GameObject> allUnits = new List<GameObject>();
 	
 	//main camera object
 	public GameObject mainCamera;
