@@ -26,6 +26,7 @@ public class MissionReader : MonoBehaviour {
 	public bool rotate = false;
 	public string objective = "";
 	
+	
 	string autoSavedMission = "";
 	int rotationY = 0; //how much to rotate enemies by
 	
@@ -59,10 +60,15 @@ public class MissionReader : MonoBehaviour {
 	//holds temporary vector of gridSquare for unit to be placed on
 	Vector3 tempPosition;
 	
+	//checkmark uisprite
+	UISprite checkmark;
+	
 	// Use this for initialization
 	void Start () {
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
 		saveData = GameObject.Find("SaveData");
+		checkmark = GameObject.Find("ObjectivesCheckmark").GetComponent<UISprite>();
+		
 		if(Application.loadedLevelName == "Tutorial"){
 			tutorial = true;
 			mission1 = false;

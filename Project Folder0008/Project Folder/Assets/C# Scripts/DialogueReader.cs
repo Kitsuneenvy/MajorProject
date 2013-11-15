@@ -15,13 +15,14 @@ public class DialogueReader : MonoBehaviour {
 	UILabel narrativeDialogue;
 	UILabel buttonText;
 	GameObject narrativeAnchor;
-	
+	MissionReader mReaderObject;
 
 	// Use this for initialization
 	void Start () {
 		buttonText = GameObject.Find("DialogueLabel").GetComponent<UILabel>();
 		narrativeAnchor = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		narrativeDialogue = GameObject.FindGameObjectWithTag("NarrativeDialogue").GetComponent<UILabel>();
+		mReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
 		readDialogueFile();
 	}
 	
@@ -92,10 +93,13 @@ public class DialogueReader : MonoBehaviour {
 		switch(EventToPlay){
 		case 1:
 			Debug.Log("HALLAEO");
+			mReaderObject.objective = "Move next to \n enemy";
 			break;
 		case 2:
+			mReaderObject.objective = "End your turn";
 			break;
 		case 3:
+			mReaderObject.objective = "Defeat the robot";
 			break;
 		case 4:
 			break;

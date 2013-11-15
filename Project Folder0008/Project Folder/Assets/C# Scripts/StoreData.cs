@@ -19,8 +19,8 @@ public class StoreData : MonoBehaviour {
 	
 	void Update()
 	{
-		if(Application.loadedLevelName != "OptionsWorking" && saved == false && !File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav"))
-		{
+		if(Application.loadedLevelName != "OptionsWorking" && saved == false && !File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName))
+		{Debug.Log("RUN ONCE");
 			saved = true;
 			CreateFile();
 		}
@@ -47,9 +47,9 @@ public class StoreData : MonoBehaviour {
 		{
 			Directory.CreateDirectory(Application.persistentDataPath+"/AutoSaves");
 		}
-		if(!File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName))
+		if(!File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName + ".sav"))
 		{
-			createdFile = File.Create(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav");
+			createdFile = File.Create(Application.persistentDataPath+"/AutoSaves/"+autoSaveName + ".sav");
 			createdFile.Close();
 		}
 	}

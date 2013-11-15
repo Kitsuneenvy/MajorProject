@@ -132,6 +132,10 @@ public class UnitGenerics : MonoBehaviour
 	public void launchAttack (GameObject target)
 	{
 		setAttackState (false);
+		if(this.name.Contains("Chef"))
+		{
+			this.animation.Play("ChefHeal",PlayMode.StopAll);
+		}
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
 			if(this.GetComponent<AstarAI>().myTurn == true){
