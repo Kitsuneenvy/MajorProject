@@ -45,7 +45,6 @@ public class UnitGenerics : MonoBehaviour
 	int ratingNum;
 	int id;
 	//End of AI
-	
 
 	// Use this for initialization if we need it
 	void Start ()
@@ -322,6 +321,8 @@ public class UnitGenerics : MonoBehaviour
 					targetGenerics.onGrid.heldUnit = null;
 					//destroy object
 					Destroy(targetGenerics.gameObject);
+					//check if task is completed
+					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion();
 				}
 			} else {
 				if(Random.Range(0,100)<25){

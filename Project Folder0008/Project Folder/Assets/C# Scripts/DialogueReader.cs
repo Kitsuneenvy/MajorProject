@@ -16,7 +16,8 @@ public class DialogueReader : MonoBehaviour {
 	UILabel buttonText;
 	GameObject narrativeAnchor;
 	MissionReader mReaderObject;
-
+	public GameObject endButton;
+	
 	// Use this for initialization
 	void Start () {
 		buttonText = GameObject.Find("DialogueLabel").GetComponent<UILabel>();
@@ -96,15 +97,54 @@ public class DialogueReader : MonoBehaviour {
 			mReaderObject.objective = "Move next to \n enemy";
 			break;
 		case 2:
+			mReaderObject.checkmark.alpha = 0;
 			mReaderObject.objective = "End your turn";
 			break;
 		case 3:
+			mReaderObject.checkmark.alpha = 0;
 			mReaderObject.objective = "Defeat the robot";
 			break;
 		case 4:
 			break;
 		default:
 			break;
+		}
+	}
+	
+	//completing an objective
+	public void TaskCompletion()
+	{
+		if(Application.loadedLevelName == "Tutorial")
+		{
+			if(mReaderObject.objective.Contains("Move"))
+			{
+				
+			}
+			else if(mReaderObject.objective.Contains("End"))
+			{
+				
+				if(endButton.GetComponent<EndTurn>().pressed == true)
+				{
+					mReaderObject.checkmark.alpha = 255;
+				}
+			}
+			else
+			{
+				if(mReaderObject.enemyUnits == null)
+				{
+					mReaderObject.checkmark.alpha = 255;
+				}
+			}
+		}
+		else 
+		{
+			if(mReaderObject.objective.Contains("Kill all"))
+			{
+				if(mReaderObject.enemyUnits == null)
+				{
+					mReaderObject.checkmark.alpha = 255;
+				}
+			}
 		}
 	}
 }

@@ -102,8 +102,12 @@ public class AstarAI : MonoBehaviour
 				if(GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().returnTurn()==false){
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
 				}
+				
 			}
-			this.animation.Play("IdleChef");
+				if(this.name.Contains("Chef")&& this.animation.isPlaying == false)
+				{
+					this.animation.Play("ChefIdle1");
+				}
 		}
 		if (path == null) {
 			//We have no path to move after yet
@@ -124,27 +128,34 @@ public class AstarAI : MonoBehaviour
 		//set timevalue
 		timeValue = (1 / (targetPosition - this.transform.position).magnitude);
 		 if(moveUnit== true){
-		if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
-			this.animation.Play("WalkChef");
-			//Lerp to location of raycasted position.z
-			this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
-				
-			if (this.transform.position.z <= targetPosition.z + 0.2f && this.transform.position.z >= targetPosition.z - 0.2f) {
-					
-			this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
-				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
-			}
-		} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
-			this.animation.Play("WalkChef");
-			//Lerp to location of raycasted position.x
-			this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
-				
-			if (this.transform.position.x <= targetPosition.x + 0.2f && this.transform.position.x >= targetPosition.x - 0.2f) {
-					
-			this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
+			if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
+				if(this.name.Contains("Chef"))
+				{
+					this.animation.Play("ChefWalk");
+				}
+				//Lerp to location of raycasted position.z
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
+					
+				if (this.transform.position.z <= targetPosition.z + 0.2f && this.transform.position.z >= targetPosition.z - 0.2f) {
+						
+				this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
+					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
+				}
+			} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
+				if(this.name.Contains("Chef"))
+				{
+					this.animation.Play("ChefWalk");
+				}
+				//Lerp to location of raycasted position.x
+				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
+					
+				if (this.transform.position.x <= targetPosition.x + 0.2f && this.transform.position.x >= targetPosition.x - 0.2f) {
+						
+					this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
+					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
+				}
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion();
 			}
-		}
 		
 		}
 		
