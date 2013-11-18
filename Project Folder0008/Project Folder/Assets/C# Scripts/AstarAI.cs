@@ -154,7 +154,7 @@ public class AstarAI : MonoBehaviour
 					this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
 				}
-				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion();
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
 			}
 		
 		}

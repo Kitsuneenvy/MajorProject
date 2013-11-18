@@ -318,11 +318,12 @@ public class UnitGenerics : MonoBehaviour
 					
 					//remove from list
 					missionReaderObject.allUnits.Remove(targetGenerics.gameObject);
+					missionReaderObject.enemyUnits.Remove(targetGenerics.gameObject);
 					targetGenerics.onGrid.heldUnit = null;
 					//destroy object
 					Destroy(targetGenerics.gameObject);
 					//check if task is completed
-					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion();
+					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 				}
 			} else {
 				if(Random.Range(0,100)<25){

@@ -112,13 +112,16 @@ public class DialogueReader : MonoBehaviour {
 	}
 	
 	//completing an objective
-	public void TaskCompletion()
+	public void TaskCompletion(GameObject character)
 	{
 		if(Application.loadedLevelName == "Tutorial")
 		{
 			if(mReaderObject.objective.Contains("Move"))
 			{
-				
+				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character)
+				{
+					mReaderObject.checkmark.alpha = 255;
+				}
 			}
 			else if(mReaderObject.objective.Contains("End"))
 			{
@@ -130,7 +133,7 @@ public class DialogueReader : MonoBehaviour {
 			}
 			else
 			{
-				if(mReaderObject.enemyUnits == null)
+				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
 				}
@@ -140,7 +143,7 @@ public class DialogueReader : MonoBehaviour {
 		{
 			if(mReaderObject.objective.Contains("Kill all"))
 			{
-				if(mReaderObject.enemyUnits == null)
+				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
 				}
