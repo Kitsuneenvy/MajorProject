@@ -21,7 +21,7 @@ public class EndTurn : MonoBehaviour {
 			{
 				pressed = true;
 				Debug.Log(pressed.ToString());
-				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion();
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 			}
 			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().nextTurn();
 		}

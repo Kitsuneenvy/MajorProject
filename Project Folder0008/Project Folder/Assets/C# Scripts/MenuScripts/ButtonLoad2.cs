@@ -26,13 +26,16 @@ public class ButtonLoad2 : MonoBehaviour {
 	
 	void OnClick()
 	{
-		foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file))
+		if(file != "")
 		{
-			mission = line;
+			foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file))
+			{
+				mission = line;
+			}
+			saveData.GetComponent<StoreData>().MissionToLoad(mission);
+			saveData.GetComponent<StoreData>().setAutoSaveName(file);
+			Application.LoadLevel("Week6");
 		}
-		saveData.GetComponent<StoreData>().MissionToLoad(mission);
-		saveData.GetComponent<StoreData>().setAutoSaveName(file);
-		Application.LoadLevel("Week6");
 	}
 	
 	public string ReturnFileName()

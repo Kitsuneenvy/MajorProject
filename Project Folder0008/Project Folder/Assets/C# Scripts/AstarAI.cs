@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //Note this line, if it is left out, the script won't know that the class 'Path' exists and it will throw compiler errors
 //This line should always be present at the top of scripts which use pathfinding
@@ -31,6 +32,8 @@ public class AstarAI : MonoBehaviour
 	float timeValue;
 	bool moveUnit = false;
 	public bool myTurn = false;
+	
+	List<GameObject> flowerAdjacentTiles = new List<GameObject>();
 	
 	public void Start ()
 	{
@@ -155,6 +158,32 @@ public class AstarAI : MonoBehaviour
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
 				}
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
+				
+				//Flower Boost to Enemy
+				if(this.tag == "Enemy")
+				{
+					if(GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased == true)
+					{
+						this.GetComponent<UnitGenerics>().attack -= 10;
+						 GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = false;
+					}
+					if(GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits.Count > 0)
+					{
+						foreach( GameObject flower in GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits)
+						{
+							flowerAdjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(flower);
+						}
+						foreach(GameObject tile in flowerAdjacentTiles)
+						{
+							Grid gridObject = tile.GetComponent<Grid>();
+							if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+							{
+								GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = true;
+								gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+							}
+						}
+					}
+				}
 			}
 		
 		}

@@ -46,6 +46,14 @@ public class MissionReader : MonoBehaviour {
 	//holds all units
 	public List<GameObject> allUnits = new List<GameObject>();
 	
+	public List<GameObject> enemyUnits = new List<GameObject>();
+	
+	public List<GameObject> optionalTiles = new List<GameObject>();
+	
+	public List<GameObject> flowerUnits = new List<GameObject>();
+	
+	List<GameObject> flowerAdjacentTiles = new List<GameObject>();
+	
 	//main camera object
 	public GameObject mainCamera;
 	GameObject saveData;
@@ -61,7 +69,9 @@ public class MissionReader : MonoBehaviour {
 	Vector3 tempPosition;
 	
 	//checkmark uisprite
-	UISprite checkmark;
+	public UISprite checkmark;
+	
+	public bool statsIncreased = false;
 	
 	// Use this for initialization
 	void Start () {
@@ -118,6 +128,8 @@ public class MissionReader : MonoBehaviour {
 		
 		if(newMission == true)
 		{
+			optionalTiles.Clear();
+			flowerUnits.Clear();
 			newMission = false;
 			layoutCompleted = false;
 			if(mission1 == true)
@@ -377,9 +389,20 @@ public class MissionReader : MonoBehaviour {
 			{
 				tempPosition.y = 61.5f;
 			}
+			if(tutorial && tempUnit.tag == "Enemy")
+			{
+				tutorial = false;
+				optionalTiles.Add(GameObject.Find("GridSquare(Clone)" + (gridSquareNumber-1).ToString()));
+				optionalTiles.Add(GameObject.Find("GridSquare(Clone)" + (gridSquareNumber+ aStarGrid.astarData.gridGraph.width).ToString()));
+				optionalTiles.Add(GameObject.Find("GridSquare(Clone)" + (gridSquareNumber+1).ToString()));
+			}
 			tempUnit.transform.position = tempPosition;
+			
 			//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
-			tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
+			if(!tempUnit.name.Contains("Flower"))
+			{Debug.Log(tempUnit.ToString());
+				tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
+			}
 			tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
 			tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
 			
@@ -432,13 +455,13 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("Ladle")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("Bowlder")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
@@ -463,13 +486,13 @@ public class MissionReader : MonoBehaviour {
 									}
 									if(unitInfo[0] == 0)//speed
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Mower")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("Pruner")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
@@ -481,7 +504,7 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 3)//healer
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Florist")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
@@ -509,6 +532,31 @@ public class MissionReader : MonoBehaviour {
 		}
 	foreach(GameObject unit in allUnits){
 			unit.GetComponent<UnitGenerics>().setGrid(unit.GetComponent<UnitGenerics>().onGrid);
+			
+			if(unit.tag == "Enemy" && !unit.name.Contains("Flower"))
+			{
+				enemyUnits.Add(unit);
+			}
+			if(unit.name.Contains("Flower"))
+			{
+				flowerUnits.Add(unit);
+				/*if(flowerUnits.Count > 0)
+				{
+					foreach( GameObject flower in flowerUnits)
+					{
+						flowerAdjacentTiles = flower.GetComponent<UnitGenerics>().checkAdjacentGrids(flower);
+					}
+					foreach(GameObject tile in flowerAdjacentTiles)
+					{
+						Grid gridObject = tile.GetComponent<Grid>();
+						if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+						{
+							statsIncreased = true;
+							gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+						}
+					}
+				}*/
+			}
 		}
 		aStarGrid.Scan();
 	}
