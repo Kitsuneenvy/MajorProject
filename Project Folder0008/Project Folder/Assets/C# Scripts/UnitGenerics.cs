@@ -132,8 +132,7 @@ public class UnitGenerics : MonoBehaviour
 	public void launchAttack (GameObject target)
 	{
 		setAttackState (false);
-		string splitString = this.name.Split('(')[0];
-		this.animation.Play(splitString+"Attack",PlayMode.StopAll);
+		this.animation.Play("Attack",PlayMode.StopAll);
 		
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
@@ -146,12 +145,15 @@ public class UnitGenerics : MonoBehaviour
 			UnitGenerics targetGenerics;
 			targetGenerics = target.GetComponent<UnitGenerics> ();
 			if (Random.Range (0, 100) <= (accuracy - targetGenerics.dodge)) {
-				TempParticle = target.GetComponent<ParticleSystem>();
-				TempParticle.startColor = Color.red;
-				TempParticle.startLifetime = 0.5f;
-				TempParticle.enableEmission = true;
-				TempParticle.loop = false;
-				TempParticle.Play();
+				if(!target.name.Contains("Flower"))
+				{
+					TempParticle = target.GetComponent<ParticleSystem>();
+					TempParticle.startColor = Color.red;
+					TempParticle.startLifetime = 0.5f;
+					TempParticle.enableEmission = true;
+					TempParticle.loop = false;
+					TempParticle.Play();
+				}
 				targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
 				if(Random.Range(0,100)<50){
 					if(Random.Range(0,100)<25){
@@ -316,6 +318,34 @@ public class UnitGenerics : MonoBehaviour
 				}
 					//play death animation
 					
+					//flower buff removal
+					if(target.name.Contains("Flower"))
+					{Debug.Log("Running");
+						List<GameObject> tempList = new List<GameObject>();
+						tempList = checkAdjacentGrids(targetGenerics.onGrid.gameObject);
+						foreach(GameObject tile in tempList)
+						{
+							if(tile.GetComponent<ParticleSystem>() != null)
+							{
+								tile.GetComponent<ParticleSystem>().Stop();
+								
+								if(tile.GetComponent<Grid>().heldUnit != null && tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
+								{
+									if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
+									{
+										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
+									}
+									else
+									{
+										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
+									}
+									
+									tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
+								}
+							}
+						}
+						tempList.Clear();
+					}
 					//remove from list
 					missionReaderObject.allUnits.Remove(targetGenerics.gameObject);
 					missionReaderObject.enemyUnits.Remove(targetGenerics.gameObject);

@@ -109,8 +109,7 @@ public class AstarAI : MonoBehaviour
 			}
 				if(this.animation.isPlaying == false)
 				{
-					string splitString = this.name.Split('(')[0];
-					this.animation.Play(splitString+"Idle1");
+					this.animation.Play("Idle1");
 				}
 		}
 		if (path == null) {
@@ -134,8 +133,7 @@ public class AstarAI : MonoBehaviour
 		 if(moveUnit== true){
 			if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
 				
-				string splitString = this.name.Split('(')[0];
-				this.animation.Play(splitString+"Walk");
+				this.animation.Play("Walk");
 				
 				//Lerp to location of raycasted position.z
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
@@ -146,9 +144,8 @@ public class AstarAI : MonoBehaviour
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 				}
 			} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
-				
-				string splitString = this.name.Split('(')[0];
-				this.animation.Play(splitString+"Walk");
+
+				this.animation.Play("Walk");
 				
 				//Lerp to location of raycasted position.x
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
