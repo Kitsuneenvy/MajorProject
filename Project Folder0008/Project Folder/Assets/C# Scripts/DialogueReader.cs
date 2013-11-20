@@ -17,6 +17,7 @@ public class DialogueReader : MonoBehaviour {
 	GameObject narrativeAnchor;
 	MissionReader mReaderObject;
 	public GameObject endButton;
+	gameManage gameManageObject;
 	
 	// Use this for initialization
 	void Start () {
@@ -24,7 +25,13 @@ public class DialogueReader : MonoBehaviour {
 		narrativeAnchor = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		narrativeDialogue = GameObject.FindGameObjectWithTag("NarrativeDialogue").GetComponent<UILabel>();
 		mReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
+		gameManageObject = GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>();
 		readDialogueFile();
+		gameManageObject.narrativePanelOpen = true;
+		if(Application.loadedLevelName == "Tutorial")
+		{
+			readSection(1);
+		}
 	}
 	
 	// Update is called once per frame
@@ -36,7 +43,7 @@ public class DialogueReader : MonoBehaviour {
 	
 	void readDialogueFile(){
 		//If tutorial
-		if(1==1){ 
+		if(Application.loadedLevelName == "Tutorial"){ 
 			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/TutorialDialogue.txt")){
 				DialogueLines.Add(Line);
 			}
@@ -118,10 +125,12 @@ public class DialogueReader : MonoBehaviour {
 		{
 			if(mReaderObject.objective.Contains("Move"))
 			{
-				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character)
+				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)
 				{
 					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
 				}
+				
 			}
 			else if(mReaderObject.objective.Contains("End"))
 			{
@@ -136,7 +145,9 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
 				}
+				
 			}
 		}
 		else 
@@ -146,7 +157,9 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
 				}
+				
 			}
 		}
 	}

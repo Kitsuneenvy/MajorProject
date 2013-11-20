@@ -134,6 +134,7 @@ public class MissionReader : MonoBehaviour {
 			flowerUnits.Clear();
 			newMission = false;
 			layoutCompleted = false;
+			objective = "";
 			if(mission1 == true)
 			{
 				objective = "Kill All Enemies";
@@ -164,7 +165,7 @@ public class MissionReader : MonoBehaviour {
 				aStarGrid.Scan();
 				aStarGrid.astarData.gridGraph.nodeSize = 5;
 			}
-			else if (mission5 = true)
+			else if (mission5 == true)
 			{
 				objective = "Stop the florist \n from escaping";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
