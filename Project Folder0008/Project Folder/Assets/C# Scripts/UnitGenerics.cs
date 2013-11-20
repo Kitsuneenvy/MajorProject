@@ -10,7 +10,7 @@ public class UnitGenerics : MonoBehaviour
 	public float defence;
 	public float accuracy;
 	public float dodge;
-	float movement;
+	public float movement;
 	RaycastHit info;
 	bool attackState = false;
 	bool movementState = false;
@@ -36,6 +36,7 @@ public class UnitGenerics : MonoBehaviour
 	int AINumChoices;
 	int ID; // Passed to this script by game manager upon initialisation
 	public int unitType; // 1 = speed, 2 = attack, 3 = defence, 4 = healer
+	gameManage gameManageObject;
 	MissionReader missionReaderObject;
 	SoundManager soundObject;
 	//This stuff is for AI decision rating
@@ -50,6 +51,7 @@ public class UnitGenerics : MonoBehaviour
 	// Use this for initialization if we need it
 	void Start ()
 	{
+		gameManageObject = GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>();
 		soundObject = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SoundManager>();
 		missionReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
 	}
@@ -317,7 +319,7 @@ public class UnitGenerics : MonoBehaviour
 					}
 				}
 					//play death animation
-					
+					targetGenerics.gameObject.GetComponent<Animation>().Play("Death");
 					//flower buff removal
 					if(target.name.Contains("Flower"))
 					{Debug.Log("Running");
@@ -351,7 +353,7 @@ public class UnitGenerics : MonoBehaviour
 					missionReaderObject.enemyUnits.Remove(targetGenerics.gameObject);
 					targetGenerics.onGrid.heldUnit = null;
 					//destroy object
-					Destroy(targetGenerics.gameObject);
+					Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death"].length);
 					//check if task is completed
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 				}
@@ -565,132 +567,171 @@ public class UnitGenerics : MonoBehaviour
 		ratingsList.Clear();
 		AITargetAdjacent.Clear();
 		unitList.Clear();
-		//The ratings used for the various difficulty levels
-		Vector2 highestRating = new Vector2(0,0);
-		Vector2 middleRating = new Vector2(0,0);
-		Vector2 lowestRating = new Vector2(0,0);
+		//The rating of the best unit
+		float highestRating = 0;
 		//The target for whichever action the AI will take
-		GameObject chosenTarget;
-		//A loop to discern which grid squares the unit can reach
-		foreach(GameObject testGrid in moveableSquares){
-			foreach(GameObject secondTest in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-				if(secondTest==testGrid){
-					if(!(AIThinkSquares.Contains(secondTest))){
-						AIThinkSquares.Add(secondTest);
+		GameObject chosenTarget = null;
+		float shortestDistance = Mathf.Infinity;
+		foreach(GameObject testUnit in missionReaderObject.allUnits){
+			if(testUnit.tag=="PlayerUnit"){
+				if(calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)<shortestDistance){
+					shortestDistance = calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject);
+					chosenTarget = testUnit;
+				} else if (calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)==shortestDistance){
+					if(calculateRating(chosenTarget, this.gameObject)<calculateRating(testUnit,this.gameObject)){
+						chosenTarget = testUnit;
 					}
 				}
 			}
 		}
-		//Refine the squares to only the squares that have units in them, to speed it up.
-		foreach(GameObject thinkSquare in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-			if(thinkSquare.GetComponent<Grid>().heldUnit==null||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Enemy"||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Flower"){
-				if(AIThinkSquares.Contains(thinkSquare)){
-					AIThinkSquares.Remove(thinkSquare);
-				}
-			}
-		}
-		if(AIThinkSquares.Count!=0){
-		//Loop through the remaining squares and find out which ones have the best actions
-		foreach(GameObject thinkSquare in AIThinkSquares){
-			ratingNum = 0;
-			UnitGenerics thinkUnit = thinkSquare.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
-			Grid thinkGrid = thinkSquare.GetComponent<Grid>();
-			if(thinkGrid.heldUnit.tag==this.tag){
-				if(health<maxHealth/2&&thinkUnit.unitType==3){
-					unitList.Add(thinkSquare);
-					ratingsList.Add(new Vector2(ratingsList.Count+1,8));
-				}
-				if(thinkUnit.getHealth()<thinkUnit.getMax()/2&&thinkUnit.unitType==3&&unitType==2){
-					unitList.Add(thinkSquare);
-					ratingsList.Add(new Vector2(ratingsList.Count+1,6));
-				}
-			} else if (thinkUnit.tag=="PlayerUnit"){
-				if(thinkUnit.health<health){
-					ratingNum = ratingNum+2;
-				}
-				if(thinkUnit.unitType==0&&unitType==2){
-					ratingNum = ratingNum+2;
-				}
-				if(thinkUnit.unitType==1&&unitType==0){
-					ratingNum = ratingNum+2;
-				}
-				if(thinkUnit.unitType==2&&unitType==1){
-					ratingNum = ratingNum+2;
-				}
-				if(thinkUnit.unitType==3&&unitType!=3){
-					ratingNum = ratingNum+3;
-				}
-				unitList.Add(thinkSquare);
-				ratingsList.Add(new Vector2(ratingsList.Count+1,ratingNum));
-			}
-		}
-		//find the various ratings for each difficulty
-			foreach(GameObject square in unitList){
-				if(returnRating(square).y>highestRating.y){
-					highestRating.y = returnRating(square).y;
-				}
-				if(returnRating(square).y>middleRating.y&&returnRating(square).y<highestRating.y){
-					middleRating.y = returnRating(square).y;
-				}
-				if(returnRating(square).y>lowestRating.y&&returnRating(square).y<middleRating.y){
-					lowestRating.y = returnRating(square).y;
-				}
-			}
-		//Decide on the target, next we do things for it
-		chosenTarget = unitList[int.Parse(highestRating.x.ToString())];
-		GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(chosenTarget.GetComponent<Grid>().heldUnit.gameObject,this.gameObject,highestRating.y);
-		//for simplicity
-		Grid chosenGrid = chosenTarget.GetComponent<Grid>();
-		foreach(GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-		if (checkAdjacentGrids(chosenGrid.gameObject).Contains(testGrid)) {
-				AITargetAdjacent.Add (testGrid);
-			}
-		}
-		} else if(AIThinkSquares.Count==0){
-			Debug.Log ("Running the non think ai");
-			GameObject temporary = null;
-			float shortestDis = Mathf.Infinity;
-			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-					maxMove.Add(square);
-			}
-			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-				if(calculateGridDistance(onGrid.gameObject,square)>movement||square.GetComponent<Grid>().heldUnit!=null){
-					maxMove.Remove(square);
-				}
-			}
-			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-				if(square.GetComponent<Grid>().heldUnit!=null&&square.GetComponent<Grid>().heldUnit.tag=="PlayerUnit"){
-					AIThinkSquares.Add(square);
-					UnitGenerics thinkUnit = square.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
-					if(thinkUnit.health<health){
-						ratingNum = ratingNum+2;
-					}
-					if(thinkUnit.unitType==0&&unitType==2){
-						ratingNum = ratingNum+2;
-					}
-					if(thinkUnit.unitType==1&&unitType==0){
-						ratingNum = ratingNum+2;
-					}
-					if(thinkUnit.unitType==2&&unitType==1){
-						ratingNum = ratingNum+2;
-					}
-					if(thinkUnit.unitType==3&&unitType!=3){
-						ratingNum = ratingNum+3;
-					}
-				}
-			}
-			foreach(GameObject square in maxMove){
-				foreach(GameObject checkSquare in AIThinkSquares){
-					if(calculateGridDistance(square,checkSquare)<shortestDis){
-						shortestDis = calculateGridDistance(square,checkSquare);
-						temporary = square;
-					}
-				}
-			}
-			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,ratingNum-2);
-		}
+		highestRating = calculateRating(chosenTarget, this.gameObject);
+		
+		gameManageObject.setActions(chosenTarget,this.gameObject,highestRating);
+		
+		
+//		
+//		
+//		//A loop to discern which grid squares the unit can reach
+//		foreach(GameObject testGrid in moveableSquares){
+//			foreach(GameObject secondTest in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
+//				if(secondTest==testGrid){
+//					if(!(AIThinkSquares.Contains(secondTest))){
+//						AIThinkSquares.Add(secondTest);
+//					}
+//				}
+//			}
+//		}
+//		//Refine the squares to only the squares that have units in them, to speed it up.
+//		foreach(GameObject thinkSquare in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
+//			if(thinkSquare.GetComponent<Grid>().heldUnit==null||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Enemy"||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Flower"){
+//				if(AIThinkSquares.Contains(thinkSquare)){
+//					AIThinkSquares.Remove(thinkSquare);
+//				}
+//			}
+//		}
+//		if(AIThinkSquares.Count!=0){
+//		//Loop through the remaining squares and find out which ones have the best actions
+//		foreach(GameObject thinkSquare in AIThinkSquares){
+//			ratingNum = 0;
+//			UnitGenerics thinkUnit = thinkSquare.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
+//			Grid thinkGrid = thinkSquare.GetComponent<Grid>();
+//			if(thinkGrid.heldUnit.tag==this.tag){
+//				if(health<maxHealth/2&&thinkUnit.unitType==3){
+//					unitList.Add(thinkSquare);
+//					ratingsList.Add(new Vector2(ratingsList.Count+1,8));
+//				}
+//				if(thinkUnit.getHealth()<thinkUnit.getMax()/2&&thinkUnit.unitType==3&&unitType==2){
+//					unitList.Add(thinkSquare);
+//					ratingsList.Add(new Vector2(ratingsList.Count+1,6));
+//				}
+//			} else if (thinkUnit.tag=="PlayerUnit"){
+//				if(thinkUnit.health<health){
+//					ratingNum = ratingNum+2;
+//				}
+//				if(thinkUnit.unitType==0&&unitType==2){
+//					ratingNum = ratingNum+2;
+//				}
+//				if(thinkUnit.unitType==1&&unitType==0){
+//					ratingNum = ratingNum+2;
+//				}
+//				if(thinkUnit.unitType==2&&unitType==1){
+//					ratingNum = ratingNum+2;
+//				}
+//				if(thinkUnit.unitType==3&&unitType!=3){
+//					ratingNum = ratingNum+3;
+//				}
+//				unitList.Add(thinkSquare);
+//				ratingsList.Add(new Vector2(ratingsList.Count+1,ratingNum));
+//			}
+//		}
+//		//find the various ratings for each difficulty
+//			foreach(GameObject square in unitList){
+//				if(returnRating(square).y>highestRating.y){
+//					highestRating.y = returnRating(square).y;
+//				}
+//				if(returnRating(square).y>middleRating.y&&returnRating(square).y<highestRating.y){
+//					middleRating.y = returnRating(square).y;
+//				}
+//				if(returnRating(square).y>lowestRating.y&&returnRating(square).y<middleRating.y){
+//					lowestRating.y = returnRating(square).y;
+//				}
+//			}
+//		//Decide on the target, next we do things for it
+//		chosenTarget = unitList[int.Parse(highestRating.x.ToString())];
+//		GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(chosenTarget.GetComponent<Grid>().heldUnit.gameObject,this.gameObject,highestRating.y);
+//		//for simplicity
+//		Grid chosenGrid = chosenTarget.GetComponent<Grid>();
+//		foreach(GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
+//		if (checkAdjacentGrids(chosenGrid.gameObject).Contains(testGrid)) {
+//				AITargetAdjacent.Add (testGrid);
+//			}
+//		}
+//		} else if(AIThinkSquares.Count==0){
+//			Debug.Log ("Running the non think ai");
+//			GameObject temporary = null;
+//			float shortestDis = Mathf.Infinity;
+//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
+//					maxMove.Add(square);
+//			}
+//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
+//				if(calculateGridDistance(onGrid.gameObject,square)>movement||square.GetComponent<Grid>().heldUnit!=null){
+//					maxMove.Remove(square);
+//				}
+//			}
+//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
+//				if(square.GetComponent<Grid>().heldUnit!=null&&square.GetComponent<Grid>().heldUnit.tag=="PlayerUnit"){
+//					AIThinkSquares.Add(square);
+//					UnitGenerics thinkUnit = square.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
+//					if(thinkUnit.health<health){
+//						ratingNum = ratingNum+2;
+//					}
+//					if(thinkUnit.unitType==0&&unitType==2){
+//						ratingNum = ratingNum+2;
+//					}
+//					if(thinkUnit.unitType==1&&unitType==0){
+//						ratingNum = ratingNum+2;
+//					}
+//					if(thinkUnit.unitType==2&&unitType==1){
+//						ratingNum = ratingNum+2;
+//					}
+//					if(thinkUnit.unitType==3&&unitType!=3){
+//						ratingNum = ratingNum+3;
+//					}
+//				}
+//			}
+//			foreach(GameObject square in maxMove){
+//				foreach(GameObject checkSquare in AIThinkSquares){
+//					if(calculateGridDistance(square,checkSquare)<shortestDis){
+//						shortestDis = calculateGridDistance(square,checkSquare);
+//						temporary = square;
+//					}
+//				}
+//			}
+//			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,ratingNum-2);
+//		}
 		
 	}
+	
+	float calculateRating(GameObject target, GameObject unit){
+		float ratingReturn = 0;
+		if(target.GetComponent<UnitGenerics>().health/target.GetComponent<UnitGenerics>().maxHealth<health/maxHealth){
+			ratingReturn = ratingReturn+2;
+		}
+		if(target.GetComponent<UnitGenerics>().unitType==0&&unit.GetComponent<UnitGenerics>().unitType==2){
+			ratingReturn = ratingReturn+2;
+		}
+		if(target.GetComponent<UnitGenerics>().unitType==1&&unit.GetComponent<UnitGenerics>().unitType==0){
+			ratingReturn = ratingReturn+2;
+		}
+		if(target.GetComponent<UnitGenerics>().unitType==2&&unit.GetComponent<UnitGenerics>().unitType==1){
+			ratingReturn = ratingReturn+2;
+		}
+		if(target.GetComponent<UnitGenerics>().unitType==3&&unit.GetComponent<UnitGenerics>().unitType!=3){
+			ratingReturn = ratingReturn+3;
+		}
+		return ratingReturn;
+	}
+	
 	//A function to return the given rating for any gameobject. Returns vector2.zero if the object is not in the list
 	Vector2 returnRating(GameObject unitToCheck){
 		int count = 0;

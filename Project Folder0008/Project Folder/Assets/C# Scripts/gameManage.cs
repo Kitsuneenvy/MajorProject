@@ -261,21 +261,29 @@ public class gameManage : MonoBehaviour {
 				max = rating.y;
 				count = rating.x;
 			}
-			listCount = int.Parse(count.ToString());
+			listCount = (int)count;
 		}
-		if(chosenTargets[listCount].GetComponent<Grid>()==null){
+		if(chosenTargets[listCount].GetComponent<Grid>()!=null){
 		foreach(GameObject square in sendUnits[listCount].GetComponent<UnitGenerics>().checkAdjacentGrids(chosenTargets[listCount].GetComponent<UnitGenerics>().onGrid.gameObject)){
 				if(square.GetComponent<Grid>().returnUnit()==null){
-			if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square)<shortestDistance){
-				shortestDistance = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square);
-				moveSquare = square;
-			}
+					if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square)<shortestDistance){
+						shortestDistance = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square);
+						moveSquare = square;
+					}
 				}
 			}
 			
-		} else {
-			moveSquare = chosenTargets[listCount];
 		}
+		if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,moveSquare)>sendUnits[listCount].GetComponent<UnitGenerics>().movement){
+			float distanceSquare = Mathf.Infinity;
+			foreach(GameObject tile in sendUnits[listCount].GetComponent<UnitGenerics>().moveableSquares){
+				if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare)<distanceSquare){
+					distanceSquare = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare);
+					moveSquare = tile;
+				}
+			}
+		}
+		Debug.Log(shortestDistance.ToString());
 		if(shortestDistance<1){
 			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
 			sendUnits[listCount].GetComponent<UnitGenerics>().launchAttack(chosenTargets[listCount]);
