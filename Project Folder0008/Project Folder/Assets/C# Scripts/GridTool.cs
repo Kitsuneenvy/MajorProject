@@ -33,7 +33,7 @@ public class GridTool : MonoBehaviour {
 	MissionReader mReaderObject;
 	
 	List<GameObject> gridColliders = new List<GameObject>();
-	
+	List<GameObject> flowerAdjacentTiles = new List<GameObject>();
 	
 	GameObject instantiatedCollider;
 	GameObject gridParent;
@@ -96,7 +96,7 @@ public class GridTool : MonoBehaviour {
 					instantiatedCollider.transform.parent = gridParent.transform;
 					gridColliders.Add(instantiatedCollider);
 				}
-				
+					
 				//This is mostly debug, we will be doing this with the mission creator later
 			} else if(!missionInit){
 				if(astarGrid.GetComponent<MissionReader>().rotate == true){

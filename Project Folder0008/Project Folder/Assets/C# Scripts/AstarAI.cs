@@ -107,9 +107,10 @@ public class AstarAI : MonoBehaviour
 				}
 				
 			}
-				if(this.name.Contains("Chef")&& this.animation.isPlaying == false)
+				if(this.animation.isPlaying == false)
 				{
-					this.animation.Play("ChefIdle1");
+					string splitString = this.name.Split('(')[0];
+					this.animation.Play(splitString+"Idle1");
 				}
 		}
 		if (path == null) {
@@ -132,10 +133,10 @@ public class AstarAI : MonoBehaviour
 		timeValue = (1 / (targetPosition - this.transform.position).magnitude);
 		 if(moveUnit== true){
 			if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
-				if(this.name.Contains("Chef"))
-				{
-					this.animation.Play("ChefWalk");
-				}
+				
+				string splitString = this.name.Split('(')[0];
+				this.animation.Play(splitString+"Walk");
+				
 				//Lerp to location of raycasted position.z
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
 					
@@ -145,10 +146,10 @@ public class AstarAI : MonoBehaviour
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 				}
 			} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
-				if(this.name.Contains("Chef"))
-				{
-					this.animation.Play("ChefWalk");
-				}
+				
+				string splitString = this.name.Split('(')[0];
+				this.animation.Play(splitString+"Walk");
+				
 				//Lerp to location of raycasted position.x
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 					
@@ -162,10 +163,17 @@ public class AstarAI : MonoBehaviour
 				//Flower Boost to Enemy
 				if(this.tag == "Enemy")
 				{
-					if(GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased == true)
+					if(this.GetComponent<UnitGenerics>().statsIncreased == true)
 					{
-						this.GetComponent<UnitGenerics>().attack -= 10;
-						 GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = false;
+						if(this.name.Contains("Florist"))
+						{
+							this.GetComponent<UnitGenerics>().attack -= 10;
+						}
+						else
+						{
+							this.GetComponent<UnitGenerics>().attack += 10;
+						}
+						this.GetComponent<UnitGenerics>().statsIncreased = false;
 					}
 					if(GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits.Count > 0)
 					{
@@ -178,8 +186,15 @@ public class AstarAI : MonoBehaviour
 								Grid gridObject = tile.GetComponent<Grid>();
 								if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
 								{
-									GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = true;
-									gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+									this.GetComponent<UnitGenerics>().statsIncreased = true;
+									if(this.name.Contains("Florist"))
+									{
+										this.GetComponent<UnitGenerics>().attack -= 10;
+									}
+									else
+									{
+										this.GetComponent<UnitGenerics>().attack += 10;
+									}
 								}
 							}
 						}

@@ -41,6 +41,7 @@ public class UnitGenerics : MonoBehaviour
 	//This stuff is for AI decision rating
 	List<GameObject> unitList = new List<GameObject>();
 	List<Vector2> ratingsList = new List<Vector2>();
+	public bool statsIncreased = true;
 	GameObject unit;
 	int ratingNum;
 	int id;
@@ -131,10 +132,9 @@ public class UnitGenerics : MonoBehaviour
 	public void launchAttack (GameObject target)
 	{
 		setAttackState (false);
-		if(this.name.Contains("Chef"))
-		{
-			this.animation.Play("ChefHeal",PlayMode.StopAll);
-		}
+		string splitString = this.name.Split('(')[0];
+		this.animation.Play(splitString+"Attack",PlayMode.StopAll);
+		
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
 			if(this.GetComponent<AstarAI>().myTurn == true){

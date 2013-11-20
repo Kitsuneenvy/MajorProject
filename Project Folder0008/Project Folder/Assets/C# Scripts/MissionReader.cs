@@ -73,6 +73,8 @@ public class MissionReader : MonoBehaviour {
 	
 	public bool statsIncreased = false;
 	
+	ParticleSystem particleOnGrid;
+	
 	// Use this for initialization
 	void Start () {
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
@@ -455,19 +457,19 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Chef")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Bowlder")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 3)//healer
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Chef")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
@@ -492,7 +494,7 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("ChefChar")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Pruner")) as GameObject;
 										tempUnit.tag = "Enemy";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
@@ -536,7 +538,7 @@ public class MissionReader : MonoBehaviour {
 				enemyUnits.Add(unit);
 			}
 			if(unit.name.Contains("Flower"))
-			{Debug.Log("Adding Flower");
+			{
 				flowerUnits.Add(unit);
 			}
 			unit.GetComponent<UnitGenerics>().setGrid(unit.GetComponent<UnitGenerics>().onGrid);
@@ -546,17 +548,30 @@ public class MissionReader : MonoBehaviour {
 		if(flowerUnits.Count > 0)
 		{
 			foreach( GameObject flowerUnit in flowerUnits)
-			{Debug.Log("Adding tiles");
+			{
 				flowerAdjacentTiles = flowerUnit.GetComponent<UnitGenerics>().checkAdjacentGrids(flowerUnit.GetComponent<UnitGenerics>().onGrid.gameObject);
 				
 				foreach(GameObject tile in flowerAdjacentTiles)
 				{
-					Debug.Log(tile.ToString());
+					particleOnGrid = tile.AddComponent<ParticleSystem>();
+					particleOnGrid.startLifetime = 1.0f;
+					particleOnGrid.emissionRate = 10;
+					particleOnGrid.gravityModifier = -0.5f;
+					particleOnGrid.startColor = Color.black;
+					particleOnGrid.startSize = 1.0f;
+					
 					Grid gridObject = tile.GetComponent<Grid>();
 					if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
-					{Debug.Log("Running");
-						statsIncreased = true;
-						gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+					{
+						gridObject.heldUnit.GetComponent<UnitGenerics>().statsIncreased = true;
+						if(this.name.Contains("Florist"))
+						{
+							gridObject.heldUnit.GetComponent<UnitGenerics>().attack -= 10;
+						}
+						else
+						{
+							gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+						}
 					}
 				}
 			}
