@@ -171,15 +171,16 @@ public class AstarAI : MonoBehaviour
 					{
 						foreach( GameObject flower in GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits)
 						{
-							flowerAdjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(flower);
-						}
-						foreach(GameObject tile in flowerAdjacentTiles)
-						{
-							Grid gridObject = tile.GetComponent<Grid>();
-							if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+							flowerAdjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(flower.GetComponent<UnitGenerics>().onGrid.gameObject);
+							
+							foreach(GameObject tile in flowerAdjacentTiles)
 							{
-								GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = true;
-								gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+								Grid gridObject = tile.GetComponent<Grid>();
+								if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+								{
+									GameObject.Find("A*").GetComponent<MissionReader>().statsIncreased = true;
+									gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+								}
 							}
 						}
 					}

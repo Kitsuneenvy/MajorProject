@@ -55,7 +55,6 @@ public class UnitGenerics : MonoBehaviour
 	//This function creates the unit statistics
 	public void Initialise (int type) 
 	{
-		Debug.Log(type.ToString());
 		if (type == 0) {
 			health = 60;
 			attack = 20;

@@ -400,7 +400,7 @@ public class MissionReader : MonoBehaviour {
 			
 			//GameObject.Find("GridSquare(Clone)" + gridSquareNumber.ToString()).GetComponent<Grid>().OnTriggerEnter(tempUnit.collider);
 			if(!tempUnit.name.Contains("Flower"))
-			{Debug.Log(tempUnit.ToString());
+			{
 				tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
 			}
 			tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
@@ -531,33 +531,36 @@ public class MissionReader : MonoBehaviour {
 			}
 		}
 	foreach(GameObject unit in allUnits){
-			unit.GetComponent<UnitGenerics>().setGrid(unit.GetComponent<UnitGenerics>().onGrid);
-			
 			if(unit.tag == "Enemy" && !unit.name.Contains("Flower"))
 			{
 				enemyUnits.Add(unit);
 			}
 			if(unit.name.Contains("Flower"))
-			{
+			{Debug.Log("Adding Flower");
 				flowerUnits.Add(unit);
-				/*if(flowerUnits.Count > 0)
-				{
-					foreach( GameObject flower in flowerUnits)
-					{
-						flowerAdjacentTiles = flower.GetComponent<UnitGenerics>().checkAdjacentGrids(flower);
-					}
-					foreach(GameObject tile in flowerAdjacentTiles)
-					{
-						Grid gridObject = tile.GetComponent<Grid>();
-						if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
-						{
-							statsIncreased = true;
-							gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
-						}
-					}
-				}*/
 			}
+			unit.GetComponent<UnitGenerics>().setGrid(unit.GetComponent<UnitGenerics>().onGrid);
+			
 		}
 		aStarGrid.Scan();
+		if(flowerUnits.Count > 0)
+		{
+			foreach( GameObject flowerUnit in flowerUnits)
+			{Debug.Log("Adding tiles");
+				flowerAdjacentTiles = flowerUnit.GetComponent<UnitGenerics>().checkAdjacentGrids(flowerUnit.GetComponent<UnitGenerics>().onGrid.gameObject);
+				
+				foreach(GameObject tile in flowerAdjacentTiles)
+				{
+					Debug.Log(tile.ToString());
+					Grid gridObject = tile.GetComponent<Grid>();
+					if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+					{Debug.Log("Running");
+						statsIncreased = true;
+						gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
+					}
+				}
+			}
+			
+		}
 	}
 }
