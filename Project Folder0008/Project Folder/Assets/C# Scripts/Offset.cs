@@ -65,7 +65,7 @@ public class Offset : MonoBehaviour {
 		if(name == "Checkbox")
 		{
 			this.transform.localPosition = new Vector3(-Screen.width/5, -Screen.height/10,0);
-			this.transform.FindChild("Label").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
+			this.transform.FindChild("ObjectivesLabel").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
 		}
 		if(name == "EndTurn"){
 			this.transform.localScale = new Vector3(GameObject.Find("CommandPointsPanel").transform.localScale.y/150,this.transform.localScale.y,0);
