@@ -42,6 +42,8 @@ public class SoundManager : MonoBehaviour {
 	void Start () {
 		ambience1 = this.gameObject.AddComponent<AudioSource>();
 		ambience2 = this.gameObject.AddComponent<AudioSource>();
+		ambience1.volume = 0.3f;
+		ambience2.volume = 0.3f;
 		soundEffects = this.gameObject.AddComponent<AudioSource>();
 		ambience1.clip = ambienceClip1; //set first ambience clip
 		ambience1.loop = true;

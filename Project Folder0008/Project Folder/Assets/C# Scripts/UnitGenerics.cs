@@ -212,13 +212,13 @@ public class UnitGenerics : MonoBehaviour
 					}
 				} else {
 					if(Random.Range(0,100)<25){
-						switch(unitType){
+						switch(targetGenerics.unitType){
 							case(0):
 							{
-								if(tag == "Enemy"){
+								if(target.tag == "Enemy"){
 									soundObject.soundEffects.clip = (soundObject.mowerAudio[4]);
 								}
-								if(tag == "PlayerUnit"){
+								if(target.tag == "PlayerUnit"){
 									soundObject.soundEffects.clip = (soundObject.frierAudio[4]);
 								}
 								soundObject.soundEffects.Play();
@@ -226,10 +226,10 @@ public class UnitGenerics : MonoBehaviour
 							}
 							case(1):
 							{
-								if(tag == "Enemy"){
+								if(target.tag == "Enemy"){
 									soundObject.soundEffects.clip = (soundObject.prunerAudio[4]);
 								}
-								if(tag == "PlayerUnit"){
+								if(target.tag == "PlayerUnit"){
 									soundObject.soundEffects.clip = (soundObject.ladlewightAudio[4]);
 								}
 								soundObject.soundEffects.Play();
@@ -237,10 +237,10 @@ public class UnitGenerics : MonoBehaviour
 							}
 							case(2):
 							{
-								if(tag == "Enemy"){
+								if(target.tag == "Enemy"){
 									soundObject.soundEffects.clip = (soundObject.potterAudio[4]);
 								}
-								if(tag == "PlayerUnit"){
+								if(target.tag == "PlayerUnit"){
 									soundObject.soundEffects.clip = (soundObject.bowlderAudio[4]);
 								}
 								soundObject.soundEffects.Play();
@@ -248,10 +248,10 @@ public class UnitGenerics : MonoBehaviour
 							}
 							case(3):
 							{
-								if(tag == "Enemy"){
+								if(target.tag == "Enemy"){
 									soundObject.soundEffects.clip = (soundObject.floristAudio[4]);
 								}
-								if(tag == "PlayerUnit"){
+								if(target.tag == "PlayerUnit"){
 									soundObject.soundEffects.clip = (soundObject.chefAudio[4]);
 								}
 								soundObject.soundEffects.Play();
@@ -267,13 +267,13 @@ public class UnitGenerics : MonoBehaviour
 				if(targetGenerics.getHealth()<= 0)
 				{
 					if(Random.Range(0,100)<25){
-					switch(unitType){
+					switch(targetGenerics.unitType){
 						case(0):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.mowerAudio[3]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.frierAudio[3]);
 							}
 							soundObject.soundEffects.Play();
@@ -281,10 +281,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(1):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.prunerAudio[3]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.ladlewightAudio[3]);
 							}
 							soundObject.soundEffects.Play();
@@ -292,10 +292,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(2):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.potterAudio[3]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.bowlderAudio[3]);
 							}
 							soundObject.soundEffects.Play();
@@ -303,10 +303,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(3):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.floristAudio[3]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.chefAudio[3]);
 							}
 							soundObject.soundEffects.Play();
@@ -365,13 +365,13 @@ public class UnitGenerics : MonoBehaviour
 				}
 			} else {
 				if(Random.Range(0,100)<25){
-					switch(unitType){
+					switch(targetGenerics.unitType){
 						case(0):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.mowerAudio[2]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.frierAudio[2]);
 							}
 							soundObject.soundEffects.Play();
@@ -379,10 +379,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(1):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.prunerAudio[2]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.ladlewightAudio[2]);
 							}
 							soundObject.soundEffects.Play();
@@ -390,10 +390,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(2):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.potterAudio[2]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.bowlderAudio[2]);
 							}
 							soundObject.soundEffects.Play();
@@ -401,10 +401,10 @@ public class UnitGenerics : MonoBehaviour
 						}
 						case(3):
 						{
-							if(tag == "Enemy"){
+							if(target.tag == "Enemy"){
 								soundObject.soundEffects.clip = (soundObject.floristAudio[2]);
 							}
-							if(tag == "PlayerUnit"){
+							if(target.tag == "PlayerUnit"){
 								soundObject.soundEffects.clip = (soundObject.chefAudio[2]);
 							}
 							soundObject.soundEffects.Play();
