@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour {
 	AudioSource ambience1;
 	AudioSource ambience2;
 	public AudioSource soundEffects;
+	public AudioSource soundEffectsIdle;
 	
 	//background sounds
 	public AudioClip ambienceClip1; //birds cheeping
@@ -45,6 +46,7 @@ public class SoundManager : MonoBehaviour {
 		ambience1.volume = 0.3f;
 		ambience2.volume = 0.3f;
 		soundEffects = this.gameObject.AddComponent<AudioSource>();
+		soundEffectsIdle = this.gameObject.AddComponent<AudioSource>();
 		ambience1.clip = ambienceClip1; //set first ambience clip
 		ambience1.loop = true;
 		ambience2.loop = true;

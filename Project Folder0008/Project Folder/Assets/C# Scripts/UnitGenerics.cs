@@ -67,7 +67,7 @@ public class UnitGenerics : MonoBehaviour
 			movement = 4;
 		} else if (type == 1) {
 			health = 80;
-			attack = 30;
+			attack = 40;
 			defence = 10;
 			accuracy = 70;
 			dodge = 30;
@@ -75,7 +75,7 @@ public class UnitGenerics : MonoBehaviour
 			
 		} else if (type == 2) {
 			health = 100;
-			attack = 25;
+			attack = 20;
 			defence = 15;
 			accuracy = 80;
 			dodge = 15;
@@ -142,11 +142,11 @@ public class UnitGenerics : MonoBehaviour
 				this.GetComponent<AstarAI>().myTurn = false;
 				GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
 			}
-			this.transform.LookAt(target.transform.position);
+			this.transform.LookAt(new Vector3(target.transform.position.x,this.transform.position.y,target.transform.position.x)); // Don't look at the sky randomly.
 			GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints--;
 			UnitGenerics targetGenerics;
 			targetGenerics = target.GetComponent<UnitGenerics> ();
-			if (Random.Range (0, 100) <= (accuracy - targetGenerics.dodge)) {
+			if ((Random.Range (0, 100) <= (accuracy - targetGenerics.dodge))||target.tag == "Flower") {
 				if(!target.name.Contains("Flower"))
 				{
 					TempParticle = target.GetComponent<ParticleSystem>();
@@ -156,7 +156,23 @@ public class UnitGenerics : MonoBehaviour
 					TempParticle.loop = false;
 					TempParticle.Play();
 				}
-				targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
+				if(unitType!=3){
+					if(targetGenerics.defence - attack > 0){
+						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
+					} else {
+						targetGenerics.setHealth (targetGenerics.health - 1);
+					}
+				} else {
+					if(target.tag == this.tag){
+						targetGenerics.setHealth(targetGenerics.health + attack);
+					} else {
+						if(targetGenerics.defence - attack > 0){
+						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
+					} else {
+						targetGenerics.setHealth (targetGenerics.health - 1);
+					}
+					}
+				}
 				if(Random.Range(0,100)<50){
 					if(Random.Range(0,100)<25){
 						switch(unitType){
@@ -266,7 +282,7 @@ public class UnitGenerics : MonoBehaviour
 				}
 				if(targetGenerics.getHealth()<= 0)
 				{
-					if(Random.Range(0,100)<25){
+					if(Random.Range(0,100)<100){
 					switch(targetGenerics.unitType){
 						case(0):
 						{
@@ -324,27 +340,29 @@ public class UnitGenerics : MonoBehaviour
 					}
 					//flower buff removal
 					if(target.name.Contains("Flower"))
-					{Debug.Log("Running");
+					{
 						List<GameObject> tempList = new List<GameObject>();
 						tempList = checkAdjacentGrids(targetGenerics.onGrid.gameObject);
 						foreach(GameObject tile in tempList)
 						{
-							if(tile.GetComponent<ParticleSystem>() != null)
-							{
-								tile.GetComponent<ParticleSystem>().Stop();
-								
-								if(tile.GetComponent<Grid>().heldUnit != null && tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
+							if(tile.GetComponent<Grid>().heldUnit.tag == "Enemy"){
+								if(tile.GetComponent<ParticleSystem>() != null)
 								{
-									if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
-									{
-										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
-									}
-									else
-									{
-										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
-									}
+									tile.GetComponent<ParticleSystem>().Stop();
 									
-									tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
+									if(tile.GetComponent<Grid>().heldUnit != null && tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
+									{
+										if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
+										{
+											tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
+										}
+										else
+										{
+											tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
+										}
+										
+										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
+									}
 								}
 							}
 						}
@@ -591,7 +609,6 @@ public class UnitGenerics : MonoBehaviour
 			}
 		}
 		highestRating = calculateRating(chosenTarget, this.gameObject);
-		
 		gameManageObject.setActions(chosenTarget,this.gameObject,highestRating);
 		
 		
@@ -739,6 +756,7 @@ public class UnitGenerics : MonoBehaviour
 	}
 	
 	//A function to return the given rating for any gameobject. Returns vector2.zero if the object is not in the list
+	//Not necessary with new AI.
 	Vector2 returnRating(GameObject unitToCheck){
 		int count = 0;
 		foreach(GameObject check in unitList){
@@ -820,6 +838,8 @@ public class UnitGenerics : MonoBehaviour
 	}
 	//End of AI Functions
 	
+	
+	//Called to tell all the other units to update for the newly moved unit. Memory hog, but unless you can think of a better way...?
 		public void refreshMovement(){
 		moveableSquares.Clear();
 		adjacentSquares.Clear();

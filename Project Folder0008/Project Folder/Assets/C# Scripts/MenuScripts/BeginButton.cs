@@ -8,6 +8,6 @@ void OnClick()
 	{
 		saveData.GetComponent<StoreData>().DataStorage();
 		
-		Application.LoadLevel("Week6");	
+		Application.LoadLevel("Tutorial");	
 	}
 }

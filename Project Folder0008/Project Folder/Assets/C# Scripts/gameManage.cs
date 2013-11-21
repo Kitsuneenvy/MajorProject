@@ -74,28 +74,29 @@ public class gameManage : MonoBehaviour {
 		if(narrativePanelOpen==false){
 			if(dialogueTimer<=0){
 				UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
-				Debug.Log(randomUnit.tag.ToString());
 				switch(randomUnit.unitType){
 					case(0):
 						{
 							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffects.clip = (soundObject.mowerAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
 							}
 							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffects.clip = (soundObject.frierAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
 							}
-							soundObject.soundEffects.Play();
+							randomUnit.GetComponent<Animation>().Play("Quirk");
+							soundObject.soundEffectsIdle.Play();
 							dialogueTimer = 15;
 							break;
 						}
 						case(1):
 						{
 							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffects.clip = (soundObject.prunerAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.prunerAudio[1]);
 							}
 							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffects.clip = (soundObject.ladlewightAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
 							}
+							randomUnit.GetComponent<Animation>().Play("Quirk");
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
@@ -103,11 +104,12 @@ public class gameManage : MonoBehaviour {
 						case(2):
 						{
 							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffects.clip = (soundObject.potterAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.potterAudio[1]);
 							}
 							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffects.clip = (soundObject.bowlderAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
 							}
+							randomUnit.GetComponent<Animation>().Play("Quirk");
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
@@ -115,11 +117,12 @@ public class gameManage : MonoBehaviour {
 						case(3):
 						{
 							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffects.clip = (soundObject.floristAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.floristAudio[1]);
 							}
 							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffects.clip = (soundObject.chefAudio[1]);
+								soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
 							}
+							randomUnit.GetComponent<Animation>().Play("Quirk");
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
