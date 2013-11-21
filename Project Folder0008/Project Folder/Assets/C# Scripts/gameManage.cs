@@ -38,6 +38,8 @@ public class gameManage : MonoBehaviour {
 	List<GameObject> sendUnits = new List<GameObject>();
 	List<Vector2> chosenRatings = new List<Vector2>();
 	
+	int turnCounter = 0;
+	
 	// Use this for initialization
 	void Start () {
 		NarrativeAnchorObject = GameObject.FindGameObjectWithTag("NarrativeAnchor");
@@ -233,6 +235,8 @@ public class gameManage : MonoBehaviour {
 	public void nextTurn(){
 		timer = 3;
 		commandPoints = 5;
+		turnCounter++;
+		
 		if(playerTurn){
 			endTurnButton.SetActive(false);
 			chosenTargets.Clear();
@@ -246,6 +250,10 @@ public class gameManage : MonoBehaviour {
 		} else {
 			endTurnButton.SetActive(true);
 			playerTurn = true;
+		}
+		if(turnCounter == 2 && Application.loadedLevelName == "Tutorial")
+		{
+			narrativePanelOpen = true;
 		}
 	}
 	//The AI uses this to determine the best action to take currently

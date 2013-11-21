@@ -105,7 +105,80 @@ public class AstarAI : MonoBehaviour
 				if(GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().returnTurn()==false){
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().toggleTurn();
 				}
-				
+				if(this.tag == "Enemy")
+				{
+					if(this.GetComponent<UnitGenerics>().statsIncreased == true)
+					{Debug.Log("Reset");
+						switch(this.GetComponent<UnitGenerics>().unitType)
+						{
+						case (0):
+						{
+							this.GetComponent<UnitGenerics>().attack = 20;
+							break;
+						}
+						case (1):
+						{
+							this.GetComponent<UnitGenerics>().attack = 30;
+							break;
+						}
+						case (2):
+						{
+							this.GetComponent<UnitGenerics>().attack = 25;
+							break;
+						}
+						case (3):
+						{
+							this.GetComponent<UnitGenerics>().attack = -30;
+							break;
+						}
+						default:
+							break;
+						}
+						this.GetComponent<UnitGenerics>().statsIncreased = false;
+					}
+					if(GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits.Count > 0)
+					{
+						foreach( GameObject flower in GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits)
+						{
+							flowerAdjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(flower.GetComponent<UnitGenerics>().onGrid.gameObject);
+							
+							foreach(GameObject tile in flowerAdjacentTiles)
+							{
+								Grid gridObject = tile.GetComponent<Grid>();
+								if(gridObject.heldUnit != null && gridObject.heldUnit == this.gameObject && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
+								{Debug.Log("attack increased");
+									this.GetComponent<UnitGenerics>().statsIncreased = true;
+									//int unitType = this.GetComponent<UnitGenerics>().unitType;
+									switch(this.GetComponent<UnitGenerics>().unitType)
+									{
+									case (0):
+									{
+										this.GetComponent<UnitGenerics>().attack = 30;
+										break;
+									}
+									case (1):
+									{
+										this.GetComponent<UnitGenerics>().attack = 40;
+										break;
+									}
+									case (2):
+									{
+										this.GetComponent<UnitGenerics>().attack = 35;
+										break;
+									}
+									case (3):
+									{
+										this.GetComponent<UnitGenerics>().attack = -40;
+										break;
+									}
+									default:
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 				if(this.animation.isPlaying == false)
 				{
@@ -131,6 +204,7 @@ public class AstarAI : MonoBehaviour
 		//set timevalue
 		timeValue = (1 / (targetPosition - this.transform.position).magnitude);
 		 if(moveUnit== true){
+
 			if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
 				
 				this.animation.Play("Walk");
@@ -143,6 +217,8 @@ public class AstarAI : MonoBehaviour
 				this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 				}
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
+				
 			} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
 
 				this.animation.Play("Walk");
@@ -156,49 +232,7 @@ public class AstarAI : MonoBehaviour
 					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
 				}
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
-				
-				//Flower Boost to Enemy
-				if(this.tag == "Enemy")
-				{
-					if(this.GetComponent<UnitGenerics>().statsIncreased == true)
-					{
-						if(this.name.Contains("Florist"))
-						{
-							this.GetComponent<UnitGenerics>().attack += 10;
-						}
-						else
-						{
-							this.GetComponent<UnitGenerics>().attack -= 10;
-						}
-						this.GetComponent<UnitGenerics>().statsIncreased = false;
-					}
-					if(GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits.Count > 0)
-					{
-						foreach( GameObject flower in GameObject.Find("A*").GetComponent<MissionReader>().flowerUnits)
-						{
-							flowerAdjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(flower.GetComponent<UnitGenerics>().onGrid.gameObject);
-							
-							foreach(GameObject tile in flowerAdjacentTiles)
-							{
-								Grid gridObject = tile.GetComponent<Grid>();
-								if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
-								{
-									this.GetComponent<UnitGenerics>().statsIncreased = true;
-									if(this.name.Contains("Florist"))
-									{
-										this.GetComponent<UnitGenerics>().attack -= 10;
-									}
-									else
-									{
-										this.GetComponent<UnitGenerics>().attack += 10;
-									}
-								}
-							}
-						}
-					}
 				}
-			}
-		
 		}
 		
 		

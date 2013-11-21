@@ -128,6 +128,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)
 				{
 					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.commandPoints = 0;
 					gameManageObject.narrativePanelOpen = true;
 				}
 				
