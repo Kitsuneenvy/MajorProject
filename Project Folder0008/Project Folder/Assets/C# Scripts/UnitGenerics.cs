@@ -319,7 +319,9 @@ public class UnitGenerics : MonoBehaviour
 					}
 				}
 					//play death animation
-					targetGenerics.gameObject.GetComponent<Animation>().Play("Death");
+					if(target.tag!="Flower"){
+						targetGenerics.gameObject.GetComponent<Animation>().Play("Death");
+					}
 					//flower buff removal
 					if(target.name.Contains("Flower"))
 					{Debug.Log("Running");
@@ -353,7 +355,11 @@ public class UnitGenerics : MonoBehaviour
 					missionReaderObject.enemyUnits.Remove(targetGenerics.gameObject);
 					targetGenerics.onGrid.heldUnit = null;
 					//destroy object
-					Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death"].length);
+					if(target.tag!="Flower"){
+						Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death"].length);
+					} else {
+						Destroy(targetGenerics.gameObject);
+					}
 					//check if task is completed
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 				}

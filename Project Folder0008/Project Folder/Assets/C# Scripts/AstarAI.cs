@@ -164,11 +164,11 @@ public class AstarAI : MonoBehaviour
 					{
 						if(this.name.Contains("Florist"))
 						{
-							this.GetComponent<UnitGenerics>().attack -= 10;
+							this.GetComponent<UnitGenerics>().attack += 10;
 						}
 						else
 						{
-							this.GetComponent<UnitGenerics>().attack += 10;
+							this.GetComponent<UnitGenerics>().attack -= 10;
 						}
 						this.GetComponent<UnitGenerics>().statsIncreased = false;
 					}

@@ -263,37 +263,41 @@ public class gameManage : MonoBehaviour {
 			}
 			listCount = (int)count;
 		}
-		if(chosenTargets[listCount].GetComponent<Grid>()!=null){
-		foreach(GameObject square in sendUnits[listCount].GetComponent<UnitGenerics>().checkAdjacentGrids(chosenTargets[listCount].GetComponent<UnitGenerics>().onGrid.gameObject)){
-				if(square.GetComponent<Grid>().returnUnit()==null){
-					if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square)<shortestDistance){
-						shortestDistance = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square);
-						moveSquare = square;
-					}
-				}
-			}
-			
-		}
-		if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,moveSquare)>sendUnits[listCount].GetComponent<UnitGenerics>().movement){
-			float distanceSquare = Mathf.Infinity;
-			foreach(GameObject tile in sendUnits[listCount].GetComponent<UnitGenerics>().moveableSquares){
-				if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare)<distanceSquare){
-					distanceSquare = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare);
-					moveSquare = tile;
-				}
-			}
-		}
-		Debug.Log(shortestDistance.ToString());
-		if(shortestDistance<1){
+		if(sendUnits[listCount].GetComponent<UnitGenerics>().checkAdjacentGrids(chosenTargets[listCount].GetComponent<UnitGenerics>().onGrid.gameObject).Contains(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject)){
 			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
 			sendUnits[listCount].GetComponent<UnitGenerics>().launchAttack(chosenTargets[listCount]);
+			chosenTargets.Clear();
+			sendUnits.Clear();
+			chosenRatings.Clear();
 		} else {
+			if(chosenTargets[listCount].GetComponent<Grid>()==null){
+			foreach(GameObject square in sendUnits[listCount].GetComponent<UnitGenerics>().checkAdjacentGrids(chosenTargets[listCount].GetComponent<UnitGenerics>().onGrid.gameObject)){
+					if(square.GetComponent<Grid>().returnUnit()==null){
+						if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square)<shortestDistance){
+							shortestDistance = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,square);
+							moveSquare = square;
+						}
+					}
+				}
+				
+			}
+			if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(sendUnits[listCount].GetComponent<UnitGenerics>().onGrid.gameObject,moveSquare)>sendUnits[listCount].GetComponent<UnitGenerics>().movement){
+				float distanceSquare = Mathf.Infinity;
+				GameObject tempTile = null;
+				foreach(GameObject tile in sendUnits[listCount].GetComponent<UnitGenerics>().moveableSquares){
+					if(sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare)<distanceSquare){
+						distanceSquare = sendUnits[listCount].GetComponent<UnitGenerics>().calculateGridDistance(tile,moveSquare);
+						tempTile = tile;
+					}
+				}
+				moveSquare = tempTile;
+			}
 			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
 			sendUnits[listCount].GetComponent<AstarAI>().move(moveSquare);
+			chosenTargets.Clear();
+			sendUnits.Clear();
+			chosenRatings.Clear();
 		}
-		chosenTargets.Clear();
-		sendUnits.Clear();
-		chosenRatings.Clear();
 	}
 	//Set the actions that each unit has decided is best for it in a list.
 	public void setActions(GameObject unitTarget,GameObject sendingUnit, float ratings){
