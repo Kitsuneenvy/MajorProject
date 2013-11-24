@@ -75,6 +75,8 @@ public class MissionReader : MonoBehaviour {
 	
 	ParticleSystem particleOnGrid;
 	
+	public Material particleMaterial;
+	
 	// Use this for initialization
 	void Start () {
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
@@ -554,12 +556,25 @@ public class MissionReader : MonoBehaviour {
 				
 				foreach(GameObject tile in flowerAdjacentTiles)
 				{
-					particleOnGrid = tile.AddComponent<ParticleSystem>();
-					particleOnGrid.startLifetime = 1.0f;
-					particleOnGrid.emissionRate = 10;
-					particleOnGrid.gravityModifier = -0.5f;
-					particleOnGrid.startColor = Color.black;
-					particleOnGrid.startSize = 1.0f;
+					tile.AddComponent("MeshParticleEmitter");
+					tile.AddComponent<ParticleRenderer>();
+					tile.AddComponent<ParticleAnimator>();
+					tile.particleEmitter.maxSize = 1;
+					tile.particleEmitter.worldVelocity = new Vector3(0,1,0);
+					tile.GetComponent<ParticleRenderer>().material = particleMaterial;
+					Color[] animatorColours = tile.GetComponent<ParticleAnimator>().colorAnimation;
+					animatorColours[0] = new Color(0f,0f,0f,1f);
+					animatorColours[1] = new Color(1f,0f,0f,1f);
+					animatorColours[2] = new Color(1f,0.075f,0.075f,1f);
+					animatorColours[3] = new Color(1f,0.15f,0.15f,1f);
+					animatorColours[4] = new Color(0.6f,0.5f,0.3f,1f);
+					tile.GetComponent<ParticleAnimator>().colorAnimation = animatorColours;
+					
+//					particleOnGrid.startLifetime = 1.0f;
+//					particleOnGrid.emissionRate = 10;
+//					particleOnGrid.gravityModifier = -0.5f;
+//					particleOnGrid.startColor = Color.black;
+					//particleOnGrid.startSize = 1.0f;
 					
 					Grid gridObject = tile.GetComponent<Grid>();
 					if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
