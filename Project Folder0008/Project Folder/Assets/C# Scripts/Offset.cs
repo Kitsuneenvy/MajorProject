@@ -43,7 +43,7 @@ public class Offset : MonoBehaviour {
 			this.transform.localPosition = new Vector3(Screen.width/50, -Screen.height/20,0);
 		}
 		if(name == "Command Points"){
-			this.transform.localPosition = new Vector3(-Screen.width/3.2f, Screen.height/14,0);
+			this.transform.localPosition = new Vector3(-Screen.width/2.5f, Screen.height/14,0);
 		}
 		if(name == "Dialogue"){
 			this.transform.localPosition = new Vector3(Screen.width/50f, Screen.height/8,0);
@@ -60,15 +60,15 @@ public class Offset : MonoBehaviour {
 		}
 		if(name == "Objectives")
 		{
-			this.transform.localPosition = new Vector3(-Screen.width/6, -Screen.height/20,0);
+			this.transform.localPosition = new Vector3(-Screen.width/6, -Screen.height/18,0);
 		}
 		if(name == "Checkbox")
 		{
-			this.transform.localPosition = new Vector3(-Screen.width/5, -Screen.height/10,0);
+			this.transform.localPosition = new Vector3(-Screen.width/5, -Screen.height/8,0);
 			this.transform.FindChild("ObjectivesLabel").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
 		}
 		if(name == "EndTurn"){
-			this.transform.localScale = new Vector3(GameObject.Find("CommandPointsPanel").transform.localScale.y/150,this.transform.localScale.y,0);
+//			this.transform.localScale = new Vector3(GameObject.Find("CommandPointsPanel").transform.localScale.y/150,this.transform.localScale.y,0);
 			this.transform.localPosition = new Vector3(-Screen.width/12f, Screen.height/12f,0);	
 		}
 	

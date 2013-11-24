@@ -118,12 +118,12 @@ public class AstarAI : MonoBehaviour
 						}
 						case (1):
 						{
-							this.GetComponent<UnitGenerics>().attack = 30;
+							this.GetComponent<UnitGenerics>().attack = 40;
 							break;
 						}
 						case (2):
 						{
-							this.GetComponent<UnitGenerics>().attack = 25;
+							this.GetComponent<UnitGenerics>().attack = 20;
 							break;
 						}
 						case (3):
@@ -158,12 +158,12 @@ public class AstarAI : MonoBehaviour
 									}
 									case (1):
 									{
-										this.GetComponent<UnitGenerics>().attack = 40;
+										this.GetComponent<UnitGenerics>().attack = 50;
 										break;
 									}
 									case (2):
 									{
-										this.GetComponent<UnitGenerics>().attack = 35;
+										this.GetComponent<UnitGenerics>().attack = 30;
 										break;
 									}
 									case (3):
@@ -180,7 +180,7 @@ public class AstarAI : MonoBehaviour
 					}
 				}
 			}
-				if(this.animation.isPlaying == false)
+				if(this.animation.isPlaying == false&&this.GetComponent<UnitGenerics>().health>0)
 				{
 					this.animation.Play("Idle1");
 				}

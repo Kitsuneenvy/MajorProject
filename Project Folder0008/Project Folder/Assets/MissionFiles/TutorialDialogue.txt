@@ -60,5 +60,16 @@
 <Tim>: Exactly, open the action menu, right click on an enemy. You can't target allies though!;
 <Pierre>: Oh, fiddlesticks. Well let's show this robot who is the Masterchef around here!;
 -3
++4
+<Pierre>: Is it... Is it dead? Phew!;
+<Tim>: Well it's a pass. Barely.;
+<Chef>: Did you expect anything less than a pass? Hahahaha...;
+<Tim>: Yes. I hoped for it too.;
+<Chef>: Now, onwards to battle! Those cultists won't subdue themselves!;
+<Pierre>: I think I need a rest. A long rest.;
+<Chef>: Oh, right. Did anyone find that mouse in the end? I thought I saw it for a moment but it was just one of Pierre's fingers.;
+<Pieere>: Ohhh.... (Faints);
+<Tim>: Time to leave, you can sleep on the boats.;
+-4
 $end;
 

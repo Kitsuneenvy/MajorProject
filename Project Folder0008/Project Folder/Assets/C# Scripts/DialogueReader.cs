@@ -100,7 +100,6 @@ public class DialogueReader : MonoBehaviour {
 		//WARNING, ENTERING AN INVALID EVENT NUMBER WILL BREAAAAK IT ALLL.
 		switch(EventToPlay){
 		case 1:
-			Debug.Log("HALLAEO");
 			mReaderObject.objective = "Move next to \n enemy";
 			break;
 		case 2:
@@ -112,6 +111,7 @@ public class DialogueReader : MonoBehaviour {
 			mReaderObject.objective = "Defeat the robot";
 			break;
 		case 4:
+			Application.LoadLevel("Week6");
 			break;
 		default:
 			break;

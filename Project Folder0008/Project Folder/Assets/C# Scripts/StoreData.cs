@@ -20,7 +20,7 @@ public class StoreData : MonoBehaviour {
 	void Update()
 	{
 		if(Application.loadedLevelName != "OptionsWorking" && saved == false && !File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName))
-		{Debug.Log("RUN ONCE");
+		{
 			saved = true;
 			CreateFile();
 		}

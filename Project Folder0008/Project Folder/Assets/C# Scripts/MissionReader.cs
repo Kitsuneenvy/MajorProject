@@ -460,7 +460,7 @@ public class MissionReader : MonoBehaviour {
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
-										tempUnit = GameObject.Instantiate(Resources.Load("Chef")) as GameObject;
+										tempUnit = GameObject.Instantiate(Resources.Load("Ladlewight")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
@@ -519,8 +519,10 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
-								//add unit to list
-								allUnits.Add(tempUnit);
+								//if(tempUnit.tag !="Flower"){
+									//add unit to unit list if it is not a flower.
+									allUnits.Add(tempUnit);
+								//}
 								//position the unit
 								CalculateGridPosition();
 								//reset iterator
