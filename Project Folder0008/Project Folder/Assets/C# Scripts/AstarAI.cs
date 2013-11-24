@@ -180,7 +180,7 @@ public class AstarAI : MonoBehaviour
 					}
 				}
 			}
-				if(this.animation.isPlaying == false)
+				if(this.animation.isPlaying == false&&this.GetComponent<UnitGenerics>().health>0)
 				{
 					this.animation.Play("Idle1");
 				}

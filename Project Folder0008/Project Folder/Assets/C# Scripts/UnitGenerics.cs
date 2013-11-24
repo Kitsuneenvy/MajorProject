@@ -133,6 +133,8 @@ public class UnitGenerics : MonoBehaviour
 
 	public void launchAttack (GameObject target)
 	{
+		int bonusHit = 0;
+		int bonusDamage = 0;
 		setAttackState (false);
 		this.animation.Play("Attack",PlayMode.StopAll);
 		
@@ -142,11 +144,20 @@ public class UnitGenerics : MonoBehaviour
 				this.GetComponent<AstarAI>().myTurn = false;
 				GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
 			}
-			this.transform.LookAt(new Vector3(target.transform.position.x,this.transform.position.y,target.transform.position.x)); // Don't look at the sky randomly.
+			this.transform.LookAt(new Vector3(target.transform.position.x,this.transform.position.y,target.transform.position.z)); // Don't look at the sky randomly.
 			GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints--;
 			UnitGenerics targetGenerics;
 			targetGenerics = target.GetComponent<UnitGenerics> ();
-			if ((Random.Range (0, 100) <= (accuracy - targetGenerics.dodge))||target.tag == "Flower") {
+			if(target.tag!="Flower"){
+				target.transform.LookAt(new Vector3(this.transform.position.x,target.transform.position.y,this.transform.position.z));
+			}
+			GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setFocus(this.gameObject,target.gameObject);
+			GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(true);
+			if(unitType==2&&targetGenerics.unitType==0||unitType==1&&targetGenerics.unitType==2||unitType==0&&targetGenerics.unitType==1){
+				bonusHit = 20;
+				bonusDamage = 20;
+			}
+			if ((Random.Range (0, 100) <= (accuracy +bonusHit - targetGenerics.dodge))||target.tag == "Flower") {
 				if(!target.name.Contains("Flower"))
 				{
 					TempParticle = target.GetComponent<ParticleSystem>();
@@ -156,9 +167,12 @@ public class UnitGenerics : MonoBehaviour
 					TempParticle.loop = false;
 					TempParticle.Play();
 				}
+				if(target.tag!="Flower"){
+					StartCoroutine(animationQ(target.gameObject,"TakenHit"));
+				}
 				if(unitType!=3){
-					if(targetGenerics.defence - attack > 0){
-						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
+					if((attack - targetGenerics.defence) > 0){
+						targetGenerics.setHealth (targetGenerics.health - (attack +bonusDamage - targetGenerics.defence));
 					} else {
 						targetGenerics.setHealth (targetGenerics.health - 1);
 					}
@@ -336,7 +350,7 @@ public class UnitGenerics : MonoBehaviour
 				}
 					//play death animation
 					if(target.tag!="Flower"){
-						targetGenerics.gameObject.GetComponent<Animation>().Play("Death");
+						StartCoroutine(animationQ(target.gameObject,"Death"));
 					}
 					//flower buff removal
 					if(target.name.Contains("Flower"))
@@ -345,24 +359,22 @@ public class UnitGenerics : MonoBehaviour
 						tempList = checkAdjacentGrids(targetGenerics.onGrid.gameObject);
 						foreach(GameObject tile in tempList)
 						{
-							if(tile.GetComponent<Grid>().heldUnit.tag == "Enemy"){
-								if(tile.GetComponent<ParticleSystem>() != null)
+							
+							if(tile.GetComponent<ParticleSystem>() != null)
+							{
+								tile.GetComponent<ParticleSystem>().Stop();
+								if(tile.GetComponent<Grid>().heldUnit != null &&tile.GetComponent<Grid>().heldUnit.tag == "Enemy"&& tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
 								{
-									tile.GetComponent<ParticleSystem>().Stop();
-									
-									if(tile.GetComponent<Grid>().heldUnit != null && tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
+									if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
 									{
-										if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
-										{
-											tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
-										}
-										else
-										{
-											tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
-										}
-										
-										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
+										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
 									}
+									else
+									{
+										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
+									}
+									
+									tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
 								}
 							}
 						}
@@ -382,6 +394,7 @@ public class UnitGenerics : MonoBehaviour
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 				}
 			} else {
+				StartCoroutine(animationQ(target.gameObject,"Dodge"));
 				if(Random.Range(0,100)<25){
 					switch(targetGenerics.unitType){
 						case(0):
@@ -881,5 +894,14 @@ public class UnitGenerics : MonoBehaviour
 		}
 		moveableSquares.Remove(onGrid.gameObject);
 		AIThinkSquares.Remove(onGrid.gameObject);
+	}
+	
+	IEnumerator animationQ(GameObject target, string animationToPlay){
+		yield return new WaitForSeconds(this.animation.GetClip("Attack").length);
+		target.animation.Play(animationToPlay);
+		if(!target!=null){
+			yield return new WaitForSeconds(target.animation.GetClip(animationToPlay).length);
+			GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
+		}
 	}
 }

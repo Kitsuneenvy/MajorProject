@@ -517,10 +517,10 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
-								if(tempUnit.tag !="Flower"){
+								//if(tempUnit.tag !="Flower"){
 									//add unit to unit list if it is not a flower.
 									allUnits.Add(tempUnit);
-								}
+								//}
 								//position the unit
 								CalculateGridPosition();
 								//reset iterator

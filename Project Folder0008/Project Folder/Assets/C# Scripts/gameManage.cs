@@ -12,6 +12,7 @@ public class gameManage : MonoBehaviour {
 	
 	GameObject temp;
 	GameObject NarrativeAnchorObject;
+	SecondaryCamera secondaryCameraObject;
 	
 	float gridPosx;
 	float gridPosy;
@@ -21,7 +22,7 @@ public class gameManage : MonoBehaviour {
 	float nodeWidthCount;
 	float nodeLengthCount;
 	
-	public float commandPoints = 5;
+	public float commandPoints = 3;
 	
 	public bool playerTurn;
 	public bool narrativePanelOpen = false;
@@ -42,6 +43,7 @@ public class gameManage : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		secondaryCameraObject = GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>();
 		NarrativeAnchorObject = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		//gridMask = LayerMask.NameToLayer("Grid");
 		//astarMask = LayerMask.NameToLayer("AStar");
@@ -71,11 +73,12 @@ public class gameManage : MonoBehaviour {
 				gridObject.renderer.material.color = Color.black;
 			}
 		}
-		if(narrativePanelOpen==false){
+		if(narrativePanelOpen==false&&secondaryCameraObject.getActive()==false){
 			if(dialogueTimer<=0){
 				UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
-				switch(randomUnit.unitType){
-					case(0):
+				if(randomUnit.tag!="Flower"){
+					switch(randomUnit.unitType){
+						case(0):
 						{
 							if(randomUnit.tag == "Enemy"){
 								soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
@@ -83,7 +86,12 @@ public class gameManage : MonoBehaviour {
 							if(randomUnit.tag == "PlayerUnit"){
 								soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
 							}
+							if(secondaryCameraObject.getActive()==false){
+								secondaryCameraObject.setFocus(randomUnit.gameObject);
+								secondaryCameraObject.setActive(true);
+							}
 							randomUnit.GetComponent<Animation>().Play("Quirk");
+							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 							soundObject.soundEffectsIdle.Play();
 							dialogueTimer = 15;
 							break;
@@ -96,7 +104,12 @@ public class gameManage : MonoBehaviour {
 							if(randomUnit.tag == "PlayerUnit"){
 								soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
 							}
+							if(secondaryCameraObject.getActive()==false){
+								secondaryCameraObject.setFocus(randomUnit.gameObject);
+								secondaryCameraObject.setActive(true);
+							}
 							randomUnit.GetComponent<Animation>().Play("Quirk");
+							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
@@ -109,7 +122,12 @@ public class gameManage : MonoBehaviour {
 							if(randomUnit.tag == "PlayerUnit"){
 								soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
 							}
+							if(secondaryCameraObject.getActive()==false){
+								secondaryCameraObject.setFocus(randomUnit.gameObject);
+								secondaryCameraObject.setActive(true);
+							}
 							randomUnit.GetComponent<Animation>().Play("Quirk");
+							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
@@ -122,7 +140,12 @@ public class gameManage : MonoBehaviour {
 							if(randomUnit.tag == "PlayerUnit"){
 								soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
 							}
+							if(secondaryCameraObject.getActive()==false){
+								secondaryCameraObject.setFocus(randomUnit.gameObject);
+								secondaryCameraObject.setActive(true);
+							}
 							randomUnit.GetComponent<Animation>().Play("Quirk");
+							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 							soundObject.soundEffects.Play();
 							dialogueTimer = 15;
 							break;
@@ -132,6 +155,7 @@ public class gameManage : MonoBehaviour {
 							dialogueTimer = 15;
 							break;
 						}
+					}
 				}
 			} else {
 				dialogueTimer -= Time.deltaTime;
@@ -158,7 +182,7 @@ public class gameManage : MonoBehaviour {
 						timer-=Time.deltaTime;
 					} else {
 						turnEnded = false;
-						timer = 1;
+						timer = 3;
 						if(commandPoints!=0){
 							chosenTargets.Clear();
 							chosenRatings.Clear();
@@ -223,13 +247,16 @@ public class gameManage : MonoBehaviour {
 						"  Ddg: " + hoverUnit.dodge;
 					GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString();
 				} else {
-					GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name:";
-					GameObject.Find("Character Attributes").GetComponent<UILabel>().text = 
-						"Att:" +
-						"    Def:" +
-						"    Acc:" +
-						"    Ddg:";
-					GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:";
+					//GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name:";
+					GameObject.Find("Character Name").GetComponent<UILabel>().text = "";
+					GameObject.Find("Character Attributes").GetComponent<UILabel>().text = "";
+//					GameObject.Find("Character Attributes").GetComponent<UILabel>().text = 
+//						"Att:" +
+//						"    Def:" +
+//						"    Acc:" +
+//						"    Ddg:";
+					GameObject.Find("Character HP").GetComponent<UILabel>().text = "";
+					//GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:";
 				}
 			}
 		}
@@ -237,7 +264,7 @@ public class gameManage : MonoBehaviour {
 	//This is called when the player ends their turn or the AI runs out of command points. It resets the command points and AI stuff.
 	public void nextTurn(){
 		timer = 3;
-		commandPoints = 5;
+		commandPoints = 3;
 		turnCounter++;
 		
 		if(playerTurn){
@@ -326,5 +353,9 @@ public class gameManage : MonoBehaviour {
 	}
 	public bool returnTurn(){
 		return turnEnded;
+	}
+	IEnumerator secondaryCameraHide(string playedAnimation,GameObject target){
+		yield return new WaitForSeconds(target.animation.GetClip(playedAnimation).length);
+		secondaryCameraObject.setActive(false);
 	}
 }
