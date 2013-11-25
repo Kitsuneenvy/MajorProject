@@ -73,132 +73,131 @@ public class gameManage : MonoBehaviour {
 				gridObject.renderer.material.color = Color.black;
 			}
 		}
-		if(narrativePanelOpen==false&&secondaryCameraObject.getActive()==false){
-			if(dialogueTimer<=0){
-				UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
-				if(randomUnit.tag!="Flower"){
-					switch(randomUnit.unitType){
-						case(0):
-						{
-							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
+		if(narrativePanelOpen==false){
+			if(secondaryCameraObject.getActive()==false){
+				if(dialogueTimer<=0){
+					UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
+					if(randomUnit.tag!="Flower"){
+						switch(randomUnit.unitType){
+							case(0):
+							{
+								if(randomUnit.tag == "Enemy"){
+									soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
+								}
+								if(randomUnit.tag == "PlayerUnit"){
+									soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
+								}
+								if(secondaryCameraObject.getActive()==false){
+									secondaryCameraObject.setFocus(randomUnit.gameObject);
+									secondaryCameraObject.setActive(true);
+								}
+								randomUnit.GetComponent<Animation>().Play("Quirk");
+								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+								soundObject.soundEffectsIdle.Play();
+								dialogueTimer = 15;
+								break;
 							}
-							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
+							case(1):
+							{
+								if(randomUnit.tag == "Enemy"){
+									soundObject.soundEffectsIdle.clip = (soundObject.prunerAudio[1]);
+								}
+								if(randomUnit.tag == "PlayerUnit"){
+									soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
+								}
+								if(secondaryCameraObject.getActive()==false){
+									secondaryCameraObject.setFocus(randomUnit.gameObject);
+									secondaryCameraObject.setActive(true);
+								}
+								randomUnit.GetComponent<Animation>().Play("Quirk");
+								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+								soundObject.soundEffects.Play();
+								dialogueTimer = 15;
+								break;
 							}
-							if(secondaryCameraObject.getActive()==false){
-								secondaryCameraObject.setFocus(randomUnit.gameObject);
-								secondaryCameraObject.setActive(true);
+							case(2):
+							{
+								if(randomUnit.tag == "Enemy"){
+									soundObject.soundEffectsIdle.clip = (soundObject.potterAudio[1]);
+								}
+								if(randomUnit.tag == "PlayerUnit"){
+									soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
+								}
+								if(secondaryCameraObject.getActive()==false){
+									secondaryCameraObject.setFocus(randomUnit.gameObject);
+									secondaryCameraObject.setActive(true);
+								}
+								randomUnit.GetComponent<Animation>().Play("Quirk");
+								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+								soundObject.soundEffects.Play();
+								dialogueTimer = 15;
+								break;
 							}
-							randomUnit.GetComponent<Animation>().Play("Quirk");
-							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-							soundObject.soundEffectsIdle.Play();
-							dialogueTimer = 15;
-							break;
-						}
-						case(1):
-						{
-							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffectsIdle.clip = (soundObject.prunerAudio[1]);
+							case(3):
+							{
+								if(randomUnit.tag == "Enemy"){
+									soundObject.soundEffectsIdle.clip = (soundObject.floristAudio[1]);
+								}
+								if(randomUnit.tag == "PlayerUnit"){
+									soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
+								}
+								if(secondaryCameraObject.getActive()==false){
+									secondaryCameraObject.setFocus(randomUnit.gameObject);
+									secondaryCameraObject.setActive(true);
+								}
+								randomUnit.GetComponent<Animation>().Play("Quirk");
+								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+								soundObject.soundEffects.Play();
+								dialogueTimer = 15;
+								break;
 							}
-							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
+							default:
+							{
+								dialogueTimer = 15;
+								break;
 							}
-							if(secondaryCameraObject.getActive()==false){
-								secondaryCameraObject.setFocus(randomUnit.gameObject);
-								secondaryCameraObject.setActive(true);
-							}
-							randomUnit.GetComponent<Animation>().Play("Quirk");
-							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-							soundObject.soundEffects.Play();
-							dialogueTimer = 15;
-							break;
-						}
-						case(2):
-						{
-							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffectsIdle.clip = (soundObject.potterAudio[1]);
-							}
-							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
-							}
-							if(secondaryCameraObject.getActive()==false){
-								secondaryCameraObject.setFocus(randomUnit.gameObject);
-								secondaryCameraObject.setActive(true);
-							}
-							randomUnit.GetComponent<Animation>().Play("Quirk");
-							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-							soundObject.soundEffects.Play();
-							dialogueTimer = 15;
-							break;
-						}
-						case(3):
-						{
-							if(randomUnit.tag == "Enemy"){
-								soundObject.soundEffectsIdle.clip = (soundObject.floristAudio[1]);
-							}
-							if(randomUnit.tag == "PlayerUnit"){
-								soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
-							}
-							if(secondaryCameraObject.getActive()==false){
-								secondaryCameraObject.setFocus(randomUnit.gameObject);
-								secondaryCameraObject.setActive(true);
-							}
-							randomUnit.GetComponent<Animation>().Play("Quirk");
-							StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-							soundObject.soundEffects.Play();
-							dialogueTimer = 15;
-							break;
-						}
-						default:
-						{
-							dialogueTimer = 15;
-							break;
 						}
 					}
+				} else {
+					dialogueTimer -= Time.deltaTime;
 				}
-			} else {
-				dialogueTimer -= Time.deltaTime;
 			}
-			NarrativeAnchorObject.SetActive(false);
-			if(mReaderObject.returnLayoutCompleted() == true && this.GetComponent<GridTool>().returnGridColliders().Count > 0)
-			{
-			foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
-				if(gridObject.renderer.material.ToString() == "Transparent (Instance) (UnityEngine.Material)"){
-					gridObject.renderer.material.color = Color.black;
-				} else if (gridObject.renderer.material.ToString() == "HighlightHoverAttack (Instance) (UnityEngine.Material)"){
-					gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
-					gridObject.renderer.material.color = Color.red;
-				} else if (gridObject.renderer.material.ToString() == "HighlightHoverMove (Instance) (UnityEngine.Material)"){
-					gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
-					gridObject.renderer.material.color = Color.blue;
+				NarrativeAnchorObject.SetActive(false);
+				if(mReaderObject.returnLayoutCompleted() == true && this.GetComponent<GridTool>().returnGridColliders().Count > 0)
+					{
+					foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
+						if(gridObject.renderer.material.ToString() == "Transparent (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material.color = Color.black;
+						} else if (gridObject.renderer.material.ToString() == "HighlightHoverAttack (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
+							gridObject.renderer.material.color = Color.red;
+						} else if (gridObject.renderer.material.ToString() == "HighlightHoverMove (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
+							gridObject.renderer.material.color = Color.blue;
+						}	
+					}
 				}
-					
-			}
-			}
-			if(playerTurn==false){
-				if(turnEnded==true){
-					if(timer>0){
-						timer-=Time.deltaTime;
-					} else {
-						turnEnded = false;
-						timer = 3;
-						if(commandPoints!=0){
-							chosenTargets.Clear();
-							chosenRatings.Clear();
-							sendUnits.Clear();
-							foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
-								enemy.GetComponent<UnitGenerics>().AIThink();
-							}
-							decideAction();
+				if(playerTurn==false){
+					if(turnEnded==true){
+						if(timer>0){
+							timer-=Time.deltaTime;
 						} else {
-							nextTurn();
-						}
-					} 
-				}
+							turnEnded = false;
+							timer = 5;
+							if(commandPoints!=0){
+								chosenTargets.Clear();
+								chosenRatings.Clear();
+								sendUnits.Clear();
+								foreach(GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy")){
+									enemy.GetComponent<UnitGenerics>().AIThink();
+								}
+								decideAction();
+							} else {
+								nextTurn();
+							}
+						} 
+					}
 			}
-		
-		
 		hoverOverGrid();
 		GameObject.Find("Command Points").GetComponent<UILabel>().text = "Command Points: " + commandPoints.ToString();
 		} else {
@@ -263,7 +262,7 @@ public class gameManage : MonoBehaviour {
 	}
 	//This is called when the player ends their turn or the AI runs out of command points. It resets the command points and AI stuff.
 	public void nextTurn(){
-		timer = 3;
+		timer = 5;
 		commandPoints = 3;
 		turnCounter++;
 		

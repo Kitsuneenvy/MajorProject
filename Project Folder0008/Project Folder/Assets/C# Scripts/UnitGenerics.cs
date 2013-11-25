@@ -46,6 +46,7 @@ public class UnitGenerics : MonoBehaviour
 	GameObject unit;
 	int ratingNum;
 	int id;
+	GameObject damageText;
 	//End of AI
 
 	// Use this for initialization if we need it
@@ -136,10 +137,11 @@ public class UnitGenerics : MonoBehaviour
 		int bonusHit = 0;
 		int bonusDamage = 0;
 		setAttackState (false);
-		this.animation.Play("Attack",PlayMode.StopAll);
 		
 		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 		if(GameObject.Find("Game Manager").GetComponent<gameManage>().commandPoints>0){
+			
+		this.animation.Play("Attack",PlayMode.StopAll);
 			if(this.GetComponent<AstarAI>().myTurn == true){
 				this.GetComponent<AstarAI>().myTurn = false;
 				GameObject.Find("Game Manager").GetComponent<gameManage>().toggleTurn();
@@ -170,6 +172,8 @@ public class UnitGenerics : MonoBehaviour
 				if(target.tag!="Flower"){
 					StartCoroutine(animationQ(target.gameObject,"TakenHit"));
 				}
+				damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+				damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
 				if(unitType!=3){
 					if((attack - targetGenerics.defence) > 0){
 						targetGenerics.setHealth (targetGenerics.health - (attack +bonusDamage - targetGenerics.defence));
@@ -182,9 +186,9 @@ public class UnitGenerics : MonoBehaviour
 					} else {
 						if(targetGenerics.defence - attack > 0){
 						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
-					} else {
-						targetGenerics.setHealth (targetGenerics.health - 1);
-					}
+						} else {
+							targetGenerics.setHealth (targetGenerics.health - 1);
+						}
 					}
 				}
 				if(Random.Range(0,100)<50){
@@ -351,6 +355,8 @@ public class UnitGenerics : MonoBehaviour
 					//play death animation
 					if(target.tag!="Flower"){
 						StartCoroutine(animationQ(target.gameObject,"Death"));
+					} else {
+						GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
 					}
 					//flower buff removal
 					if(target.name.Contains("Flower"))
@@ -360,9 +366,9 @@ public class UnitGenerics : MonoBehaviour
 						foreach(GameObject tile in tempList)
 						{
 							
-							if(tile.GetComponent<ParticleSystem>() != null)
+							if(tile.particleEmitter != null)
 							{
-								tile.GetComponent<ParticleSystem>().Stop();
+								tile.particleEmitter.maxEmission = 0;
 								if(tile.GetComponent<Grid>().heldUnit != null &&tile.GetComponent<Grid>().heldUnit.tag == "Enemy"&& tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
 								{
 									if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
@@ -389,11 +395,14 @@ public class UnitGenerics : MonoBehaviour
 						Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death"].length);
 					} else {
 						Destroy(targetGenerics.gameObject);
+						missionReaderObject.flowerUnits.Remove(targetGenerics.gameObject);
 					}
 					//check if task is completed
 					GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 				}
 			} else {
+				damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+				damageText.GetComponent<TextMesh>().text = "Miss!";
 				StartCoroutine(animationQ(target.gameObject,"Dodge"));
 				if(Random.Range(0,100)<25){
 					switch(targetGenerics.unitType){
@@ -898,10 +907,10 @@ public class UnitGenerics : MonoBehaviour
 	
 	IEnumerator animationQ(GameObject target, string animationToPlay){
 		yield return new WaitForSeconds(this.animation.GetClip("Attack").length);
+		if(target!=null){
 		target.animation.Play(animationToPlay);
-		if(!target!=null){
-			yield return new WaitForSeconds(target.animation.GetClip(animationToPlay).length);
-			GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
+		yield return new WaitForSeconds(target.animation.GetClip(animationToPlay).length);
 		}
+		GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
 	}
 }
