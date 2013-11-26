@@ -36,7 +36,7 @@ public class ButtonLoad : MonoBehaviour {
 		exitButton.SetActive(false);
 		optionsButton.SetActive(false);
 		
-		increaseY = 0.2f;
+		increaseY = 140f;
 		//change title
 		editLabel.text = "Load Menu";
 		
@@ -65,8 +65,9 @@ public class ButtonLoad : MonoBehaviour {
 			temp.GetComponentInChildren<UILabel>().text = tempString;
 			temp.transform.localScale = new Vector3(1,1,0);
 			Vector3 newPosition = new Vector3(0,increaseY,0.5f);
-			temp.transform.position = newPosition;
-			increaseY -= 0.1f;
+			Debug.Log(newPosition.ToString());
+			temp.transform.localPosition = newPosition;
+			increaseY -= 25.0f;
 			
 		}
 	}
