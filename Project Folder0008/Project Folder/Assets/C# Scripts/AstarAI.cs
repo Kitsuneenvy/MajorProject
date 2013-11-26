@@ -168,7 +168,7 @@ public class AstarAI : MonoBehaviour
 									}
 									case (3):
 									{
-										this.GetComponent<UnitGenerics>().attack = -40;
+										this.GetComponent<UnitGenerics>().attack = 40;
 										break;
 									}
 									default:

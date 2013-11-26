@@ -84,7 +84,7 @@ public class UnitGenerics : MonoBehaviour
 			
 		} else if (type == 3) {
 			health = 40;
-			attack = -30;
+			attack = 30;
 			defence = 5;
 			accuracy = 100;
 			dodge = 25;
@@ -105,7 +105,7 @@ public class UnitGenerics : MonoBehaviour
 			if (Input.GetKeyDown (KeyCode.Mouse1)) {
 				if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out info, Mathf.Infinity, gridMask.value)) {
 					if (info.collider.tag == "Square" && info.collider.GetComponent<Grid> ().returnUnit () != null) {
-						if (adjacentSquares.Contains (info.collider.gameObject) && (info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag != this.tag)) {
+						if (adjacentSquares.Contains (info.collider.gameObject) && ((info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag != this.tag || (info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag == this.tag && unitType == 3)))) {
 							launchAttack (info.collider.GetComponent<Grid> ().returnUnit ());
 							attackState = false;
 							AIThinkSquares.Clear();
@@ -173,6 +173,7 @@ public class UnitGenerics : MonoBehaviour
 					StartCoroutine(animationQ(target.gameObject,"TakenHit"));
 				}
 				damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+				damageText.GetComponent<TextMesh>().color = Color.white;
 				damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
 				if(unitType!=3){
 					if((attack - targetGenerics.defence) > 0){
@@ -371,14 +372,8 @@ public class UnitGenerics : MonoBehaviour
 								tile.particleEmitter.maxEmission = 0;
 								if(tile.GetComponent<Grid>().heldUnit != null &&tile.GetComponent<Grid>().heldUnit.tag == "Enemy"&& tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased == true)
 								{
-									if(tile.GetComponent<Grid>().heldUnit.name.Contains("Florist"))
-									{
-										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack += 10;
-									}
-									else
-									{
-										tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
-									}
+									
+									tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().attack -= 10;
 									
 									tile.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>().statsIncreased = false;
 								}

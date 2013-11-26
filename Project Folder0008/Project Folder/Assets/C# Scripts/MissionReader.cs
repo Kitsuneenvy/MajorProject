@@ -571,25 +571,13 @@ public class MissionReader : MonoBehaviour {
 					animatorColours[3] = new Color(1f,0.15f,0.15f,1f);
 					animatorColours[4] = new Color(0.6f,0.5f,0.3f,1f);
 					tile.GetComponent<ParticleAnimator>().colorAnimation = animatorColours;
-					
-//					particleOnGrid.startLifetime = 1.0f;
-//					particleOnGrid.emissionRate = 10;
-//					particleOnGrid.gravityModifier = -0.5f;
-//					particleOnGrid.startColor = Color.black;
-					//particleOnGrid.startSize = 1.0f;
+
 					
 					Grid gridObject = tile.GetComponent<Grid>();
 					if(gridObject.heldUnit != null && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
 					{
 						gridObject.heldUnit.GetComponent<UnitGenerics>().statsIncreased = true;
-						if(this.name.Contains("Florist"))
-						{
-							gridObject.heldUnit.GetComponent<UnitGenerics>().attack -= 10;
-						}
-						else
-						{
-							gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
-						}
+						gridObject.heldUnit.GetComponent<UnitGenerics>().attack += 10;
 					}
 				}
 			}
