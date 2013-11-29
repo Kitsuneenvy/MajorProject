@@ -11,7 +11,7 @@ void OnClick()
 		if(tutorialCheck.alpha==1){
 		Application.LoadLevel("Tutorial");	
 		} else {
-			Application.LoadLevel("Week6");
+			Application.LoadLevel("Main");
 		}
 	}
 }

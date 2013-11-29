@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 	
+	
+	public bool noMove = false;
 	DropDownMenu dropDownMenuObject;
 	int xLeft = 0; //left 
 	int xRight = 0;	//right
@@ -63,27 +65,27 @@ public class CameraMovement : MonoBehaviour {
 		}
 		
 		//Move camera as long as no drop down menu is created
-		if(!dropDownMenuObject.cameraLock){
+		if(!dropDownMenuObject.cameraLock&&noMove==false){
 			if(!missionReader.flipped){
 				//moves camera left
-				if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x > xLeft ){
+				if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x > xLeft){
 		
-					this.transform.Translate(Vector3.left);		
+					this.transform.Translate(Vector3.left/2);		
 				}
 					//moves camera right
 				if(Input.mousePosition.x>=Screen.width-Screen.width/50 && this.transform.position.x < xRight){
 					
-					this.transform.Translate(Vector3.right);
+					this.transform.Translate(Vector3.right/2);
 				}
 					//moves camera down
 				if(Input.mousePosition.y<=Screen.height/50 && this.transform.position.z > zBack){
 						
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-1)));
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-0.5f)));
 				}
 					//moves camera up
-				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z < zFront ){
+				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z < zFront){
 						
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,1)));
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,0.5f)));
 				}
 		
 			}
@@ -91,32 +93,32 @@ public class CameraMovement : MonoBehaviour {
 				//moves camera left
 				if(Input.mousePosition.x<=Screen.width/50 && this.transform.position.x < (xRight + 5 )){
 		
-					this.transform.Translate(Vector3.left);		
+					this.transform.Translate(Vector3.left/2);		
 				}
 					//moves camera right
 				if(Input.mousePosition.x>=Screen.width-Screen.width/50 && this.transform.position.x > (xLeft - 2)){
 					
-					this.transform.Translate(Vector3.right);
+					this.transform.Translate(Vector3.right/2);
 				}
 					//moves camera down
 				if(Input.mousePosition.y<=Screen.height/50 && this.transform.position.z < (zFront + 10)){
 						
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,1)));
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,0.5f)));
 		
 				}
 					//moves camera up
-				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z > zBack ){
+				if(Input.mousePosition.y>=Screen.height-Screen.height/50 && this.transform.position.z > zBack){
 							
-					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-1)));
+					this.transform.Translate(this.transform.InverseTransformDirection(new Vector3(0,0,-0.5f)));
 				}
 			}
 			//zooms in camera
 		if(Input.GetAxis("Mouse ScrollWheel")>0&&this.transform.position.y>75){
-			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.down));
+			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.down*2));
 		}
 			//zooms out camera
 		if(Input.GetAxis("Mouse ScrollWheel")<0&&this.transform.position.y<100){
-			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.up));
+			this.transform.Translate(this.transform.InverseTransformDirection(Vector3.up*2));
 		}
 		}
 		//if a drop down menu is created
