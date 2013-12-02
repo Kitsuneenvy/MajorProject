@@ -31,6 +31,7 @@ public class gameManage : MonoBehaviour {
 	public LayerMask astarMask;
 	public GameObject endTurnButton;
 	
+	GameObject mainCamera;
 	RaycastHit info;
 	
 	float timer;
@@ -45,6 +46,8 @@ public class gameManage : MonoBehaviour {
 	void Start () {
 		secondaryCameraObject = GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>();
 		NarrativeAnchorObject = GameObject.FindGameObjectWithTag("NarrativeAnchor");
+		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+		Debug.Log(NarrativeAnchorObject.ToString());
 		//gridMask = LayerMask.NameToLayer("Grid");
 		//astarMask = LayerMask.NameToLayer("AStar");
 		playerTurn = true;	
@@ -267,6 +270,21 @@ public class gameManage : MonoBehaviour {
 		turnCounter++;
 		
 		if(playerTurn){
+			
+			GameObject enemyTurnText = GameObject.Instantiate(Resources.Load("DamageText")) as GameObject;
+			enemyTurnText.transform.parent = mainCamera.transform;
+			enemyTurnText.transform.localPosition = new Vector3(-4,0,9);
+			if(mReaderObject.flipped == true)
+			{
+				enemyTurnText.transform.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+			}
+			enemyTurnText.GetComponent<TextMesh>().text = "Enemy Turn";
+			enemyTurnText.GetComponent<TextMesh>().color = Color.red;
+			foreach(GameObject unit in mReaderObject.allUnits)
+			{
+				unit.GetComponent<UnitGenerics>().setMovementState(false);
+				unit.GetComponent<UnitGenerics>().setAttackState(false);
+			}
 			endTurnButton.SetActive(false);
 			chosenTargets.Clear();
 			chosenRatings.Clear();
@@ -277,6 +295,22 @@ public class gameManage : MonoBehaviour {
 			}
 			decideAction();
 		} else {
+			
+			GameObject playerTurnText = GameObject.Instantiate(Resources.Load("DamageText")) as GameObject;
+			playerTurnText.transform.parent = mainCamera.transform;
+			playerTurnText.transform.localPosition = new Vector3(-4,0,9);
+			if(mReaderObject.flipped == true)
+			{
+				playerTurnText.transform.localRotation = Quaternion.Euler(new Vector3(0,0,0));
+			}
+			playerTurnText.GetComponent<TextMesh>().text = "Your Turn";
+			playerTurnText.GetComponent<TextMesh>().color = Color.blue;
+			Debug.Log("Player Turn");
+			foreach(GameObject unit in mReaderObject.allUnits)
+			{
+				unit.GetComponent<UnitGenerics>().setMovementState(false);
+				unit.GetComponent<UnitGenerics>().setAttackState(false);
+			}
 			endTurnButton.SetActive(true);
 			playerTurn = true;
 		}
@@ -330,7 +364,7 @@ public class gameManage : MonoBehaviour {
 				moveSquare = tempTile;
 			}
 			sendUnits[listCount].GetComponent<AstarAI>().myTurn = true;
-			sendUnits[listCount].GetComponent<AstarAI>().move(moveSquare);
+			sendUnits[listCount].GetComponent<AstarAI>().move(moveSquare,sendUnits[listCount].GetComponent<UnitGenerics>().moveableSquares );
 			chosenTargets.Clear();
 			sendUnits.Clear();
 			chosenRatings.Clear();

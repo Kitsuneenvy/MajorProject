@@ -34,6 +34,15 @@ public class AstarAI : MonoBehaviour
 	public bool myTurn = false;
 	
 	List<GameObject> flowerAdjacentTiles = new List<GameObject>();
+	List<GameObject> moveTiles = new List<GameObject>();
+	List<float> tempList = new List<float>();
+	List<GameObject> finalPath = new List<GameObject>();
+	List<GameObject> newFinalPath = new List<GameObject>();
+	
+	GameObject tempTile;
+	int counter = 0;
+	GameObject targetGrid = null;
+	bool minusComPoint = false;
 	
 	public void Start ()
 	{
@@ -61,18 +70,128 @@ public class AstarAI : MonoBehaviour
 		}*/
 	}
 
-	public void move (GameObject newGrid)
+	public void move (GameObject newGrid, List <GameObject> moveSquares)
 	{
+		moveTiles = moveSquares;//think is redundant now
 		GameObject.Find ("Panel").GetComponent<DropDownMenu> ().resetSelectedUnit ();
+		Debug.Log("Next Grid to check: " + newGrid.ToString());
 		if (GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints > 0) {
-			GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
-			//set target position to location of collided raycast
-			targetPosition = newGrid.transform.position;
+			if(targetGrid == null)
+			{
+				//set target position to location of collided raycast
+				targetPosition = newGrid.transform.position;
+				targetGrid = newGrid;
+				finalPath.Add(targetGrid);
+				Debug.Log("Set targetGrid: " + targetGrid.ToString());
+			}
+			//check adjacents of passed tile
+			List<GameObject> adjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(newGrid);
+			List<GameObject> possiblePaths = new List<GameObject>();
+			int adjCounter = 0;
+			foreach(GameObject adjTile in adjacentTiles)
+			{
+				Debug.Log(adjTile.ToString());
+				adjCounter++;
+			
+				//check if already adjacent to target and move
+				if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && finalPath.Count == 0)
+				{Debug.Log("Next to tile");
+					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
+					targetGrid = null;
+					//Start a new path to the targetPosition, return the result to the OnPathComplete function
+					seeker.StartPath (transform.position, finalPath[0].transform.position, OnPathComplete);
+					moveUnit = true;
+					break;
+				}
+				else if(adjTile != this.GetComponent<UnitGenerics>().onGrid.gameObject && moveUnit == false)
+				{
+					//else if a moveable square and not already in finalpath (to stop backtracking)
+					if(moveTiles.Contains(adjTile))
+					{
+						if(finalPath.Count != 0)
+						{
+							if(!finalPath.Contains(adjTile) && adjTile != targetGrid)
+							{
+								Debug.Log("Added to possible paths final path check completed");
+								possiblePaths.Add(adjTile);
+							}
+						}
+						else
+						{
+							Debug.Log("Added to possible paths");
+								possiblePaths.Add(adjTile);
+						}
+					}
+					//if hit a dead end
+					else if(!moveTiles.Contains(adjTile) && adjCounter == adjacentTiles.Count && possiblePaths.Count == 0)
+					{
+						Debug.Log("Hit a dead end");
+						
+						if(newGrid != targetGrid)
+						{
+							moveTiles.Remove(newGrid);
+							if(finalPath.Contains(newGrid))
+							{
+							finalPath.Remove(newGrid);
+							Debug.Log("Removed" + newGrid.ToString());
+							}
+						}
+						move (finalPath[finalPath.Count-1],moveTiles);
+					}
+				}
+				else if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && moveUnit == false)
+				{Debug.Log("Finished path");
+					targetGrid = null;
+					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
+					finalPath.Reverse();
+					foreach(GameObject tile in finalPath)
+					{
+						Debug.Log("Final Path " + tile.ToString());
+					}
+					//moveSquares.Clear();
+					//this.GetComponent<UnitGenerics>().moveableSquares.Clear();
+					//moveTiles.Clear();
+					seeker.StartPath (this.transform.position, finalPath[0].transform.position, OnPathComplete);
+					moveUnit = true;
+					break;
+				}
+			}
+			if(possiblePaths.Count != null && moveUnit == false)
+			{
+				//check tiles closeness to end
+				foreach(GameObject tile in possiblePaths)
+				{
+					counter++;
+					Debug.Log("Checking distance");
+					float distance = Vector3.Distance(this.GetComponent<UnitGenerics>().onGrid.gameObject.transform.position,tile.transform.position);
+					//closest tile added to list
+					if(tempList.Count > 0 && distance < tempList[0])
+					{
+						tempList.Add(distance);
+						tempTile = tile;
+					}
+					//if first tile automatically add to list as closest distance
+					else if(tempList.Count == 0)
+					{
+						tempList.Add(distance);
+						tempTile = tile;
+					}
+					//once finished checking each tile add to final path
+					if(tile == possiblePaths[possiblePaths.Count-1])
+					{
+						Debug.Log("Adding to final path");
+						finalPath.Add(tempTile);
+						tempList.Clear();
+						counter = 0;
+						move (finalPath[finalPath.Count-1],moveTiles);
+					}
+				}
+				
+			}
+			
 			//set y above terrain so as to not have the character Lerp into the ground
 			//targetPosition.y = targetPosition.y + 0.5f*this.GetComponentInChildren<Renderer>().renderer.bounds.size.y;
-			//Start a new path to the targetPosition, return the result to the OnPathComplete function
-			seeker.StartPath (transform.position, targetPosition, OnPathComplete);
-			moveUnit = true;
+			
 		} else {
 			foreach(GameObject gridObject in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
 				gridObject.renderer.material = Resources.Load ("Transparent") as Material;
@@ -94,10 +213,23 @@ public class AstarAI : MonoBehaviour
  
 	public void FixedUpdate ()
 	{
-		
-		
-		if(Vector3.Distance(this.transform.position,targetPosition)<=1f){
-			moveUnit=false;
+		if(finalPath.Count != 0)
+		{
+			if(Vector3.Distance(this.transform.position,finalPath[0].transform.position)<=1f){
+				finalPath.Remove(finalPath[0]);
+				Debug.Log("HI");
+				//moveUnit = false;
+				if(finalPath.Count != 0)
+				{
+					Debug.Log(finalPath[0].ToString() + "\t Moved");
+					seeker.StartPath (transform.position, finalPath[0].transform.position, OnPathComplete);
+					//moveUnit = true;
+				}
+				else
+				{
+					moveUnit=false;
+				}
+			}
 		}
 		if(moveUnit==false){
 			if(myTurn == true){
@@ -194,42 +326,43 @@ public class AstarAI : MonoBehaviour
 //            Debug.Log ("End Of Path Reached");
 			//attempt at moving closer
 			//Lerp closer to location
-			transform.position = Vector3.Lerp (this.transform.position, targetPosition, (1 / (Vector3.Distance (this.transform.position, targetPosition))) * 0.1f);
+		//	transform.position = Vector3.Lerp (this.transform.position, targetPosition, (1 / (Vector3.Distance (this.transform.position, targetPosition))) * 0.1f);
+			
 			return;
 		}
 		//Direction to the next waypoint
 		Vector3 dir = (path.vectorPath [currentWaypoint] - transform.position).normalized;
 		dir *= speed * Time.fixedDeltaTime;//DONT THINK IS REQUIRED ANYMORE CHECK LATER
 		
-		//set timevalue
-		timeValue = (1 / (targetPosition - this.transform.position).magnitude);
+		
 		 if(moveUnit== true){
-
-			if (DistanceCalculation (this.transform.position, targetPosition) == true) { 
+			//set timevalue
+		timeValue = (1 / (finalPath[0].transform.position - this.transform.position).magnitude);
+			if (DistanceCalculation (this.transform.position, finalPath[0].transform.position) == true) { 
 				
 				this.animation.Play("Walk");
 				
 				//Lerp to location of raycasted position.z
-				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
+				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z)))) * 0.1f);
 					
-				if (this.transform.position.z <= targetPosition.z + 0.2f && this.transform.position.z >= targetPosition.z - 0.2f) {
+				if (this.transform.position.z <= finalPath[0].transform.position.z + 0.2f && this.transform.position.z >= finalPath[0].transform.position.z - 0.2f) {
 						
-				this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
-					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
+				this.transform.LookAt (new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, finalPath[0].transform.position.z));
+					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 				}
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
 				
-			} else if (DistanceCalculation (this.transform.position, targetPosition) == false) {
+			} else if (DistanceCalculation (this.transform.position, finalPath[0].transform.position) == false) {
 
 				this.animation.Play("Walk");
 				
 				//Lerp to location of raycasted position.x
-				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (targetPosition.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
+				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 					
-				if (this.transform.position.x <= targetPosition.x + 0.2f && this.transform.position.x >= targetPosition.x - 0.2f) {
+				if (this.transform.position.x <= finalPath[0].transform.position.x + 0.2f && this.transform.position.x >= finalPath[0].transform.position.x - 0.2f) {
 						
-					this.transform.LookAt (new Vector3 (targetPosition.x, this.transform.position.y, targetPosition.z));
-					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, targetPosition.z)))) * 0.1f);
+					this.transform.LookAt (new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, finalPath[0].transform.position.z));
+					this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z)))) * 0.1f);
 				}
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
 				}
@@ -241,6 +374,7 @@ public class AstarAI : MonoBehaviour
 		//If we are, proceed to follow the next waypoint
 		if (Vector3.Distance (transform.position, path.vectorPath [currentWaypoint]) < nextWaypointDistance) {
 			currentWaypoint++;
+			Debug.Log("Checking next waypoint");
 			return;
 		}
 	}

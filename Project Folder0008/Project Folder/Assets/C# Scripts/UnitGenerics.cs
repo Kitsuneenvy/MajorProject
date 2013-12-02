@@ -120,7 +120,7 @@ public class UnitGenerics : MonoBehaviour
 				if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out info, Mathf.Infinity, gridMask.value)) {
 					if (info.collider.tag == "Square" && info.collider.GetComponent<Grid> ().returnUnit () == null) {
 						if (moveableSquares.Contains (info.collider.gameObject)) {
-							this.GetComponent<AstarAI>().move (info.collider.gameObject);
+							this.GetComponent<AstarAI>().move (info.collider.gameObject, moveableSquares);
 							movementState = false;
 							AIThinkSquares.Clear();
 						}
@@ -454,7 +454,7 @@ public class UnitGenerics : MonoBehaviour
 //					info.collider.GetComponent<Grid>().returnUnit().gameObject.GetComponent<Animation>().Play("DodgeMain",PlayMode.StopAll);
 			}
 		} else {
-			GameObject.Find("Game Manager").GetComponent<gameManage>().nextTurn();
+			//GameObject.Find("Game Manager").GetComponent<gameManage>().nextTurn();
 		}
 	}
 
@@ -822,6 +822,10 @@ public class UnitGenerics : MonoBehaviour
 		List<GameObject> returnAdjacent = new List<GameObject>();
 		RaycastHit checkHit;
 		if(checkIndex<=gridList.Count){
+			if(checkIndex == GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width)
+			{
+				returnAdjacent.Add(gridList[0]);
+			}
 			if(checkIndex!=0){
 				if(checkIndex%GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width!=0){
 					returnAdjacent.Add(gridList[checkIndex-1]);
