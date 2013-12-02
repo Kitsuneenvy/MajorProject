@@ -9,6 +9,8 @@ public class DialogueReader : MonoBehaviour {
 	public int section = 0;
 	int sectionLine = 0;
 	public int dialogueLine = 0;
+	public LayerMask everythingMask;
+	public LayerMask cinematicMask;
 	string charName = "";
 	string dialogue = "";
 	float delay = 0;
@@ -134,50 +136,57 @@ public class DialogueReader : MonoBehaviour {
 			}
 		}
 		if(Application.loadedLevelName == "Main"){
-			GameObject tempObject1 = null;
-			GameObject tempObject2 = null;
-			GameObject tempObject3 = null;
-			GameObject pivotFocus = null;
-			switch(EventToPlay){
-			case 0:
-				initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
-				initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+			Debug.Log(GameObject.Find("A*").GetComponent<MissionReader>().currentMission.ToString());
+			if(GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 1||EventToPlay == 0){
+				GameObject tempObject1 = null;
+				GameObject tempObject2 = null;
+				GameObject tempObject3 = null;
+				GameObject pivotFocus = null;
 				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
-					if(cineObject.name.Contains("Chef")){
-						tempObject1 = cineObject;
+						if(cineObject.name.Contains("Chef")){
+							tempObject1 = cineObject;
+						}
+						if(cineObject.name.Contains("Frier")){
+							tempObject2 = cineObject;
+						}
+						if(cineObject.name.Contains("Bowlder")){
+							tempObject3 = cineObject;
+						}
+						if(cineObject.name.Contains("Mission1")){
+							pivotFocus = cineObject;
+						}
 					}
-					if(cineObject.name.Contains("Frier")){
-						tempObject2 = cineObject;
-					}
-					if(cineObject.name.Contains("Bowlder")){
-						tempObject3 = cineObject;
-					}
-					if(cineObject.name.Contains("Mission1")){
-						pivotFocus = cineObject;
-					}
+				switch(EventToPlay){
+				case 0:
+					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+					
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = true;
+					GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					GameObject.FindGameObjectWithTag("MainCamera").transform.LookAt(pivotFocus.transform);
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cullingMask = cinematicMask;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 1:
+					Debug.Log("Played event 1");
+					DestroyImmediate(tempObject1);
+					DestroyImmediate(tempObject2);
+					DestroyImmediate(tempObject3);
+					DestroyImmediate(pivotFocus);
+					GameObject.FindGameObjectWithTag("MainCamera").transform.rotation = initialRotation;
+					GameObject.FindGameObjectWithTag("MainCamera").transform.position = initialPosition;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cullingMask = everythingMask;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = false;
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				default:
+					break;
 				}
-				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = true;
-				GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(pivotFocus.transform.position.x+5,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+5);
-				GameObject.FindGameObjectWithTag("MainCamera").transform.LookAt(pivotFocus.transform);
-				gameManageObject.narrativePanelOpen = true;
-				break;
-			case 1:
-				DestroyImmediate(tempObject1);
-				DestroyImmediate(tempObject2);
-				DestroyImmediate(tempObject3);
-				DestroyImmediate(pivotFocus);
-				GameObject.FindGameObjectWithTag("MainCamera").transform.rotation = initialRotation;
-				GameObject.FindGameObjectWithTag("MainCamera").transform.position = initialPosition;
-				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = false;
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			default:
-				break;
 			}
 		}
 	}

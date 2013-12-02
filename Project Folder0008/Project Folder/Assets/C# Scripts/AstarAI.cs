@@ -90,12 +90,11 @@ public class AstarAI : MonoBehaviour
 			int adjCounter = 0;
 			foreach(GameObject adjTile in adjacentTiles)
 			{
-				Debug.Log(adjTile.ToString());
 				adjCounter++;
 			
 				//check if already adjacent to target and move
 				if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && finalPath.Count == 0)
-				{Debug.Log("Next to tile");
+				{
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
 					targetGrid = null;
 					//Start a new path to the targetPosition, return the result to the OnPathComplete function
@@ -112,20 +111,17 @@ public class AstarAI : MonoBehaviour
 						{
 							if(!finalPath.Contains(adjTile) && adjTile != targetGrid)
 							{
-								Debug.Log("Added to possible paths final path check completed");
 								possiblePaths.Add(adjTile);
 							}
 						}
 						else
 						{
-							Debug.Log("Added to possible paths");
 								possiblePaths.Add(adjTile);
 						}
 					}
 					//if hit a dead end
 					else if(!moveTiles.Contains(adjTile) && adjCounter == adjacentTiles.Count && possiblePaths.Count == 0)
 					{
-						Debug.Log("Hit a dead end");
 						
 						if(newGrid != targetGrid)
 						{
@@ -133,24 +129,16 @@ public class AstarAI : MonoBehaviour
 							if(finalPath.Contains(newGrid))
 							{
 							finalPath.Remove(newGrid);
-							Debug.Log("Removed" + newGrid.ToString());
 							}
 						}
 						move (finalPath[finalPath.Count-1],moveTiles);
 					}
 				}
 				else if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && moveUnit == false)
-				{Debug.Log("Finished path");
+				{
 					targetGrid = null;
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
 					finalPath.Reverse();
-					foreach(GameObject tile in finalPath)
-					{
-						Debug.Log("Final Path " + tile.ToString());
-					}
-					//moveSquares.Clear();
-					//this.GetComponent<UnitGenerics>().moveableSquares.Clear();
-					//moveTiles.Clear();
 					seeker.StartPath (this.transform.position, finalPath[0].transform.position, OnPathComplete);
 					moveUnit = true;
 					break;
@@ -162,7 +150,6 @@ public class AstarAI : MonoBehaviour
 				foreach(GameObject tile in possiblePaths)
 				{
 					counter++;
-					Debug.Log("Checking distance");
 					float distance = Vector3.Distance(this.GetComponent<UnitGenerics>().onGrid.gameObject.transform.position,tile.transform.position);
 					//closest tile added to list
 					if(tempList.Count > 0 && distance < tempList[0])
@@ -179,7 +166,6 @@ public class AstarAI : MonoBehaviour
 					//once finished checking each tile add to final path
 					if(tile == possiblePaths[possiblePaths.Count-1])
 					{
-						Debug.Log("Adding to final path");
 						finalPath.Add(tempTile);
 						tempList.Clear();
 						counter = 0;
@@ -217,11 +203,9 @@ public class AstarAI : MonoBehaviour
 		{
 			if(Vector3.Distance(this.transform.position,finalPath[0].transform.position)<=1f){
 				finalPath.Remove(finalPath[0]);
-				Debug.Log("HI");
 				//moveUnit = false;
 				if(finalPath.Count != 0)
 				{
-					Debug.Log(finalPath[0].ToString() + "\t Moved");
 					seeker.StartPath (transform.position, finalPath[0].transform.position, OnPathComplete);
 					//moveUnit = true;
 				}
@@ -240,7 +224,7 @@ public class AstarAI : MonoBehaviour
 				if(this.tag == "Enemy")
 				{
 					if(this.GetComponent<UnitGenerics>().statsIncreased == true)
-					{Debug.Log("Reset");
+					{
 						switch(this.GetComponent<UnitGenerics>().unitType)
 						{
 						case (0):
@@ -278,7 +262,7 @@ public class AstarAI : MonoBehaviour
 							{
 								Grid gridObject = tile.GetComponent<Grid>();
 								if(gridObject.heldUnit != null && gridObject.heldUnit == this.gameObject && gridObject.heldUnit.tag != "PlayerUnit" && (!gridObject.heldUnit.name.Contains("Flower") || !gridObject.heldUnit.name.Contains("Florist")))
-								{Debug.Log("attack increased");
+								{
 									this.GetComponent<UnitGenerics>().statsIncreased = true;
 									//int unitType = this.GetComponent<UnitGenerics>().unitType;
 									switch(this.GetComponent<UnitGenerics>().unitType)
@@ -374,7 +358,6 @@ public class AstarAI : MonoBehaviour
 		//If we are, proceed to follow the next waypoint
 		if (Vector3.Distance (transform.position, path.vectorPath [currentWaypoint]) < nextWaypointDistance) {
 			currentWaypoint++;
-			Debug.Log("Checking next waypoint");
 			return;
 		}
 	}

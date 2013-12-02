@@ -247,7 +247,7 @@ public class gameManage : MonoBehaviour {
 						"  Def: " + hoverUnit.defence.ToString()+
 						"  Acc: " + hoverUnit.accuracy.ToString() +
 						"  Ddg: " + hoverUnit.dodge;
-					GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString();
+					GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString() + "/"+hoverUnit.maxHealth.ToString() ;
 				} else {
 					//GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name:";
 					GameObject.Find("Character Name").GetComponent<UILabel>().text = "";

@@ -15,10 +15,12 @@ public class MissionReader : MonoBehaviour {
 	//whether new mission
 	bool newMission = true;
 	
+	public int currentMission = 0;
+	
 	//which mission to be created
-	bool tutorial = false;
-	bool mission1 = false;
-	bool mission2 = false;
+	public bool tutorial = false;
+	public bool mission1 = false;
+	public bool mission2 = false;
 	public bool mission3 = false;
 	public bool mission4 = false;
 	public bool mission5 = false;
@@ -97,23 +99,27 @@ public class MissionReader : MonoBehaviour {
 				//temporarily
 				if(temp == "Mission1")
 				{
+					currentMission = 1;
 					mission1 = true;
 				}
 				else if (temp == "Mission2")
 				{
-					
+					currentMission = 2;
 					mission2 = true;
 				}
 				else if(temp == "Mission3")
 				{
+					currentMission = 3;
 					mission3 = true;
 				}
 				else if (temp == "Mission4")
 				{
+					currentMission = 4;
 					mission4 = true;
 				}
 				else if (temp == "Mission5")
 				{
+					currentMission = 5;
 					mission5 = true;
 				}
 				
@@ -139,10 +145,12 @@ public class MissionReader : MonoBehaviour {
 			objective = "";
 			if(mission1 == true)
 			{
+				currentMission = 1;
 				objective = "Kill All Enemies";
 			}
 			else if (mission2 == true)
 			{
+				currentMission = 2;
 				objective = "Reach one tile \n right of fence";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
@@ -152,6 +160,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			else if(mission3 == true)
 			{
+				currentMission = 3;
 				objective = "Rout Enemies";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
@@ -161,6 +170,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			else if (mission4 == true)
 			{
+				currentMission = 4;
 				objective = "Defend chef";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
@@ -169,6 +179,7 @@ public class MissionReader : MonoBehaviour {
 			}
 			else if (mission5 == true)
 			{
+				currentMission = 5;
 				objective = "Stop the florist \n from escaping";
 				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
 				aStarGrid.astarData.AddGraph("GridGraph");
@@ -225,6 +236,7 @@ public class MissionReader : MonoBehaviour {
 			autoSave ="Assets/MissionFiles/Mission1.mis";
 			//set new mission to false
 			mission1 = false;
+			currentMission = 1;
 			newMission = false;
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 			{
@@ -241,6 +253,7 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission2.mis";
 			//set new mission to false
 			mission2 = false;
+			currentMission = 2;
 			newMission = false;
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 			{
@@ -332,18 +345,21 @@ public class MissionReader : MonoBehaviour {
 				if(mission3)
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 13;
+					currentMission = 3;
 					mission3 = false;
 					rotate = true;
 				}
 				if(mission4)
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 325;
+					currentMission = 4;
 					mission4 = false;
 					flipped = true;
 				}
 				if(mission5)
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 360;
+					currentMission = 5;
 					mission5 = false;
 				}
 				aStarGrid.astarData.gridGraph.UpdateSizeFromWidthDepth();

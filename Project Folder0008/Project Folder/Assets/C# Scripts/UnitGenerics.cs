@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class UnitGenerics : MonoBehaviour
 {
-	float maxHealth;
+	public float maxHealth;
 	public float health;
 	public float attack;
 	public float defence;
@@ -159,6 +159,9 @@ public class UnitGenerics : MonoBehaviour
 				bonusHit = 20;
 				bonusDamage = 20;
 			}
+			if(unitType==3){
+				bonusHit+=100;
+			}
 			if ((Random.Range (0, 100) <= (accuracy +bonusHit - targetGenerics.dodge))||target.tag == "Flower") {
 				if(!target.name.Contains("Flower"))
 				{
@@ -172,10 +175,10 @@ public class UnitGenerics : MonoBehaviour
 				if(target.tag!="Flower"){
 					StartCoroutine(animationQ(target.gameObject,"TakenHit"));
 				}
-				damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
-				damageText.GetComponent<TextMesh>().color = Color.white;
-				damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
 				if(unitType!=3){
+					damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+					damageText.GetComponent<TextMesh>().color = Color.white;
+					damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
 					if((attack - targetGenerics.defence) > 0){
 						targetGenerics.setHealth (targetGenerics.health - (attack +bonusDamage - targetGenerics.defence));
 					} else {
@@ -183,8 +186,18 @@ public class UnitGenerics : MonoBehaviour
 					}
 				} else {
 					if(target.tag == this.tag){
-						targetGenerics.setHealth(targetGenerics.health + attack);
+						damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+						damageText.GetComponent<TextMesh>().color = Color.white;
+						damageText.GetComponent<TextMesh>().text = "+"+(attack).ToString();
+						if(targetGenerics.health+attack>targetGenerics.maxHealth){
+							targetGenerics.health = targetGenerics.maxHealth;
+						} else {
+							targetGenerics.setHealth(targetGenerics.health + attack);
+						}
 					} else {
+						damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
+						damageText.GetComponent<TextMesh>().color = Color.white;
+						damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
 						if(targetGenerics.defence - attack > 0){
 						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
 						} else {
@@ -485,47 +498,6 @@ public class UnitGenerics : MonoBehaviour
 		currentX = onGrid.returnXY ().x;
 		currentY = onGrid.returnXY ().y;
 		current = new Vector2 (currentX, currentY);
-//		RaycastHit blockCheck;
-//		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
-//			if(Physics.Raycast(new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z),(this.transform.position-new Vector3(testGrid.transform.position.x,testGrid.transform.position.y+2,testGrid.transform.position.z)),out blockCheck,Mathf.Infinity,unitMask.value)){
-//				if(blockCheck.collider.tag == this.tag){
-//					testX = testGrid.GetComponent<Grid> ().returnXY ().x;
-//					testY = testGrid.GetComponent<Grid> ().returnXY ().y;
-//					test = new Vector2 (testX, testY);
-//					if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
-//						adjacentSquares.Add (testGrid);
-//					}
-//					if (testX > currentX) {
-//						distanceX = testX - currentX;
-//					} else if (testX < currentX) {
-//						distanceX = currentX - testX;
-//					}
-//					if (testY > currentY) {
-//						distanceY = testY - currentY;
-//					} else if (testY < currentY) {
-//						distanceY = currentY - testY;
-//					}
-//					if (testX == currentX) {
-//						distanceX = 0;
-//					}
-//					if (currentY == testY) {
-//						distanceY = 0;
-//					}
-//					if (distanceX + distanceY <= movement) {
-//						if (test != current) {
-//							if (testGrid.GetComponent<Grid> ().returnUnit () == null) {
-//								if(!(moveableSquares.Contains(testGrid))){
-//									moveableSquares.Add (testGrid);
-//								}
-//							}
-//							if(!(AIThinkSquares.Contains(testGrid))){
-//								AIThinkSquares.Add(testGrid);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
 		foreach (GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()) {
 			if (checkAdjacentGrids(onGrid.gameObject).Contains(testGrid)) {
 				adjacentSquares.Add (testGrid);
@@ -629,126 +601,7 @@ public class UnitGenerics : MonoBehaviour
 		gameManageObject.setActions(chosenTarget,this.gameObject,highestRating);
 		
 		
-//		
-//		
-//		//A loop to discern which grid squares the unit can reach
-//		foreach(GameObject testGrid in moveableSquares){
-//			foreach(GameObject secondTest in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-//				if(secondTest==testGrid){
-//					if(!(AIThinkSquares.Contains(secondTest))){
-//						AIThinkSquares.Add(secondTest);
-//					}
-//				}
-//			}
-//		}
-//		//Refine the squares to only the squares that have units in them, to speed it up.
-//		foreach(GameObject thinkSquare in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-//			if(thinkSquare.GetComponent<Grid>().heldUnit==null||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Enemy"||thinkSquare.GetComponent<Grid>().heldUnit.tag=="Flower"){
-//				if(AIThinkSquares.Contains(thinkSquare)){
-//					AIThinkSquares.Remove(thinkSquare);
-//				}
-//			}
-//		}
-//		if(AIThinkSquares.Count!=0){
-//		//Loop through the remaining squares and find out which ones have the best actions
-//		foreach(GameObject thinkSquare in AIThinkSquares){
-//			ratingNum = 0;
-//			UnitGenerics thinkUnit = thinkSquare.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
-//			Grid thinkGrid = thinkSquare.GetComponent<Grid>();
-//			if(thinkGrid.heldUnit.tag==this.tag){
-//				if(health<maxHealth/2&&thinkUnit.unitType==3){
-//					unitList.Add(thinkSquare);
-//					ratingsList.Add(new Vector2(ratingsList.Count+1,8));
-//				}
-//				if(thinkUnit.getHealth()<thinkUnit.getMax()/2&&thinkUnit.unitType==3&&unitType==2){
-//					unitList.Add(thinkSquare);
-//					ratingsList.Add(new Vector2(ratingsList.Count+1,6));
-//				}
-//			} else if (thinkUnit.tag=="PlayerUnit"){
-//				if(thinkUnit.health<health){
-//					ratingNum = ratingNum+2;
-//				}
-//				if(thinkUnit.unitType==0&&unitType==2){
-//					ratingNum = ratingNum+2;
-//				}
-//				if(thinkUnit.unitType==1&&unitType==0){
-//					ratingNum = ratingNum+2;
-//				}
-//				if(thinkUnit.unitType==2&&unitType==1){
-//					ratingNum = ratingNum+2;
-//				}
-//				if(thinkUnit.unitType==3&&unitType!=3){
-//					ratingNum = ratingNum+3;
-//				}
-//				unitList.Add(thinkSquare);
-//				ratingsList.Add(new Vector2(ratingsList.Count+1,ratingNum));
-//			}
-//		}
-//		//find the various ratings for each difficulty
-//			foreach(GameObject square in unitList){
-//				if(returnRating(square).y>highestRating.y){
-//					highestRating.y = returnRating(square).y;
-//				}
-//				if(returnRating(square).y>middleRating.y&&returnRating(square).y<highestRating.y){
-//					middleRating.y = returnRating(square).y;
-//				}
-//				if(returnRating(square).y>lowestRating.y&&returnRating(square).y<middleRating.y){
-//					lowestRating.y = returnRating(square).y;
-//				}
-//			}
-//		//Decide on the target, next we do things for it
-//		chosenTarget = unitList[int.Parse(highestRating.x.ToString())];
-//		GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(chosenTarget.GetComponent<Grid>().heldUnit.gameObject,this.gameObject,highestRating.y);
-//		//for simplicity
-//		Grid chosenGrid = chosenTarget.GetComponent<Grid>();
-//		foreach(GameObject testGrid in GameObject.Find("Game Manager").GetComponent<GridTool>().returnGridColliders()){
-//		if (checkAdjacentGrids(chosenGrid.gameObject).Contains(testGrid)) {
-//				AITargetAdjacent.Add (testGrid);
-//			}
-//		}
-//		} else if(AIThinkSquares.Count==0){
-//			Debug.Log ("Running the non think ai");
-//			GameObject temporary = null;
-//			float shortestDis = Mathf.Infinity;
-//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-//					maxMove.Add(square);
-//			}
-//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-//				if(calculateGridDistance(onGrid.gameObject,square)>movement||square.GetComponent<Grid>().heldUnit!=null){
-//					maxMove.Remove(square);
-//				}
-//			}
-//			foreach(GameObject square in GameObject.Find(("Game Manager")).GetComponent<GridTool>().returnGridColliders()){
-//				if(square.GetComponent<Grid>().heldUnit!=null&&square.GetComponent<Grid>().heldUnit.tag=="PlayerUnit"){
-//					AIThinkSquares.Add(square);
-//					UnitGenerics thinkUnit = square.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
-//					if(thinkUnit.health<health){
-//						ratingNum = ratingNum+2;
-//					}
-//					if(thinkUnit.unitType==0&&unitType==2){
-//						ratingNum = ratingNum+2;
-//					}
-//					if(thinkUnit.unitType==1&&unitType==0){
-//						ratingNum = ratingNum+2;
-//					}
-//					if(thinkUnit.unitType==2&&unitType==1){
-//						ratingNum = ratingNum+2;
-//					}
-//					if(thinkUnit.unitType==3&&unitType!=3){
-//						ratingNum = ratingNum+3;
-//					}
-//				}
-//			}
-//			foreach(GameObject square in maxMove){
-//				foreach(GameObject checkSquare in AIThinkSquares){
-//					if(calculateGridDistance(square,checkSquare)<shortestDis){
-//						shortestDis = calculateGridDistance(square,checkSquare);
-//						temporary = square;
-//					}
-//				}
-//			}
-//			GameObject.Find("Game Manager").GetComponent<gameManage>().setActions(temporary.gameObject,this.gameObject,ratingNum-2);
-//		}
+
 		
 	}
 	
