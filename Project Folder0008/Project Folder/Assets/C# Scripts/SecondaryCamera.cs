@@ -7,6 +7,8 @@ public class SecondaryCamera : MonoBehaviour {
 	bool moveDirection = false;
 	bool active = false;
 	Rect cameraRect = new Rect(0,0,0,0);
+	float cameraWidth = 0;
+	float cameraHeight = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -20,14 +22,20 @@ public class SecondaryCamera : MonoBehaviour {
 				this.GetComponent<Camera>().depth = -2;
 			} else {
 				cameraRect = new Rect(cameraRect.x,cameraRect.y,cameraRect.width-0.05f,cameraRect.height);
+				if(cameraRect.height>0){
+					cameraRect = new Rect(cameraRect.x,cameraRect.y,cameraRect.width,cameraRect.height-0.05f);
+				}
 				this.GetComponent<Camera>().rect = cameraRect;
 			}
 		} else {
-			this.GetComponent<Camera>().depth = 0;
-			if(this.GetComponent<Camera>().rect.width>=0.30f){
-				this.GetComponent<Camera>().depth = 0;
+			this.GetComponent<Camera>().depth = 5;
+			if(this.GetComponent<Camera>().rect.width>=cameraWidth){
+				//this.GetComponent<Camera>().depth = 5;
 			} else {
 				cameraRect = new Rect(cameraRect.x,cameraRect.y,cameraRect.width+0.05f,cameraRect.height);
+				if(cameraRect.height<cameraHeight){
+					cameraRect = new Rect(cameraRect.x,cameraRect.y,cameraRect.width,cameraRect.height+0.05f);
+				}
 				this.GetComponent<Camera>().rect = cameraRect;
 			}
 		}
@@ -58,6 +66,13 @@ public class SecondaryCamera : MonoBehaviour {
 	}
 	public void setActive(bool newValue){
 		active = newValue;
+		cameraHeight = 0.33f;
+		cameraWidth = 0.33f;
+	}
+	public void setActive(bool newValue,float newCameraHeight, float newCameraWidth){
+		active = newValue;
+		cameraHeight = newCameraHeight;
+		cameraWidth = newCameraWidth;
 	}
 	public bool getActive(){
 		return active;

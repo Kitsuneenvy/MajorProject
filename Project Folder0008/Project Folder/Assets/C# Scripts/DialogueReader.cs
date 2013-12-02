@@ -11,7 +11,9 @@ public class DialogueReader : MonoBehaviour {
 	public int dialogueLine = 0;
 	string charName = "";
 	string dialogue = "";
-	
+	float delay = 0;
+	Quaternion initialRotation = Quaternion.identity;
+	Vector3 initialPosition = Vector3.zero;
 	UILabel narrativeDialogue;
 	UILabel buttonText;
 	GameObject narrativeAnchor;
@@ -32,6 +34,10 @@ public class DialogueReader : MonoBehaviour {
 		{
 			readSection(1);
 		}
+		if(Application.loadedLevelName == "Main")
+		{
+			readSection(0);
+		}
 	}
 	
 	// Update is called once per frame
@@ -48,11 +54,15 @@ public class DialogueReader : MonoBehaviour {
 				DialogueLines.Add(Line);
 			}
 		}
+		if(Application.loadedLevelName == "Main"){
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission1Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+		}
 	}
 	public void readSection(int sectionNumber){
-		Debug.Log(sectionNumber.ToString());
 		for(int i = 0; i<DialogueLines.Count; i++){
-			Debug.Log(DialogueLines[i]);
+			//Debug.Log(DialogueLines[i]);
 			if(DialogueLines[i].StartsWith("+"+sectionNumber.ToString())){
 				section++;
 				dialogueLine = 0;
@@ -64,11 +74,16 @@ public class DialogueReader : MonoBehaviour {
 					readLine(dialogueLine);
 					break;
 				}
+				if(DialogueLines[i].StartsWith("-")){
+					dialogueLine = i;
+					readLine(dialogueLine);
+					break;
+				}
 			}
 			if(DialogueLines[i].StartsWith("$")){
 				Debug.Log("End!");
 				break;
-				}
+			}
 		}
 	}
 	public void readLine(int lineNumber){
@@ -98,23 +113,72 @@ public class DialogueReader : MonoBehaviour {
 	
 	public void ScriptedEvents(int EventToPlay){
 		//WARNING, ENTERING AN INVALID EVENT NUMBER WILL BREAAAAK IT ALLL.
-		switch(EventToPlay){
-		case 1:
-			mReaderObject.objective = "Move next to \n enemy";
-			break;
-		case 2:
-			mReaderObject.checkmark.alpha = 0;
-			mReaderObject.objective = "End your turn";
-			break;
-		case 3:
-			mReaderObject.checkmark.alpha = 0;
-			mReaderObject.objective = "Defeat the robot";
-			break;
-		case 4:
-			Application.LoadLevel("Week6");
-			break;
-		default:
-			break;
+		if(Application.loadedLevelName== "Tutorial"){
+			switch(EventToPlay){
+			case 1:
+				mReaderObject.objective = "Move next to \n enemy";
+				break;
+			case 2:
+				mReaderObject.checkmark.alpha = 0;
+				mReaderObject.objective = "End your turn";
+				break;
+			case 3:
+				mReaderObject.checkmark.alpha = 0;
+				mReaderObject.objective = "Defeat the robot";
+				break;
+			case 4:
+				Application.LoadLevel("Main");
+				break;
+			default:
+				break;
+			}
+		}
+		if(Application.loadedLevelName == "Main"){
+			GameObject tempObject1 = null;
+			GameObject tempObject2 = null;
+			GameObject tempObject3 = null;
+			GameObject pivotFocus = null;
+			switch(EventToPlay){
+			case 0:
+				initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+				initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
+					if(cineObject.name.Contains("Chef")){
+						tempObject1 = cineObject;
+					}
+					if(cineObject.name.Contains("Frier")){
+						tempObject2 = cineObject;
+					}
+					if(cineObject.name.Contains("Bowlder")){
+						tempObject3 = cineObject;
+					}
+					if(cineObject.name.Contains("Mission1")){
+						pivotFocus = cineObject;
+					}
+				}
+				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = true;
+				GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(pivotFocus.transform.position.x+5,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+5);
+				GameObject.FindGameObjectWithTag("MainCamera").transform.LookAt(pivotFocus.transform);
+				gameManageObject.narrativePanelOpen = true;
+				break;
+			case 1:
+				DestroyImmediate(tempObject1);
+				DestroyImmediate(tempObject2);
+				DestroyImmediate(tempObject3);
+				DestroyImmediate(pivotFocus);
+				GameObject.FindGameObjectWithTag("MainCamera").transform.rotation = initialRotation;
+				GameObject.FindGameObjectWithTag("MainCamera").transform.position = initialPosition;
+				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = false;
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			default:
+				break;
+			}
 		}
 	}
 	

@@ -1,0 +1,48 @@
+//Flower cultists have been attacking islands along King Meek's minor trade routes. These islands have been well regarded for their high flower 
+//density and their suitability for storing large quantities of cooking ingredients. While the cultists ignore the ingredients for the most part, their sole 
+//goal seems to be to gather the flowers on the islands and sacrifice them to their vulgar gods, Cataclysmo, Apocalypsmo, and mow. Tired of all the 
+//complaints he has been getting, King Meek decided to send his most useless kitchen hands, and the player, his most expendable 
+//chef/commander. These kitchen hands have been given a crash course in knighthood but are far from adept. They have thus been granted the 
+//title of ÅgNewly trained knightsÅh and then sent away to deal with this slight nuisance. Can you turn your band of Newly trained knights into a 
+//powerful force to repel the sinister flower cultists and stop their aesthetic ruining ways? No. No you canÅ't.
+-0
+<Narrator>: Our heroes arrive at their destination, beaten and weary from their misadventures along the way.;
++1
+<Chef>: Well we've landed on the island. Third times the charm.;
+<Pierre>: It would've been a lot faster if we hadn't gone in the wrong direction the first two times.;
+<Chef>: Pierre, where is your sense of adventure? Besides, we got some interesting ingredients!;
+<Pierre>: Interesting indeed. What was it? Three people sick?;
+<Makin'soop>: Hate to spoil the chit-chat, but we have company!;
+<Chef>: Oh? I haven't prepared any meals for our guests! Quick, Pierre, start boiling the pot!;
+<Pierre>: Er, not guests I'm afraid. Looks like they want to fight!;
+<Chef>: Fight? Fight who? Not us I hope!;
+<Pierre>: Time to hide. Run! Fleee!;
+<Chef>: No, grab your pan. To battle!;
+<Chef>: You first. I shouldn't exercise, I just ate. If you get your equipment too scratched, I'll clean it for you.;
+<Pierre>: Ah yes, you do have the ability to restore our equipment don't you? Just like attacking an enemy.;
+<Chef>: Correct! If any of my allies get too damaged, I'll simply move next to them and "attack" them.;
+<Pierre>: Now, to attack!;
+-1
++2
+<Pierre>: Oh, those flowers are lovely!;
+<Chef>: Indeed, although it seems our enemies find them a bit more exciting than we do.;
+<Pierre>: I see your point, they definitely seem more menacing when they are standing next to those flowers;
+<Chef>: We should probably remove the flowers before we deal with them, it may make it easier on us.;
+<Pierre>: Um, but sir, we were sent to SAVE the flowers...And the people, but we haven't seen any of them...Sir?;
+<Chef>: Onwaaaards, to glory! Leave no flower uncut, and no enemy un-battered.;
+-2
++3
+<Chef>: Phew, that's all done now. I say, those people were not very friendly.;
+<Pierre>: I've got a few scratches on me, but I'll live. Hopefully.;
+<Chef>: Admirable hiding skills there, Pierre, I didn't even notice you behind the tree until one of them ran at you.;
+<Pierre>: Oh that? Haha, yeah. I wasn't hiding no. Not at all. It was er...A trap! Yes, that's it!;
+<Chef>: Then I am proud to have such a great tactician, the way you screamed like a little girl was empowering!;
+<Pierre>: Ahem...Perhaps we should just move along now?;
+<Chef>: Yes, up ahead there is the town we were sent to assist. Look over there, Pierre. A convienient path!;
+<Pierre>: Quite convenient, a narrow path with very little chance of an ambush. Surely.;
+<Chef>: Follow me! Except for you, you go infront.;
+-3
++4
+-4
+$end;
+

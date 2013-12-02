@@ -53,7 +53,9 @@ public class DropDownMenu : MonoBehaviour {
 					if(rayHit.collider.gameObject.GetComponent<Grid>().returnUnit() != null 
 						&& manager.GetComponent<gameManage>().playerTurn==true
 						&&rayHit.collider.gameObject.GetComponent<Grid>().heldUnit.tag=="PlayerUnit"
-						&&(selectedUnit==null||selectedUnit==rayHit.collider.gameObject.GetComponent<Grid>().heldUnit)){
+						&&(selectedUnit==null||selectedUnit==rayHit.collider.gameObject.GetComponent<Grid>().heldUnit)
+						&&manager.GetComponent<gameManage>().commandPoints!=0
+						&&manager.GetComponent<gameManage>().narrativePanelOpen==false){
 						selectedUnit=rayHit.collider.GetComponent<Grid>().heldUnit;
 						//set to false
 						//created = false;
