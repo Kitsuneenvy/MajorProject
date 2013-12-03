@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System;
 using System.IO;
 using System.Collections.Generic;
 
@@ -45,6 +44,15 @@ public class MissionReader : MonoBehaviour {
 	//holds unit variables
 	List<int> unitInfo = new List<int>();
 	
+	List<string> nameList = new List<string>();
+	List<string> bowlderNames = new List<string>();
+	List<string> frierNames = new List<string>();
+	List<string> ladleNames = new List<string>();
+	List<string> potterNames = new List<string>();
+	List<string> mowerNames = new List<string>();
+	List<string> floristNames = new List<string>();
+	List<string> prunerNames = new List<string>();
+	
 	//holds all units
 	public List<GameObject> allUnits = new List<GameObject>();
 	
@@ -81,6 +89,7 @@ public class MissionReader : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		readNameList();
 		aStarGrid = GameObject.Find("A*").GetComponent<AstarPath>();
 		saveData = GameObject.Find("SaveData");
 		checkmark = GameObject.Find("ObjectivesCheckmark").GetComponent<UISprite>();
@@ -143,6 +152,7 @@ public class MissionReader : MonoBehaviour {
 			newMission = false;
 			layoutCompleted = false;
 			objective = "";
+			readNameList();
 			if(mission1 == true)
 			{
 				currentMission = 1;
@@ -470,20 +480,29 @@ public class MissionReader : MonoBehaviour {
 									}
 									if(unitInfo[0] == 0)//speed
 									{
+										int charNameNumber = Random.Range(0,frierNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Frier")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
+										tempUnit.name = frierNames[charNameNumber];
+										frierNames.Remove(frierNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
+										int charNameNumber = Random.Range(0,ladleNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Ladlewight")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
+										tempUnit.name = ladleNames[charNameNumber];
+										ladleNames.Remove(ladleNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
+										int charNameNumber = Random.Range(0,bowlderNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Bowlder")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
+										tempUnit.name = bowlderNames[charNameNumber];
+										bowlderNames.Remove(bowlderNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									else if(unitInfo[0] == 3)//healer
@@ -507,26 +526,38 @@ public class MissionReader : MonoBehaviour {
 									}
 									if(unitInfo[0] == 0)//speed
 									{
+										int charNameNumber = Random.Range(0,mowerNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Mower")) as GameObject;
 										tempUnit.tag = "Enemy";
+										tempUnit.name = mowerNames[charNameNumber];
+										mowerNames.Remove(mowerNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 1)//attack
 									{
+										int charNameNumber = Random.Range(0,prunerNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Pruner")) as GameObject;
 										tempUnit.tag = "Enemy";
+										tempUnit.name = prunerNames[charNameNumber];
+										prunerNames.Remove(prunerNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 2)//defence
 									{
+										int charNameNumber = Random.Range(0,potterNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Potter")) as GameObject;
 										tempUnit.tag = "Enemy";
+										tempUnit.name = potterNames[charNameNumber];
+										potterNames.Remove(potterNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 3)//healer
 									{
+										int charNameNumber = Random.Range(0,floristNames.Count-1);
 										tempUnit = GameObject.Instantiate(Resources.Load("Florist")) as GameObject;
 										tempUnit.tag = "Enemy";
+										tempUnit.name = floristNames[charNameNumber];
+										floristNames.Remove(floristNames[charNameNumber]);
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 									else if(unitInfo[0] == 4)//flower
@@ -535,10 +566,7 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
-								//if(tempUnit.tag !="Flower"){
-									//add unit to unit list if it is not a flower.
-									allUnits.Add(tempUnit);
-								//}
+								allUnits.Add(tempUnit);
 								//position the unit
 								CalculateGridPosition();
 								//reset iterator
@@ -598,6 +626,56 @@ public class MissionReader : MonoBehaviour {
 				}
 			}
 			
+		}
+	}
+	void readNameList(){
+		nameList.Clear();
+		bowlderNames.Clear();
+		frierNames.Clear();
+		floristNames.Clear();
+		mowerNames.Clear();
+		ladleNames.Clear();
+		prunerNames.Clear();
+		potterNames.Clear();
+		foreach(string line in File.ReadAllLines("Assets/MissionFiles/NameList.txt")){
+			nameList.Add(line);
+		}
+		foreach(string line in nameList){
+			if(line.StartsWith("<Bowl")){
+				for(int i = 1; i<5; i++){
+					bowlderNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Fri")){
+				for(int i = 1; i<5; i++){
+					frierNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Flor")){
+				for(int i = 1; i<5; i++){
+					floristNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Mow")){
+				for(int i = 1; i<5; i++){
+					mowerNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Ladl")){
+				for(int i = 1; i<5; i++){
+					ladleNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Prun")){
+				for(int i = 1; i<5; i++){
+					prunerNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
+			if(line.StartsWith("<Pott")){
+				for(int i = 1; i<5; i++){
+					potterNames.Add(nameList[nameList.IndexOf(line)+i]);
+				}
+			}
 		}
 	}
 }
