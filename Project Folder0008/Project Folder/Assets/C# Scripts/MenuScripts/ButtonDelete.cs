@@ -25,7 +25,7 @@ public class ButtonDelete : MonoBehaviour {
 	
 	void OnClick()
 	{
-		File.Delete(Application.persistentDataPath+"/AutoSaves/"+file+".sav");
+		File.Delete(Application.persistentDataPath+"/AutoSaves/"+file);
 		load.GetComponent<ButtonLoad>().returnAutoSaves().Remove(objectToDelete);
 		Destroy(objectToDelete);
 		

@@ -36,7 +36,7 @@ public class ButtonLoad : MonoBehaviour {
 		exitButton.SetActive(false);
 		optionsButton.SetActive(false);
 		
-		increaseY = 140f;
+		increaseY = 100f;
 		//change title
 		editLabel.text = "Load Menu";
 		

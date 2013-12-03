@@ -114,7 +114,7 @@ public class gameManage : MonoBehaviour {
 								}
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffects.Play();
+								soundObject.soundEffectsIdle.Play();
 								dialogueTimer = 15;
 								break;
 							}
@@ -132,7 +132,7 @@ public class gameManage : MonoBehaviour {
 								}
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffects.Play();
+								soundObject.soundEffectsIdle.Play();
 								dialogueTimer = 15;
 								break;
 							}
@@ -150,7 +150,7 @@ public class gameManage : MonoBehaviour {
 								}
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffects.Play();
+								soundObject.soundEffectsIdle.Play();
 								dialogueTimer = 15;
 								break;
 							}
