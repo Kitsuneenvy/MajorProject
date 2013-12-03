@@ -166,6 +166,7 @@ public class MissionReader : MonoBehaviour {
 				aStarGrid.astarData.AddGraph("GridGraph");
 				aStarGrid.Scan();
 				aStarGrid.astarData.gridGraph.nodeSize = 5;
+				
 
 			}
 			else if(mission3 == true)
@@ -261,8 +262,6 @@ public class MissionReader : MonoBehaviour {
 		{
 			textFileName = "Assets/MissionFiles/Mission2.mis";
 			autoSave = "Assets/MissionFiles/Mission2.mis";
-			//set new mission to false
-			mission2 = false;
 			currentMission = 2;
 			newMission = false;
 			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
@@ -351,7 +350,9 @@ public class MissionReader : MonoBehaviour {
 				//set node width and depth
 				aStarGrid.astarData.gridGraph.width = int.Parse(fileLines[counter+4]);
 				aStarGrid.astarData.gridGraph.depth = int.Parse(fileLines[counter+5]);
-				
+				if(mission2){
+					mission2 = false;
+				}
 				if(mission3)
 				{
 					aStarGrid.astarData.gridGraph.rotation.y = 13;

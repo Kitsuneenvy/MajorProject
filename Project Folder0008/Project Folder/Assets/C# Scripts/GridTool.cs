@@ -103,31 +103,13 @@ public class GridTool : MonoBehaviour {
 					gridParent.transform.rotation = Quaternion.Euler(astarGrid.GetComponent<AstarPath>().astarData.gridGraph.rotation);
 
 				}
-				//foreach(GameObject gridSquare in gridColliders)
-				//{
-//					gridSquare.transform.localRotation = Quaternion.identity;
-					//gridSquare.transform.parent = gridParent.transform;
-				//}
 				missionInit = true;
+				if(mReaderObject.currentMission == 2){
+					mReaderObject.optionalTiles.Add(GameObject.Find("GridSquare(Clone)4"));
+					mReaderObject.optionalTiles.Add(GameObject.Find("GridSquare(Clone)5"));
+					mReaderObject.optionalTiles.Add(GameObject.Find("GridSquare(Clone)6"));
+				}
 				mReaderObject.PositionUnits();
-				/*//generate mission 1
-				//Creates an object based on a prefab and initialises the unit type.
-				temp = GameObject.Instantiate(Resources.Load("ChefChar"),GameObject.Find("GridSquare(Clone)6").transform.position,Quaternion.identity) as GameObject;
-						GameObject.Find("GridSquare(Clone)6").GetComponent<Grid>().heldUnit = temp;
-						temp.GetComponent<UnitGenerics>().Initialise(2);
-						temp.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)6").GetComponent<Grid>());
-				temp.tag="Enemy";
-				temp = GameObject.Instantiate(Resources.Load("ChefChar"),GameObject.Find("GridSquare(Clone)24").transform.position,Quaternion.identity) as GameObject;
-						GameObject.Find("GridSquare(Clone)24").GetComponent<Grid>().heldUnit = temp;
-						temp.GetComponent<UnitGenerics>().Initialise(3);
-						temp.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)24").GetComponent<Grid>());
-				temp.tag="Enemy";
-				temp = GameObject.Instantiate(Resources.Load("ChefChar"),GameObject.Find("GridSquare(Clone)64").transform.position,Quaternion.identity) as GameObject;
-						GameObject.Find("GridSquare(Clone)64").GetComponent<Grid>().heldUnit = temp;
-						temp.GetComponent<UnitGenerics>().Initialise(1);
-						temp.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)64").GetComponent<Grid>());
-						missionInit = true;
-				*/
 			}
 		}
 			if(mReaderObject.returnNewMission() == true && gridColliders.Count > 0)

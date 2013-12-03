@@ -136,7 +136,6 @@ public class DialogueReader : MonoBehaviour {
 			}
 		}
 		if(Application.loadedLevelName == "Main"){
-			Debug.Log(GameObject.Find("A*").GetComponent<MissionReader>().currentMission.ToString());
 			if(GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 1||EventToPlay == 0){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
@@ -168,7 +167,6 @@ public class DialogueReader : MonoBehaviour {
 					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 1:
-					Debug.Log("Played event 1");
 					DestroyImmediate(tempObject1);
 					DestroyImmediate(tempObject2);
 					DestroyImmediate(tempObject3);
@@ -237,7 +235,7 @@ public class DialogueReader : MonoBehaviour {
 			}
 			else if(mReaderObject.objective.Contains("tile"))
 			{
-				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)
+				if(((mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)))
 				{
 					mReaderObject.checkmark.alpha = 255;
 					gameManageObject.narrativePanelOpen = true;

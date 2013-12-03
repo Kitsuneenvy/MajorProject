@@ -34,7 +34,7 @@ public class ButtonLoad2 : MonoBehaviour {
 			}
 			saveData.GetComponent<StoreData>().MissionToLoad(mission);
 			saveData.GetComponent<StoreData>().setAutoSaveName(file);
-			Application.LoadLevel("Week6");
+			Application.LoadLevel("Main");
 		}
 	}
 	
