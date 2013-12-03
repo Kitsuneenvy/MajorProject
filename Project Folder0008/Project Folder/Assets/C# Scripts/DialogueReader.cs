@@ -226,7 +226,7 @@ public class DialogueReader : MonoBehaviour {
 		}
 		else 
 		{
-			if(mReaderObject.objective.Contains("Kill all"))
+			if(mReaderObject.objective.Contains("Kill all") || mReaderObject.objective.Contains("Defend"))
 			{
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
@@ -234,6 +234,31 @@ public class DialogueReader : MonoBehaviour {
 					gameManageObject.narrativePanelOpen = true;
 				}
 				
+			}
+			else if(mReaderObject.objective.Contains("tile"))
+			{
+				if(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character || mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)
+				{
+					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
+				}
+			}
+			else if(mReaderObject.objective.Contains("Rout"))
+			{
+				if(mReaderObject.enemyUnits.Count < 3)
+				{
+					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
+				}
+			}
+			else if(mReaderObject.objective.Contains("escaping"))
+			{
+				//need to change this
+				if(mReaderObject.enemyUnits.Count == 0)
+				{
+					mReaderObject.checkmark.alpha = 255;
+					gameManageObject.narrativePanelOpen = true;
+				}
 			}
 		}
 	}
