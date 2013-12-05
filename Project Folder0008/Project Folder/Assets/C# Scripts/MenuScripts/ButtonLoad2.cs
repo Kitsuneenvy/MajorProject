@@ -9,9 +9,10 @@ public class ButtonLoad2 : MonoBehaviour {
 	string mission = "";
 	int lineCounter = 0;
 	public GameObject saveData;
+	
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -28,7 +29,7 @@ public class ButtonLoad2 : MonoBehaviour {
 	{
 		if(file != "")
 		{
-			foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file))
+			foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file+".sav"))
 			{
 				lineCounter++;
 				if(lineCounter == 2)

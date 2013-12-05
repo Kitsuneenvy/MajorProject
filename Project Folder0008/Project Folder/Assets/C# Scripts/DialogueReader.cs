@@ -109,7 +109,7 @@ public class DialogueReader : MonoBehaviour {
 			}
 			else
 			{
-				using(StreamReader sr = new StreamReader(Application.persistentDataPath+"/AutoSaves/"+storeDataObject.returnAutoSaveName()))
+				using(StreamReader sr = new StreamReader(Application.persistentDataPath+"/AutoSaves/"+storeDataObject.returnAutoSaveName()+".sav"))
 				{
 					charName = sr.ReadLine();
 				}

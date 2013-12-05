@@ -11,6 +11,8 @@ public class StoreData : MonoBehaviour {
 	string mission = "";
 	bool saved = false;
 	FileStream createdFile;
+	public UISprite tutorialCheck;
+	bool overwrite = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -29,6 +31,11 @@ public class StoreData : MonoBehaviour {
 	{
 		autoSaveName =  saveField.GetComponent<UIInput>().text;
 		commanderName = commField.GetComponent<UIInput>().text;
+		
+		if(overwrite == true)
+		{
+			OverwriteFile();
+		}
 	}
 	
 	public string returnAutoSaveName()
@@ -55,6 +62,29 @@ public class StoreData : MonoBehaviour {
 			{
 				sw.WriteLine(commanderName);
 			}
+		}
+	}
+	
+	public void OverwriteFile()
+	{
+		overwrite = true;
+		
+		if(autoSaveName == null || autoSaveName == "")
+		{
+			DataStorage();
+		}
+		else
+		{
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav",false))
+			{
+				sw.WriteLine(commanderName);
+			}
+			if(tutorialCheck.alpha==1){
+					Application.LoadLevel("Tutorial");	
+				} 
+				else {
+					Application.LoadLevel("Main");
+				}
 		}
 	}
 	
