@@ -16,49 +16,39 @@
 <Chef>: Ah yes. I see the value in being next to the opponent. How do I do that?;
 <Tim>: I thought you knew, Mr. Top Caliber.;
 <Chef>: Er... I do! I just thought...You know...For the others!;
-<Pierre>: Simply click on one of your units with the left mouse button to open up the action menu, then-;
-<Chef>: Mouse?! Where? Get the broom, set the traps. It'll be after the cheese again...;
-<Pierre>: Um... Yes... Now then. Select the 'Move' action from the menu. This costs one command point though!;
-<Tim>: Don't worry about command points right now. They'll be important later though.;
-<Chef>: ...Has anyone seen the mouse yet? We have to get it before it gets to the good food!;
-<Pierre>: Ahem. I guess I'll move up to the enemy then. I think I'll move to the brightly glowing square.;
+<Pierre>: Simply click on one of your units with the left mouse button to open up the action menu, then select the 'Move' action from the menu.; 
+<Tim>: This costs one command point though!;
+<Tim>: Don't worry about command points right now though. They'll be important later though.;
+<Pierre>: Ahem. I guess I'll move up to the enemy then.;
 <Tim>: Left click on a character, left click on the move action but RIGHT click on one of the blue tiles to move.;
 -1
 +2
 <Pierre>: Whew, that was a long walk. It also seems we have run out of command points.;
-<Tim>: I'll give you one more for now, but you won't get any until the start of your next turn usually.;
-<Chef>: (Snatches script out of Pierre's hands). Give me that! Command points... mhmm... I see...;
-<Pierre>: That was awfully rude, sir. I was reading that!;
-<Chef>: Pierre! You can read?!;
-<Pierre>: Yes, sir. And I was doing so aptly until you stole my script.;
-<Chef>: Well I can't. I didn't understand a word of that! You're going to do it for me. Here! (Gives script back).;
-<Pierre>: Tim...Please save me from him.;
-<Tim>: Your problem, not mine.;
-<Pierre>: (sighs). Well, let's get this over with. Command points are those symbols in the bottom right of the display.;
-<Chef>: He's possessed! Talking about symbols, and demonic commands! Hold him down!;
-<Pierre>: Please restrain him. Thank you. Every action you take requires a command points.;
+<Tim>: You won't get any until the start of your next turn usually.;
+<Pierre>: Command points are those symbols in the bottom right of the display.;
+<Pierre>: Every action you take requires a command points.;
 <Tim>: That's right, even if you move a single square, or your attack misses, that is one command point used.;
 <Pierre>: When you are out of command points you can no longer take any actions.;
 <Tim>: At this point it is time to end your turn and hope the enemy doesn't crush you too badly.;
 <Chef>: I shall be the one doing the crushing! I have lots of experience. Garlic, nuts, bones... All sorts of things!;
 <Tim>: Are any of those skills actually usable in a combat situation?;
 <Chef>: Most definitely! Just not by me, or anyone else in this squad.;
-<Pierre>: Banter aside, go ahead and end the turn. The robots should only gently damage us, since this is training.;
+<Pierre>: Banter aside, go ahead and end the turn. The opponent should only gently attack us, since this is training.;
 -2
 +3
-<Pierre>: ARGGH! What setting are these robots on?!;
+<Pierre>: ARGGH! What setting are these things on?!;
 <Tim>: Ahahaha! I was told you were top caliber! What's the matter?;
 <Pierre>: Grr...Well I won't take that sitting down! Or standing up for that matter.;
-<Chef>: Demons! Mice! My word, it is a conspiracy by demonic mice!;
-<Pierre>: He's in his own little world now. I'm going to hit this robot with all my might!;
+<Chef>: I say, how rude! The customer is always right, Pierre.;
+<Pierre>: I'm angry now, and he isn't any help. I'm going to hit this robot with all my might!;
 <Tim>: You sure you want to do that? Do you know about type advantages?;
 <Pierre>: Yeah! Fire beats grass, grass beats water, water beats fire and fairy beats dragon!;
 <Tim>: No! Speed beats Attack, Attack beats Defense, Defense beats speed. Oh and everything beats healers like your leader.;
-<Pierre>: That isn't reassuring. Maki'nsoop, Get over here and beat this thing up!;
-<Tim>: You'll notice your command points are back. Go ahead and trash that robot, we have a lot of them.;
+<Pierre>: That isn't reassuring. You, with the ladles, get over here and beat this thing up!;
+<Tim>: You'll notice your command points are back. Go ahead and trash that thing, we have a lot of them.;
 <Pierre>: Attacking is just like moving, except you must be standing next to them and a hit is not guaranteed.;
-<Tim>: Exactly, open the action menu, right click on an enemy. You can't target allies though!;
-<Pierre>: Oh, fiddlesticks. Well let's show this robot who is the Masterchef around here!;
+<Tim>: Exactly, open the action menu, right click on an enemy. Only healers can target allies though!;
+<Pierre>: Well let's show this thing who the Masterchef is around here!;
 -3
 +4
 <Pierre>: Is it... Is it dead? Phew!;

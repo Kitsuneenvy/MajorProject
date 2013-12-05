@@ -240,13 +240,31 @@ public class gameManage : MonoBehaviour {
 				}
 				if(info.collider.GetComponent<Grid>().heldUnit!=null){
 					UnitGenerics hoverUnit = info.collider.GetComponent<Grid>().heldUnit.GetComponent<UnitGenerics>();
-					GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name;
-					GameObject.Find("Character Attributes").GetComponent<UILabel>().text = 
-						"Att: " +hoverUnit.attack.ToString() +
-						"  Def: " + hoverUnit.defence.ToString()+
-						"  Acc: " + hoverUnit.accuracy.ToString() +
-						"  Ddg: " + hoverUnit.dodge;
-					GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString() + "/"+hoverUnit.maxHealth.ToString() ;
+					if(hoverUnit.unitType == 0){
+						GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name + "   Type: Speed";
+					}
+					if(hoverUnit.unitType == 1){
+						GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name + "   Type: Attack";
+					}
+					if(hoverUnit.unitType == 2){
+						GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name + "   Type: Defence";
+					}
+					if(hoverUnit.unitType == 3){
+						GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name + "   Type: Healer";
+					}
+					if(hoverUnit.unitType == 4){
+						GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name: " + hoverUnit.name;
+					}
+					if(hoverUnit.unitType !=4){
+						GameObject.Find("Character Attributes").GetComponent<UILabel>().text = 
+							"Att: " +hoverUnit.attack.ToString() +
+							"  Def: " + hoverUnit.defence.ToString()+
+							"  Acc: " + hoverUnit.accuracy.ToString() +
+							"  Ddg: " + hoverUnit.dodge;
+						GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString() + "/"+hoverUnit.maxHealth.ToString() ;
+					} else {
+						GameObject.Find("Character Attributes").GetComponent<UILabel>().text = "Enemies standing next to this \nwill receive a bonus to their attack";
+					}
 				} else {
 					//GameObject.Find("Character Name").GetComponent<UILabel>().text = "Name:";
 					GameObject.Find("Character Name").GetComponent<UILabel>().text = "";

@@ -35,7 +35,7 @@ public class UnitGenerics : MonoBehaviour
 	List<GameObject> maxMove = new List<GameObject>();
 	int AINumChoices;
 	int ID; // Passed to this script by game manager upon initialisation
-	public int unitType; // 1 = speed, 2 = attack, 3 = defence, 4 = healer
+	public int unitType; // 0 = speed, 1 = attack, 2 = defence, 3 = healer, 4 = flower
 	gameManage gameManageObject;
 	MissionReader missionReaderObject;
 	SoundManager soundObject;
@@ -73,7 +73,6 @@ public class UnitGenerics : MonoBehaviour
 			accuracy = 70;
 			dodge = 30;
 			movement = 3;
-			
 		} else if (type == 2) {
 			health = 100;
 			attack = 20;
@@ -81,7 +80,6 @@ public class UnitGenerics : MonoBehaviour
 			accuracy = 80;
 			dodge = 15;
 			movement = 3;
-			
 		} else if (type == 3) {
 			health = 40;
 			attack = 30;
@@ -89,10 +87,16 @@ public class UnitGenerics : MonoBehaviour
 			accuracy = 100;
 			dodge = 25;
 			movement = 3;
+		} else if (type == 4) {
+			health = 1;
+			attack = 0;
+			defence = 0;
+			accuracy = 0;
+			dodge = 0;
+			movement = 0;
 		}
 		maxHealth = health;
 		unitType = type;
-		
 	}
 	// Update is called once per frame
 	void Update ()

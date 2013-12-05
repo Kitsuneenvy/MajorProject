@@ -553,6 +553,8 @@ public class MissionReader : MonoBehaviour {
 			if(!tempUnit.name.Contains("Flower"))
 			{
 				tempUnit.GetComponent<UnitGenerics>().Initialise(unitInfo[0]);
+			} else {
+				tempUnit.GetComponent<UnitGenerics>().Initialise(4);
 			}
 			tempUnit.GetComponent<UnitGenerics>().setGrid(GameObject.Find("GridSquare(Clone)" + gridSquareNumber).GetComponent<Grid>());
 			tempUnit.GetComponent<UnitGenerics>().onGrid.GetComponent<Grid>().heldUnit = tempUnit;
@@ -687,6 +689,7 @@ public class MissionReader : MonoBehaviour {
 									else if(unitInfo[0] == 4)//flower
 									{
 										tempUnit = GameObject.Instantiate(flower) as GameObject;
+										tempUnit.name = "Flower";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
