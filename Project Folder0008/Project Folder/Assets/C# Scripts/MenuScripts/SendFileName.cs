@@ -19,6 +19,6 @@ public class SendFileName : MonoBehaviour {
 	void OnClick()
 	{
 		deleteButton.GetComponent<ButtonDelete>().holdFile(this.GetComponentInChildren<UILabel>().text + ".sav", this.gameObject);
-		loadButton2.GetComponent<ButtonLoad2>().holdFile(this.GetComponentInChildren<UILabel>().text + ".sav");
+		loadButton2.GetComponent<ButtonLoad2>().holdFile(this.GetComponentInChildren<UILabel>().text);
 	}
 }
