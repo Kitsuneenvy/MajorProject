@@ -7,7 +7,7 @@ public class ButtonLoad2 : MonoBehaviour {
 	
 	string file = "";
 	string mission = "";
-	
+	int lineCounter = 0;
 	public GameObject saveData;
 	// Use this for initialization
 	void Start () {
@@ -30,7 +30,11 @@ public class ButtonLoad2 : MonoBehaviour {
 		{
 			foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file))
 			{
-				mission = line;
+				lineCounter++;
+				if(lineCounter == 2)
+				{
+					mission = line;
+				}
 			}
 			saveData.GetComponent<StoreData>().MissionToLoad(mission);
 			saveData.GetComponent<StoreData>().setAutoSaveName(file);

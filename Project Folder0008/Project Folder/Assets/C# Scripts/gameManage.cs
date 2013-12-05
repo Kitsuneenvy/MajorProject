@@ -47,7 +47,6 @@ public class gameManage : MonoBehaviour {
 		secondaryCameraObject = GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>();
 		NarrativeAnchorObject = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-		Debug.Log(NarrativeAnchorObject.ToString());
 		//gridMask = LayerMask.NameToLayer("Grid");
 		//astarMask = LayerMask.NameToLayer("AStar");
 		playerTurn = true;	

@@ -71,7 +71,7 @@ public class MissionReader : MonoBehaviour {
 	public GameObject flower;
 	
 	int counter = 0;
-	
+	int fileLineCounter = 0;
 	//Holds Units
 	GameObject tempUnit = null;
 	
@@ -87,6 +87,8 @@ public class MissionReader : MonoBehaviour {
 	
 	public Material particleMaterial;
 	
+	FileInfo savFile;
+	
 	// Use this for initialization
 	void Start () {
 		readNameList();
@@ -97,6 +99,8 @@ public class MissionReader : MonoBehaviour {
 		if(Application.loadedLevelName == "Tutorial"){
 			tutorial = true;
 			mission1 = false;
+			autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
+			savFile =  new FileInfo(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav");
 		}
 		else{
 			
@@ -138,6 +142,7 @@ public class MissionReader : MonoBehaviour {
 				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 				mission1 = true;
 			}
+			savFile =  new FileInfo(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav");
 		}
 			
 	}
@@ -249,11 +254,21 @@ public class MissionReader : MonoBehaviour {
 			mission1 = false;
 			currentMission = 1;
 			newMission = false;
-			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			if(savFile.Exists == true)
 			{
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				List<string> holdLines = new List<string>();
+				fileLineCounter = 0;
+				foreach(string line in File.ReadAllLines(savFile.ToString()))
 				{
-					sw.WriteLine("Mission1");
+					holdLines.Add(line);
+					fileLineCounter++;
+				}
+				if(!holdLines.Contains("Mission1"))
+				{
+					using(StreamWriter sw = savFile.AppendText())
+					{
+						sw.WriteLine("Mission1");
+					}
 				}
 			}
 			counter = 1;
@@ -264,11 +279,36 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission2.mis";
 			currentMission = 2;
 			newMission = false;
-			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
-			{
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+			if(savFile.Exists == true)
+			{ 
+				List<string> holdLines = new List<string>();
+				fileLineCounter = 0;
+				foreach(string line in File.ReadAllLines(savFile.ToString()))
 				{
-					sw.WriteLine("Mission2");
+					holdLines.Add(line);
+					fileLineCounter++;
+					if(fileLineCounter == 2)
+					{
+						fileLineCounter = 0;
+						foreach(string storedLine in holdLines)
+						{
+							if(fileLineCounter == 0)
+							{
+								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								{
+									sw.WriteLine(storedLine);
+								}
+							}
+							if(fileLineCounter == 1)
+							{
+								using(StreamWriter sw = savFile.AppendText())
+								{
+									sw.WriteLine("Mission2");
+								}
+							}
+							fileLineCounter++;
+						}
+					}
 				}
 			}
 			counter = 2;
@@ -279,11 +319,37 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission3.mis";
 			//set new mission to false
 			newMission = false;
-			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			if(savFile.Exists == true)
 			{
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				List<string> holdLines = new List<string>();
+				fileLineCounter = 0;
+				
+				foreach(string line in File.ReadAllLines(savFile.ToString()))
 				{
-					sw.WriteLine("Mission3");
+					holdLines.Add(line);
+					fileLineCounter++;
+					if(fileLineCounter == 2)
+					{
+						fileLineCounter = 0;
+						foreach(string storedLine in holdLines)
+						{
+							if(fileLineCounter == 0)
+							{
+								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								{
+									sw.WriteLine(storedLine);
+								}
+							}
+							if(fileLineCounter == 1)
+							{
+								using(StreamWriter sw = savFile.AppendText())
+								{
+									sw.WriteLine("Mission3");
+								}
+							}
+							fileLineCounter++;
+						}
+					}
 				}
 			}
 			counter = 3;
@@ -294,11 +360,37 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission4.mis";
 			//set new mission to false
 			newMission = false;
-			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			if(savFile.Exists == true)
 			{
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				List<string> holdLines = new List<string>();
+				fileLineCounter = 0;
+				
+				foreach(string line in File.ReadAllLines(savFile.ToString()))
 				{
-					sw.WriteLine("Mission4");
+					holdLines.Add(line);
+					fileLineCounter++;
+					if(fileLineCounter == 2)
+					{
+						fileLineCounter = 0;
+						foreach(string storedLine in holdLines)
+						{
+							if(fileLineCounter == 0)
+							{
+								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								{
+									sw.WriteLine(storedLine);
+								}
+							}
+							if(fileLineCounter == 1)
+							{
+								using(StreamWriter sw = savFile.AppendText())
+								{
+									sw.WriteLine("Mission4");
+								}
+							}
+							fileLineCounter++;
+						}
+					}
 				}
 			}
 			counter = 4;
@@ -309,11 +401,37 @@ public class MissionReader : MonoBehaviour {
 			autoSave = "Assets/MissionFiles/Mission5.mis";
 			//set new mission to false
 			newMission = false;
-			if(File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
+			if(savFile.Exists == true)
 			{
-				using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav",false))
+				List<string> holdLines = new List<string>();
+				fileLineCounter = 0;
+				
+				foreach(string line in File.ReadAllLines(savFile.ToString()))
 				{
-					sw.WriteLine("Mission5");
+					holdLines.Add(line);
+					fileLineCounter++;
+					if(fileLineCounter == 2)
+					{
+						fileLineCounter = 0;
+						foreach(string storedLine in holdLines)
+						{
+							if(fileLineCounter == 0)
+							{
+								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								{
+									sw.WriteLine(storedLine);
+								}
+							}
+							if(fileLineCounter == 1)
+							{
+								using(StreamWriter sw = savFile.AppendText())
+								{
+									sw.WriteLine("Mission5");
+								}
+							}
+							fileLineCounter++;
+						}
+					}
 				}
 			}
 		}
@@ -358,6 +476,7 @@ public class MissionReader : MonoBehaviour {
 					aStarGrid.astarData.gridGraph.rotation.y = 13;
 					currentMission = 3;
 					mission3 = false;
+					mainCamera.GetComponent<CameraMovement>().moveCamera = true;
 					rotate = true;
 				}
 				if(mission4)
@@ -510,6 +629,10 @@ public class MissionReader : MonoBehaviour {
 									{
 										tempUnit = GameObject.Instantiate(Resources.Load("Chef")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
+										using(StreamReader sr = new StreamReader(savFile.ToString()))
+										{
+											tempUnit.name = sr.ReadLine();
+										}
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									
@@ -663,7 +786,7 @@ public class MissionReader : MonoBehaviour {
 				}
 			}
 			if(line.StartsWith("<Ladl")){
-				for(int i = 1; i<5; i++){
+				for(int i = 1; i<6; i++){
 					ladleNames.Add(nameList[nameList.IndexOf(line)+i]);
 				}
 			}

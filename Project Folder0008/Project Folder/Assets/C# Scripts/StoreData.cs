@@ -51,6 +51,10 @@ public class StoreData : MonoBehaviour {
 		{
 			createdFile = File.Create(Application.persistentDataPath+"/AutoSaves/"+autoSaveName + ".sav");
 			createdFile.Close();
+			using(StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSaveName+".sav",false))
+			{
+				sw.WriteLine(commanderName);
+			}
 		}
 	}
 	

@@ -22,7 +22,7 @@ public class DialogueReader : MonoBehaviour {
 	MissionReader mReaderObject;
 	public GameObject endButton;
 	gameManage gameManageObject;
-	
+	StoreData storeDataObject;
 	// Use this for initialization
 	void Start () {
 		buttonText = GameObject.Find("DialogueLabel").GetComponent<UILabel>();
@@ -30,6 +30,7 @@ public class DialogueReader : MonoBehaviour {
 		narrativeDialogue = GameObject.FindGameObjectWithTag("NarrativeDialogue").GetComponent<UILabel>();
 		mReaderObject = GameObject.Find("A*").GetComponent<MissionReader>();
 		gameManageObject = GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>();
+		storeDataObject = GameObject.Find("SaveData").GetComponent<StoreData>();
 		readDialogueFile();
 		gameManageObject.narrativePanelOpen = true;
 		if(Application.loadedLevelName == "Tutorial")
@@ -102,6 +103,17 @@ public class DialogueReader : MonoBehaviour {
 			
 		if(charName == "Chef"){
 			//Do chef portrait
+			if(storeDataObject.returnCommName() != "" && storeDataObject.returnCommName() != null)
+			{
+				charName = storeDataObject.returnCommName();
+			}
+			else
+			{
+				using(StreamReader sr = new StreamReader(Application.persistentDataPath+"/AutoSaves/"+storeDataObject.returnAutoSaveName()))
+				{
+					charName = sr.ReadLine();
+				}
+			}
 		}
 		if(DialogueLines[lineNumber+1].StartsWith("-")){
 			buttonText.text = "End";
@@ -157,6 +169,7 @@ public class DialogueReader : MonoBehaviour {
 					}
 				switch(EventToPlay){
 				case 0:
+					Debug.Log("noMove is true");
 					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
 					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
 					
@@ -167,6 +180,7 @@ public class DialogueReader : MonoBehaviour {
 					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 1:
+					Debug.Log("noMove is false");
 					DestroyImmediate(tempObject1);
 					DestroyImmediate(tempObject2);
 					DestroyImmediate(tempObject3);
@@ -229,7 +243,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					gameManageObject.narrativePanelOpen = true;
+					//gameManageObject.narrativePanelOpen = true;
 				}
 				
 			}
@@ -238,7 +252,7 @@ public class DialogueReader : MonoBehaviour {
 				if(((mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)))
 				{
 					mReaderObject.checkmark.alpha = 255;
-					gameManageObject.narrativePanelOpen = true;
+					//gameManageObject.narrativePanelOpen = true;
 				}
 			}
 			else if(mReaderObject.objective.Contains("Rout"))
@@ -246,7 +260,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count < 3)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					gameManageObject.narrativePanelOpen = true;
+					//gameManageObject.narrativePanelOpen = true;
 				}
 			}
 			else if(mReaderObject.objective.Contains("escaping"))
@@ -255,7 +269,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					gameManageObject.narrativePanelOpen = true;
+					//gameManageObject.narrativePanelOpen = true;
 				}
 			}
 		}
