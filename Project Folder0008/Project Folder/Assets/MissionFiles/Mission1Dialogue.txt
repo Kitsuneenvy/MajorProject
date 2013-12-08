@@ -12,7 +12,7 @@
 <Pierre>: It would've been a lot faster if we hadn't gone in the wrong direction the first two times.;
 <Chef>: Pierre, where is your sense of adventure? Besides, we got some interesting ingredients!;
 <Pierre>: Interesting indeed. What was it? Three people sick?;
-<Makin'soop>: Hate to spoil the chit-chat, but we have company!;
+<Bowlder>: Hate to spoil the chit-chat, but we have company!;
 <Chef>: Oh? I haven't prepared any meals for our guests! Quick, Pierre, start boiling the pot!;
 <Pierre>: Er, not guests I'm afraid. Looks like they want to fight!;
 <Chef>: Fight? Fight who? Not us I hope!;

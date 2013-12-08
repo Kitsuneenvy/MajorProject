@@ -15,6 +15,7 @@ public class HandlePopupList : MonoBehaviour {
 	}
 	void OnSelectionChange(string selectedValue){
 		if(selectedValue=="Attack"){
+			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().resetInactive();
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(false);
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(true);
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
@@ -23,16 +24,18 @@ public class HandlePopupList : MonoBehaviour {
 			if(created==false){
 				created = true;
 			} else {
+				GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().resetInactive();
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(false);
 				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(true);
 			Destroy(GameObject.Find("Drop-down List"),0.0f);
 			}
 		} else if (selectedValue=="Cancel"){
-		GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
+			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().resetInactive();
+			GameObject.Find("Panel").GetComponent<DropDownMenu>().resetSelectedUnit();
 			GameObject.Find("Panel").GetComponent<DropDownMenu>().setCreated(false);
-				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(false);
-				GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(false);
+			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setAttackState(false);
+			GameObject.Find("Panel").GetComponent<DropDownMenu>().returnStoreUnit().GetComponent<UnitGenerics>().setMovementState(false);
 			foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
 				gridObject.renderer.material = Resources.Load ("Transparent") as Material;
 				gridObject.renderer.material.color = Color.black;

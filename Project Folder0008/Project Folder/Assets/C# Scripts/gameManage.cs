@@ -36,6 +36,8 @@ public class gameManage : MonoBehaviour {
 	
 	float timer;
 	float dialogueTimer = 15;
+	float initialCountdown = 30;
+	float inactiveTimer = 120;
 	List<GameObject> chosenTargets = new List<GameObject>();
 	List<GameObject> sendUnits = new List<GameObject>();
 	List<Vector2> chosenRatings = new List<Vector2>();
@@ -60,6 +62,12 @@ public class gameManage : MonoBehaviour {
 		{
 			Application.Quit();
 		}
+		if(inactiveTimer>0){
+			inactiveTimer -= Time.deltaTime;
+			initialCountdown = 30;
+		} else {
+			initialCountdown = 15;
+		}
 		if(Input.GetKeyDown(KeyCode.H)){
 			if(narrativePanelOpen == false){
 				narrativePanelOpen = true;
@@ -69,11 +77,6 @@ public class gameManage : MonoBehaviour {
 		}
 		if(Input.GetKeyDown(KeyCode.S)){
 			nextTurn();
-		}
-		if(Input.GetKey(KeyCode.Space)){
-			foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
-				gridObject.renderer.material.color = Color.black;
-			}
 		}
 		if(narrativePanelOpen==false){
 			if(secondaryCameraObject.getActive()==false){
@@ -96,7 +99,7 @@ public class gameManage : MonoBehaviour {
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = 15;
+								dialogueTimer = initialCountdown;
 								break;
 							}
 							case(1):
@@ -114,7 +117,7 @@ public class gameManage : MonoBehaviour {
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = 15;
+								dialogueTimer = initialCountdown;
 								break;
 							}
 							case(2):
@@ -132,7 +135,7 @@ public class gameManage : MonoBehaviour {
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = 15;
+								dialogueTimer = initialCountdown;
 								break;
 							}
 							case(3):
@@ -150,12 +153,12 @@ public class gameManage : MonoBehaviour {
 								randomUnit.GetComponent<Animation>().Play("Quirk");
 								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
 								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = 15;
+								dialogueTimer = initialCountdown;
 								break;
 							}
 							default:
 							{
-								dialogueTimer = 15;
+								dialogueTimer = initialCountdown;
 								break;
 							}
 						}
@@ -263,6 +266,7 @@ public class gameManage : MonoBehaviour {
 							"  Ddg: " + hoverUnit.dodge;
 						GameObject.Find("Character HP").GetComponent<UILabel>().text = "HP:  " +hoverUnit.health.ToString() + "/"+hoverUnit.maxHealth.ToString() ;
 					} else {
+						GameObject.Find("Character HP").GetComponent<UILabel>().text = "";
 						GameObject.Find("Character Attributes").GetComponent<UILabel>().text = "Enemies standing next to this \nwill receive a bonus to their attack";
 					}
 				} else {
@@ -282,6 +286,7 @@ public class gameManage : MonoBehaviour {
 	}
 	//This is called when the player ends their turn or the AI runs out of command points. It resets the command points and AI stuff.
 	public void nextTurn(){
+		resetInactive();
 		timer = 5;
 		commandPoints = 3;
 		turnCounter++;
@@ -407,5 +412,9 @@ public class gameManage : MonoBehaviour {
 	IEnumerator secondaryCameraHide(string playedAnimation,GameObject target){
 		yield return new WaitForSeconds(target.animation.GetClip(playedAnimation).length);
 		secondaryCameraObject.setActive(false);
+	}
+	
+	public void resetInactive(){
+		inactiveTimer = 120;
 	}
 }

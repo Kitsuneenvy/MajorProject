@@ -52,7 +52,10 @@ public class Offset : MonoBehaviour {
 			this.transform.localPosition = new Vector3(Screen.width/20f, 0,0);
 		}
 		if(name == "CharacterPortrait"){
-			this.transform.localPosition = new Vector3(-Screen.width/5f, Screen.height/7,0);
+			//this.transform.localPosition = new Vector3(-Screen.width/5f, Screen.height/7,0);
+			this.GetComponent<UIWidget>().depth= 5;
+			this.transform.localPosition = new Vector3(-(Vector3.Scale(GameObject.Find("NarrativePanel").GetComponent<UIWidget>().relativeSize,GameObject.Find("NarrativePanel").transform.localScale).x/4),0,0);
+			this.transform.localScale = new Vector3((Vector3.Scale(GameObject.Find("NarrativePanel").GetComponent<UIWidget>().relativeSize,GameObject.Find("NarrativePanel").transform.localScale).x/2),Vector3.Scale(GameObject.Find("NarrativePanel").GetComponent<UIWidget>().relativeSize,GameObject.Find("NarrativePanel").transform.localScale).y,0);
 		}
 		if(name == "NextButton"){
 			this.transform.localScale = new Vector3(GameObject.Find("NarrativePanel").transform.localScale.y/300,GameObject.Find("NarrativePanel").transform.localScale.y/300,1);
@@ -70,6 +73,10 @@ public class Offset : MonoBehaviour {
 		if(name == "EndTurn"){
 //			this.transform.localScale = new Vector3(GameObject.Find("CommandPointsPanel").transform.localScale.y/150,this.transform.localScale.y,0);
 			this.transform.localPosition = new Vector3(-Screen.width/12f, Screen.height/12f,0);	
+		}
+		if(name == "CharacterName"){
+			this.GetComponent<UIWidget>().depth = 10;
+			this.transform.localPosition = new Vector3(-(Vector3.Scale(GameObject.Find("NarrativePanel").GetComponent<UIWidget>().relativeSize,GameObject.Find("NarrativePanel").transform.localScale).x/4),-(Vector3.Scale(GameObject.Find("NarrativePanel").GetComponent<UIWidget>().relativeSize,GameObject.Find("NarrativePanel").transform.localScale).y*0.45f),-1);
 		}
 	
 	}

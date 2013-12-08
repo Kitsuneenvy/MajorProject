@@ -100,8 +100,9 @@ public class DialogueReader : MonoBehaviour {
 			readSection(section+1);
 			//If you reach the end. Might handle it another way.
 		}
-			
 		if(charName == "Chef"){
+			
+			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material	 = Resources.Load("ChefPortrait") as Material;
 			//Do chef portrait
 			if(storeDataObject.returnCommName() != "" && storeDataObject.returnCommName() != null)
 			{
@@ -114,13 +115,25 @@ public class DialogueReader : MonoBehaviour {
 					charName = sr.ReadLine();
 				}
 			}
+			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
+		} else if(charName=="Pierre"){
+			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
+			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material = Resources.Load("FrierPortrait") as Material;
+		} else if(charName=="Ladlewight"){
+			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
+			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material = Resources.Load("LadlePortrait") as Material;
+		} else if(charName=="Bowlder"){
+			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
+			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material = Resources.Load("BowlderPortrait") as Material;
+		} else {
+			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
+			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material = null;
 		}
 		if(DialogueLines[lineNumber+1].StartsWith("-")){
 			buttonText.text = "End";
 		} else {
 			buttonText.text = "Next";
 		}
-		
 		narrativeDialogue.text = dialogue;
 		//etc
 	}
