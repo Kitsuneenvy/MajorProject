@@ -107,6 +107,7 @@ public class UnitGenerics : MonoBehaviour
 		}
 		if (attackState == true) {
 			if (Input.GetKeyDown (KeyCode.Mouse1)) {
+				gameManageObject.resetInactive();
 				if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out info, Mathf.Infinity, gridMask.value)) {
 					if (info.collider.tag == "Square" && info.collider.GetComponent<Grid> ().returnUnit () != null) {
 						if (adjacentSquares.Contains (info.collider.gameObject) && ((info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag != this.tag || (info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag == this.tag && unitType == 3)))) {
@@ -121,6 +122,7 @@ public class UnitGenerics : MonoBehaviour
 		}
 		if (movementState == true) {
 			if (Input.GetKeyDown (KeyCode.Mouse1)) {
+				gameManageObject.resetInactive();
 				if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out info, Mathf.Infinity, gridMask.value)) {
 					if (info.collider.tag == "Square" && info.collider.GetComponent<Grid> ().returnUnit () == null) {
 						if (moveableSquares.Contains (info.collider.gameObject)) {
@@ -138,6 +140,7 @@ public class UnitGenerics : MonoBehaviour
 
 	public void launchAttack (GameObject target)
 	{
+		gameManageObject.resetInactive();
 		int bonusHit = 0;
 		int bonusDamage = 0;
 		setAttackState (false);
@@ -373,6 +376,10 @@ public class UnitGenerics : MonoBehaviour
 					//play death animation
 					if(target.tag!="Flower"){
 						StartCoroutine(animationQ(target.gameObject,"Death"));
+						for(int i = 0; i < 6; i++)
+						{
+							StartCoroutine(particleEmissionIncrease(target));
+						}
 					} else {
 						GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
 					}
@@ -768,5 +775,11 @@ public class UnitGenerics : MonoBehaviour
 		yield return new WaitForSeconds(target.animation.GetClip(animationToPlay).length);
 		}
 		GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
+	}
+	
+	IEnumerator particleEmissionIncrease(GameObject targetChar)
+	{
+		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxEmission += 50;
+		yield return new WaitForSeconds(0.5f);
 	}
 }
