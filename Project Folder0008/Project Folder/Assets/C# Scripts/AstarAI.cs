@@ -95,7 +95,20 @@ public class AstarAI : MonoBehaviour
 				//check if already adjacent to target and move
 				if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && finalPath.Count == 0)
 				{
+					if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 3)
+					{
+						GameObject.Find("CommPt3").GetComponent<UITexture>().material = null;
+					}
+					else if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 2)
+					{
+						GameObject.Find("CommPt2").GetComponent<UITexture>().material = null;
+					}
+					else
+					{
+						GameObject.Find("CommPt1").GetComponent<UITexture>().material = null;
+					}
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
+					
 					targetGrid = null;
 					//Start a new path to the targetPosition, return the result to the OnPathComplete function
 					seeker.StartPath (transform.position, finalPath[0].transform.position, OnPathComplete);
@@ -137,6 +150,18 @@ public class AstarAI : MonoBehaviour
 				else if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && moveUnit == false)
 				{
 					targetGrid = null;
+					if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 3)
+					{
+						GameObject.Find("CommPt3").GetComponent<UITexture>().material = null;
+					}
+					else if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 2)
+					{
+						GameObject.Find("CommPt2").GetComponent<UITexture>().material = null;
+					}
+					else
+					{
+						GameObject.Find("CommPt1").GetComponent<UITexture>().material = null;
+					}
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
 					finalPath.Reverse();
 					seeker.StartPath (this.transform.position, finalPath[0].transform.position, OnPathComplete);
