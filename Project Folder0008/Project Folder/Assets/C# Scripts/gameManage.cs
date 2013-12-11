@@ -78,6 +78,20 @@ public class gameManage : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.S)){
 			nextTurn();
 		}
+		if(mReaderObject.returnLayoutCompleted() == true && this.GetComponent<GridTool>().returnGridColliders().Count > 0)
+				{
+					foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
+						if(gridObject.renderer.material.ToString() == "Transparent (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material.color = Color.black;
+						} else if (gridObject.renderer.material.ToString() == "HighlightHoverAttack (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
+							gridObject.renderer.material.color = Color.red;
+						} else if (gridObject.renderer.material.ToString() == "HighlightHoverMove (Instance) (UnityEngine.Material)"){
+							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
+							gridObject.renderer.material.color = Color.blue;
+						}	
+					}
+				}
 		if(narrativePanelOpen==false){
 			if(secondaryCameraObject.getActive()==false){
 				if(dialogueTimer<=0){
@@ -168,20 +182,6 @@ public class gameManage : MonoBehaviour {
 				}
 			}
 				NarrativeAnchorObject.SetActive(false);
-				if(mReaderObject.returnLayoutCompleted() == true && this.GetComponent<GridTool>().returnGridColliders().Count > 0)
-					{
-					foreach(GameObject gridObject in this.GetComponent<GridTool>().returnGridColliders()){
-						if(gridObject.renderer.material.ToString() == "Transparent (Instance) (UnityEngine.Material)"){
-							gridObject.renderer.material.color = Color.black;
-						} else if (gridObject.renderer.material.ToString() == "HighlightHoverAttack (Instance) (UnityEngine.Material)"){
-							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
-							gridObject.renderer.material.color = Color.red;
-						} else if (gridObject.renderer.material.ToString() == "HighlightHoverMove (Instance) (UnityEngine.Material)"){
-							gridObject.renderer.material = Resources.Load("HighlightSquare") as Material;
-							gridObject.renderer.material.color = Color.blue;
-						}	
-					}
-				}
 				if(playerTurn==false){
 					if(turnEnded==true){
 						if(timer>0){
@@ -204,7 +204,7 @@ public class gameManage : MonoBehaviour {
 					}
 			}
 		hoverOverGrid();
-		GameObject.Find("Command Points").GetComponent<UILabel>().text = "Command Points: " + commandPoints.ToString();
+		GameObject.Find("Command Points").GetComponent<UILabel>().text = "Command Points: ";
 		} else {
 			NarrativeAnchorObject.SetActive(true);
 		} 

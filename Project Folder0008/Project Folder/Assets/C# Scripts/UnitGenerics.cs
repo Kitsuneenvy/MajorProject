@@ -180,7 +180,9 @@ public class UnitGenerics : MonoBehaviour
 					TempParticle.Play();
 				}
 				if(target.tag!="Flower"){
-					StartCoroutine(animationQ(target.gameObject,"TakenHit"));
+					if(targetGenerics.health - (attack +bonusDamage - targetGenerics.defence)>0){
+						StartCoroutine(animationQ(target.gameObject,"TakenHit"));
+					}
 				}
 				if(unitType!=3){
 					damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
@@ -205,8 +207,8 @@ public class UnitGenerics : MonoBehaviour
 						damageText = GameObject.Instantiate(Resources.Load("DamageText"),new Vector3((this.transform.position.x+target.transform.position.x)/2,(this.transform.position.y+target.transform.position.y)/2+5,(this.transform.position.z+target.transform.position.z)/2),Quaternion.identity) as GameObject;
 						damageText.GetComponent<TextMesh>().color = Color.white;
 						damageText.GetComponent<TextMesh>().text = "-"+(attack+bonusDamage - targetGenerics.defence).ToString();
-						if(targetGenerics.defence - attack > 0){
-						targetGenerics.setHealth (targetGenerics.health + (targetGenerics.defence - attack));
+						if(attack - targetGenerics.defence > 0){
+							targetGenerics.setHealth (targetGenerics.health - (attack +bonusDamage - targetGenerics.defence));
 						} else {
 							targetGenerics.setHealth (targetGenerics.health - 1);
 						}
@@ -375,10 +377,10 @@ public class UnitGenerics : MonoBehaviour
 				}
 					//play death animation
 					if(target.tag!="Flower"){
-						StartCoroutine(animationQ(target.gameObject,"Death"));
+						StartCoroutine(animationQ(target.gameObject,"Death2"));
 						for(int i = 0; i < 6; i++)
 						{
-							StartCoroutine(particleEmissionIncrease(target));
+							StartCoroutine(particleEmissionIncrease(targetGenerics.gameObject));
 						}
 					} else {
 						GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
@@ -408,10 +410,15 @@ public class UnitGenerics : MonoBehaviour
 					//remove from list
 					missionReaderObject.allUnits.Remove(targetGenerics.gameObject);
 					missionReaderObject.enemyUnits.Remove(targetGenerics.gameObject);
+					
+					Debug.Log(missionReaderObject.enemyUnits.Count);
 					targetGenerics.onGrid.heldUnit = null;
+					foreach(GameObject unit in missionReaderObject.allUnits){
+						unit.GetComponent<UnitGenerics>().refreshMovement();
+					}
 					//destroy object
 					if(target.tag!="Flower"){
-						Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death"].length);
+						//Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death2"].length);
 					} else {
 						Destroy(targetGenerics.gameObject);
 						missionReaderObject.flowerUnits.Remove(targetGenerics.gameObject);
@@ -774,12 +781,24 @@ public class UnitGenerics : MonoBehaviour
 		target.animation.Play(animationToPlay);
 		yield return new WaitForSeconds(target.animation.GetClip(animationToPlay).length);
 		}
+		if(animationToPlay == "Death2"){
+			DestroyImmediate(target.gameObject);
+		}
 		GameObject.FindGameObjectWithTag("SecondaryCamera").GetComponent<SecondaryCamera>().setActive(false);
 	}
 	
 	IEnumerator particleEmissionIncrease(GameObject targetChar)
 	{
+		Color[] animatorColours = targetChar.GetComponent<ParticleAnimator>().colorAnimation;
+		animatorColours[0] = new Color(0f,0f,0f,1f);
+		animatorColours[1] = new Color(0f,0f,0f,1f);
+		animatorColours[2] = new Color(0f,0f,0.0f,1f);
+		animatorColours[3] = new Color(0f,0f,0f,1f);
+		animatorColours[4] = new Color(0f,0f,0f,1f);
+		targetChar.GetComponent<ParticleAnimator>().colorAnimation = animatorColours;
+		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxSize = 50;
+		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.minSize = 50;
 		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxEmission += 50;
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.2f);
 	}
 }

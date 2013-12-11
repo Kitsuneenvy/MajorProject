@@ -13,7 +13,8 @@ public class CameraMovement : MonoBehaviour {
 	int RotationY = 0;
 	MissionReader missionReader;
 	AstarPath astarPath;
-	
+	Vector3 previousPos = new Vector3(0,0,0);
+	Vector3 changedPos = new Vector3(0,0,0);
 	//tell camera to move
 	public bool moveCamera = false;
 	
@@ -30,7 +31,6 @@ public class CameraMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 		//if a new mission is created
 		if(missionReader.returnLayoutCompleted() && moveCamera == true)
 		{
@@ -38,6 +38,8 @@ public class CameraMovement : MonoBehaviour {
 			{
 				RotationY = 180;
 			}
+			previousPos = this.transform.position;
+			changedPos = new Vector3(astarPath.astarData.gridGraph.center.x,this.transform.position.y,astarPath.astarData.gridGraph.center.z);
 			//set camera position to the centre of grid
 			this.transform.position = new Vector3(astarPath.astarData.gridGraph.center.x,this.transform.position.y,astarPath.astarData.gridGraph.center.z);
 			
@@ -60,8 +62,10 @@ public class CameraMovement : MonoBehaviour {
 				zBack = (int)astarPath.astarData.gridGraph.center.z - (((int)astarPath.astarData.gridGraph.depth * 5)/2) - 5;
 		//	}
 			
-			
-			moveCamera = false;
+			if(changedPos != previousPos)
+			{
+				moveCamera = false;
+			}
 		}
 		
 		//Move camera as long as no drop down menu is created

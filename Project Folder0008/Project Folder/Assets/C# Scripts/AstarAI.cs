@@ -52,29 +52,12 @@ public class AstarAI : MonoBehaviour
 
 	void Update ()
 	{
-		/*
-		//if right clicked
-		if(Input.GetMouseButton(1))
-		{ //create a ray from mouse position
-			Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-			//create raycasthit variable to check where hit
-			RaycastHit rayHit;
-			//cast the ray and output hit location to rayhit
-			if(Physics.Raycast(mouseRay, out rayHit))
-			{
-				//check if the collided object has tag "square"
-				if(rayHit.collider.gameObject.tag == "Square")
-				{
-				}
-			}
-		}*/
 	}
 
 	public void move (GameObject newGrid, List <GameObject> moveSquares)
 	{
 		moveTiles = moveSquares;//think is redundant now
 		GameObject.Find ("Panel").GetComponent<DropDownMenu> ().resetSelectedUnit ();
-		Debug.Log("Next Grid to check: " + newGrid.ToString());
 		if (GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints > 0) {
 			if(targetGrid == null)
 			{
@@ -82,7 +65,6 @@ public class AstarAI : MonoBehaviour
 				targetPosition = newGrid.transform.position;
 				targetGrid = newGrid;
 				finalPath.Add(targetGrid);
-				Debug.Log("Set targetGrid: " + targetGrid.ToString());
 			}
 			//check adjacents of passed tile
 			List<GameObject> adjacentTiles = this.GetComponent<UnitGenerics>().checkAdjacentGrids(newGrid);
@@ -95,18 +77,6 @@ public class AstarAI : MonoBehaviour
 				//check if already adjacent to target and move
 				if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && finalPath.Count == 0)
 				{
-					if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 3)
-					{
-						GameObject.Find("CommPt3").GetComponent<UITexture>().material = null;
-					}
-					else if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 2)
-					{
-						GameObject.Find("CommPt2").GetComponent<UITexture>().material = null;
-					}
-					else
-					{
-						GameObject.Find("CommPt1").GetComponent<UITexture>().material = null;
-					}
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
 					
 					targetGrid = null;
@@ -150,18 +120,6 @@ public class AstarAI : MonoBehaviour
 				else if(adjTile == this.GetComponent<UnitGenerics>().onGrid.gameObject && moveUnit == false)
 				{
 					targetGrid = null;
-					if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 3)
-					{
-						GameObject.Find("CommPt3").GetComponent<UITexture>().material = null;
-					}
-					else if(GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints == 2)
-					{
-						GameObject.Find("CommPt2").GetComponent<UITexture>().material = null;
-					}
-					else
-					{
-						GameObject.Find("CommPt1").GetComponent<UITexture>().material = null;
-					}
 					GameObject.Find ("Game Manager").GetComponent<gameManage> ().commandPoints--;
 					finalPath.Reverse();
 					seeker.StartPath (this.transform.position, finalPath[0].transform.position, OnPathComplete);
@@ -323,7 +281,7 @@ public class AstarAI : MonoBehaviour
 			}
 				if(this.animation.isPlaying == false&&this.GetComponent<UnitGenerics>().health>0)
 				{
-					this.animation.Play("Idle1");
+					this.animation.Blend("Idle1");
 				}
 		}
 		if (path == null) {
@@ -348,8 +306,9 @@ public class AstarAI : MonoBehaviour
 			//set timevalue
 		timeValue = (1 / (finalPath[0].transform.position - this.transform.position).magnitude);
 			if (DistanceCalculation (this.transform.position, finalPath[0].transform.position) == true) { 
-				
-				this.animation.Play("Walk");
+				if(animation.clip!=animation.GetClip("Walk")){
+					this.animation.Play("Walk");
+				}
 				
 				//Lerp to location of raycasted position.z
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (this.transform.position.x, this.transform.position.y, finalPath[0].transform.position.z)))) * 0.1f);
@@ -362,9 +321,9 @@ public class AstarAI : MonoBehaviour
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(this.gameObject);
 				
 			} else if (DistanceCalculation (this.transform.position, finalPath[0].transform.position) == false) {
-
-				this.animation.Play("Walk");
-				
+				if(animation.clip!=animation.GetClip("Walk")){
+					this.animation.Play("Walk");
+				}
 				//Lerp to location of raycasted position.x
 				this.transform.position = Vector3.Lerp (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z), (1 / (Vector3.Distance (this.transform.position, new Vector3 (finalPath[0].transform.position.x, this.transform.position.y, this.transform.position.z)))) * 0.1f);
 					

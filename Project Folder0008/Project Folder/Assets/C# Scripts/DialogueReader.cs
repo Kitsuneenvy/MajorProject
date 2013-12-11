@@ -23,6 +23,8 @@ public class DialogueReader : MonoBehaviour {
 	public GameObject endButton;
 	gameManage gameManageObject;
 	StoreData storeDataObject;
+	public bool initText = false;
+	public bool cinematicComplete = false;
 	// Use this for initialization
 	void Start () {
 		buttonText = GameObject.Find("DialogueLabel").GetComponent<UILabel>();
@@ -37,16 +39,20 @@ public class DialogueReader : MonoBehaviour {
 		{
 			readSection(1);
 		}
-		if(Application.loadedLevelName == "Main")
-		{
-			readSection(0);
-		}
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.O)){
 			readSection(1);
+		}
+		if(GameObject.Find("A*").GetComponent<MissionReader>().returnLayoutCompleted() == true&&initText == false){
+			if(Application.loadedLevelName == "Main")
+			{
+				readSection(0);
+			}
+			initText = true;
 		}
 	}
 	
@@ -161,7 +167,7 @@ public class DialogueReader : MonoBehaviour {
 			}
 		}
 		if(Application.loadedLevelName == "Main"){
-			if(GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 1||EventToPlay == 0){
+			if(GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 1){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -182,10 +188,9 @@ public class DialogueReader : MonoBehaviour {
 					}
 				switch(EventToPlay){
 				case 0:
-					Debug.Log("noMove is true");
+					cinematicComplete = false;
 					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
 					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
-					
 					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = true;
 					GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
 					GameObject.FindGameObjectWithTag("MainCamera").transform.LookAt(pivotFocus.transform);
@@ -193,7 +198,8 @@ public class DialogueReader : MonoBehaviour {
 					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 1:
-					Debug.Log("noMove is false");
+					cinematicComplete = true;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().moveCamera = true;
 					DestroyImmediate(tempObject1);
 					DestroyImmediate(tempObject2);
 					DestroyImmediate(tempObject3);
@@ -202,10 +208,13 @@ public class DialogueReader : MonoBehaviour {
 					GameObject.FindGameObjectWithTag("MainCamera").transform.position = initialPosition;
 					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cullingMask = everythingMask;
 					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = false;
+					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 2:
 					break;
 				case 3:
+					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
+					GameObject.Find("A*").GetComponent<MissionReader>().mission2= true;
 					break;
 				case 4:
 					break;
@@ -251,12 +260,13 @@ public class DialogueReader : MonoBehaviour {
 		}
 		else 
 		{
-			if(mReaderObject.objective.Contains("Kill all") || mReaderObject.objective.Contains("Defend"))
+			if(mReaderObject.currentMission == 1 || mReaderObject.objective.Contains("Defend"))
 			{
+				Debug.Log("rawr");
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					//gameManageObject.narrativePanelOpen = true;
+					gameManageObject.narrativePanelOpen = true;
 				}
 				
 			}

@@ -9,7 +9,6 @@ public class StoreData : MonoBehaviour {
 	public GameObject saveField;
 	public GameObject commField;
 	string mission = "";
-	bool saved = false;
 	FileStream createdFile;
 	public UISprite tutorialCheck;
 	bool overwrite = false;
@@ -21,11 +20,7 @@ public class StoreData : MonoBehaviour {
 	
 	void Update()
 	{
-		if(Application.loadedLevelName != "OptionsWorking" && saved == false && !File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName))
-		{
-			saved = true;
-			CreateFile();
-		}
+		
 	}
 	public void DataStorage()
 	{
@@ -35,6 +30,8 @@ public class StoreData : MonoBehaviour {
 		if(overwrite == true)
 		{
 			OverwriteFile();
+		} else if (!File.Exists(Application.persistentDataPath+"/AutoSaves/"+autoSaveName + ".sav")){
+			CreateFile();
 		}
 	}
 	

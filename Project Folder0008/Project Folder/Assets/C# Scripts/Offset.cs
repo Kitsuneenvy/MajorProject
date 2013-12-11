@@ -51,7 +51,7 @@ public class Offset : MonoBehaviour {
 			this.transform.localPosition = new Vector3(Screen.width/50, -Screen.height/20,0);
 		}
 		else if(name == "Command Points"){
-			this.transform.localPosition = new Vector3(-Screen.width/2.5f, Screen.height/14,0);
+			this.transform.localPosition = new Vector3(-Screen.width/2, Screen.height/14,0);
 		}
 		else if(name == "Dialogue"){
 			this.transform.localPosition = new Vector3(Screen.width/50f, Screen.height/8,0);
@@ -79,6 +79,7 @@ public class Offset : MonoBehaviour {
 			this.transform.FindChild("ObjectivesLabel").GetComponent<UILabel>().text = GameObject.Find("A*").GetComponent<MissionReader>().objective;
 		}
 		else if(name == "EndTurn"){
+			//this.transform.localScale = new Vector3(Screen.width/140,Screen.height/100,1);
 //			this.transform.localScale = new Vector3(GameObject.Find("CommandPointsPanel").transform.localScale.y/150,this.transform.localScale.y,0);
 			this.transform.localPosition = new Vector3(-Screen.width/12f, Screen.height/12f,0);	
 		}
@@ -89,41 +90,68 @@ public class Offset : MonoBehaviour {
 		
 		else if(name == "CommPt1")
 		{
-			this.transform.localPosition = new Vector3(-Screen.width/3, Screen.height/12,0);
+			this.GetComponent<UIWidget>().depth = 7;
+			this.transform.localScale = new Vector3(Screen.width/11,Screen.height/8,1);
+			this.transform.localPosition = new Vector3(-Screen.width/2.4f, Screen.height/12,5);
 			
-			if(gameManageObject.playerTurn == true && this.GetComponent<UITexture>().material == null)
+			if(gameManageObject.playerTurn == true && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == cultMat))
 			{
-				this.GetComponent<UITexture>().material = knightMat;
+				if(gameManageObject.commandPoints<=3&&gameManageObject.commandPoints>0){
+					this.GetComponent<UITexture>().material = knightMat;
+				}
 			}
-			else if (gameManageObject.playerTurn == false && this.GetComponent<UITexture>().material == null)
+			else if (gameManageObject.playerTurn == false && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == knightMat))
 			{
-				this.GetComponent<UITexture>().material = cultMat;
+				if(gameManageObject.commandPoints<=3&&gameManageObject.commandPoints>0){
+					this.GetComponent<UITexture>().material = cultMat;
+				}
+			}
+			if (gameManageObject.commandPoints <1){
+				this.GetComponent<UITexture>().material = null;
 			}
 		}
 		
 		else if(name == "CommPt2")
 		{
-			this.transform.localPosition = new Vector3((-Screen.width/3 + this.transform.localScale.x), Screen.height/12,0);
-			if(gameManageObject.playerTurn == true && this.GetComponent<UITexture>().material == null)
+			this.GetComponent<UIWidget>().depth = 7;
+			this.transform.localScale = new Vector3(Screen.width/11,Screen.height/8,1);
+			this.transform.localPosition = new Vector3((-Screen.width/2.4f + this.transform.localScale.x), Screen.height/12,5);
+			if(gameManageObject.playerTurn == true && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == cultMat))
 			{
-				this.GetComponent<UITexture>().material = knightMat;
+				if(gameManageObject.commandPoints<=3&&gameManageObject.commandPoints>1){
+					this.GetComponent<UITexture>().material = knightMat;
+				} 
 			}
-			else if (gameManageObject.playerTurn == false && this.GetComponent<UITexture>().material == null)
+			else if (gameManageObject.playerTurn == false && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == knightMat))
 			{
-				this.GetComponent<UITexture>().material = cultMat;
+				if(gameManageObject.commandPoints<=3&&gameManageObject.commandPoints>1){
+					this.GetComponent<UITexture>().material = cultMat;
+				} 
+			}
+			if (gameManageObject.commandPoints <2){
+				this.GetComponent<UITexture>().material = null;
 			}
 		}
 		
 		else if(name == "CommPt3")
 		{
-			this.transform.localPosition = new Vector3((-Screen.width/3 + this.transform.localScale.x), Screen.height/12,0);
-			if(gameManageObject.playerTurn == true && this.GetComponent<UITexture>().material == null)
+			this.GetComponent<UIWidget>().depth = 7;
+			this.transform.localScale = new Vector3(Screen.width/11,Screen.height/8,1);
+			this.transform.localPosition = new Vector3((-Screen.width/2.4f + this.transform.localScale.x*2), Screen.height/12,5);
+			if(gameManageObject.playerTurn == true && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == cultMat))
 			{
-				this.GetComponent<UITexture>().material = knightMat;
+				if(gameManageObject.commandPoints==3){
+					this.GetComponent<UITexture>().material = knightMat;
+				}
 			}
-			else if (gameManageObject.playerTurn == false && this.GetComponent<UITexture>().material == null)
+			else if (gameManageObject.playerTurn == false && (this.GetComponent<UITexture>().material == null||this.GetComponent<UITexture>().material == knightMat))
 			{
-				this.GetComponent<UITexture>().material = cultMat;
+				if(gameManageObject.commandPoints==3){
+					this.GetComponent<UITexture>().material = cultMat;
+				} 
+			}
+			if (gameManageObject.commandPoints <3){
+				this.GetComponent<UITexture>().material = null;
 			}
 		}
 	

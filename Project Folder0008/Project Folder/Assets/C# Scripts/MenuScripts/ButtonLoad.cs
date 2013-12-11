@@ -65,7 +65,6 @@ public class ButtonLoad : MonoBehaviour {
 			temp.GetComponentInChildren<UILabel>().text = tempString;
 			temp.transform.localScale = new Vector3(1,1,0);
 			Vector3 newPosition = new Vector3(0,increaseY,0.5f);
-			Debug.Log(newPosition.ToString());
 			temp.transform.localPosition = newPosition;
 			increaseY -= 25.0f;
 			

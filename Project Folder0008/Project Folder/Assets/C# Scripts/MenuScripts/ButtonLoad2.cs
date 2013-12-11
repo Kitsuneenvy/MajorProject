@@ -27,7 +27,7 @@ public class ButtonLoad2 : MonoBehaviour {
 	
 	void OnClick()
 	{
-		if(file != "")
+		if(file != ""&&file!=null)
 		{
 			foreach(string line in  File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+file+".sav"))
 			{

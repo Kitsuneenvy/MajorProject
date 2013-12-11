@@ -20,7 +20,6 @@ public class EndTurn : MonoBehaviour {
 			if(Application.loadedLevelName == "Tutorial")
 			{
 				pressed = true;
-				Debug.Log(pressed.ToString());
 				GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().TaskCompletion(null);
 			}
 			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().nextTurn();

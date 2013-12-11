@@ -12,7 +12,7 @@ public class MissionReader : MonoBehaviour {
 	Vector3 currentPosition; 
 	
 	//whether new mission
-	bool newMission = true;
+	public bool newMission = true;
 	
 	public int currentMission = 0;
 	
@@ -102,8 +102,8 @@ public class MissionReader : MonoBehaviour {
 			autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 			savFile =  new FileInfo(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav");
 		}
-		else{
-			
+		else
+		{
 			if(saveData.GetComponent<StoreData>().ReturnMission() != "" && saveData.GetComponent<StoreData>().ReturnMission() != null)
 			{
 				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
@@ -139,17 +139,22 @@ public class MissionReader : MonoBehaviour {
 			}
 			else
 			{
+				
 				autoSavedMission = saveData.GetComponent<StoreData>().returnAutoSaveName();
 				mission1 = true;
 			}
 			savFile =  new FileInfo(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav");
+//			GameObject enemyTurnText = GameObject.Instantiate(Resources.Load("DamageText")) as GameObject;
+//				enemyTurnText.transform.parent = GameObject.FindGameObjectWithTag("MainCamera").transform;
+//				enemyTurnText.transform.localPosition = new Vector3(-4,0,9);
+//				enemyTurnText.GetComponent<TextMesh>().text = savFile.ToString();
+			newMission = true;
 		}
 			
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 		if(newMission == true)
 		{
 			optionalTiles.Clear();
@@ -258,8 +263,9 @@ public class MissionReader : MonoBehaviour {
 			{
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
-				foreach(string line in File.ReadAllLines(savFile.ToString()))
+				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 				{
+					
 					holdLines.Add(line);
 					fileLineCounter++;
 				}
@@ -283,7 +289,7 @@ public class MissionReader : MonoBehaviour {
 			{ 
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
-				foreach(string line in File.ReadAllLines(savFile.ToString()))
+				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 				{
 					holdLines.Add(line);
 					fileLineCounter++;
@@ -294,7 +300,7 @@ public class MissionReader : MonoBehaviour {
 						{
 							if(fileLineCounter == 0)
 							{
-								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								using (StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 								{
 									sw.WriteLine(storedLine);
 								}
@@ -324,7 +330,7 @@ public class MissionReader : MonoBehaviour {
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
 				
-				foreach(string line in File.ReadAllLines(savFile.ToString()))
+				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 				{
 					holdLines.Add(line);
 					fileLineCounter++;
@@ -335,7 +341,7 @@ public class MissionReader : MonoBehaviour {
 						{
 							if(fileLineCounter == 0)
 							{
-								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								using (StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 								{
 									sw.WriteLine(storedLine);
 								}
@@ -365,7 +371,7 @@ public class MissionReader : MonoBehaviour {
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
 				
-				foreach(string line in File.ReadAllLines(savFile.ToString()))
+				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 				{
 					holdLines.Add(line);
 					fileLineCounter++;
@@ -376,7 +382,7 @@ public class MissionReader : MonoBehaviour {
 						{
 							if(fileLineCounter == 0)
 							{
-								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								using (StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 								{
 									sw.WriteLine(storedLine);
 								}
@@ -406,7 +412,7 @@ public class MissionReader : MonoBehaviour {
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
 				
-				foreach(string line in File.ReadAllLines(savFile.ToString()))
+				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 				{
 					holdLines.Add(line);
 					fileLineCounter++;
@@ -417,7 +423,7 @@ public class MissionReader : MonoBehaviour {
 						{
 							if(fileLineCounter == 0)
 							{
-								using (StreamWriter sw = new StreamWriter(savFile.ToString()))
+								using (StreamWriter sw = new StreamWriter(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
 								{
 									sw.WriteLine(storedLine);
 								}
@@ -476,7 +482,6 @@ public class MissionReader : MonoBehaviour {
 					aStarGrid.astarData.gridGraph.rotation.y = 13;
 					currentMission = 3;
 					mission3 = false;
-					mainCamera.GetComponent<CameraMovement>().moveCamera = true;
 					rotate = true;
 				}
 				if(mission4)
@@ -511,7 +516,9 @@ public class MissionReader : MonoBehaviour {
 			}
 		//layout completed
 			layoutCompleted = true;
-			mainCamera.GetComponent<CameraMovement>().moveCamera = true;
+			if(mainCamera.GetComponent<CameraMovement>().noMove==false&&GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().cinematicComplete == true){
+				mainCamera.GetComponent<CameraMovement>().moveCamera = true;
+			}
 				
 		}
 	
@@ -631,10 +638,7 @@ public class MissionReader : MonoBehaviour {
 									{
 										tempUnit = GameObject.Instantiate(Resources.Load("Chef")) as GameObject;
 										tempUnit.tag = "PlayerUnit";
-										using(StreamReader sr = new StreamReader(savFile.ToString()))
-										{
-											tempUnit.name = sr.ReadLine();
-										}
+										tempUnit.name = (File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))[0];
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y+rotationY,0);
 									}
 									
@@ -692,6 +696,13 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.name = "Flower";
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
+								}
+								if(unitInfo[0] != 4){
+									tempUnit.AddComponent("EllipsoidParticleEmitter");
+									tempUnit.AddComponent("ParticleAnimator");
+									tempUnit.AddComponent("ParticleRenderer");
+									tempUnit.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxEmission = 0;
+									tempUnit.GetComponent<ParticleRenderer>().material = particleMaterial;
 								}
 								allUnits.Add(tempUnit);
 								//position the unit
