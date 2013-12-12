@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 public class DialogueReader : MonoBehaviour {
 	List<string> DialogueLines = new List<string>();
@@ -46,10 +47,7 @@ public class DialogueReader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.O)){
-			readSection(1);
-		}
-		if(GameObject.Find("A*").GetComponent<MissionReader>().returnLayoutCompleted() == true&&initText == false){
+		if(mReaderObject.returnLayoutCompleted() == true&&initText == false){
 			if(Application.loadedLevelName == "Main")
 			{
 				readSection(0);
@@ -71,29 +69,65 @@ public class DialogueReader : MonoBehaviour {
 			}
 		}
 	}
+	void readDialogueFile(int missionCount){
+		DialogueLines.Clear();
+		section = 0;
+		dialogueLine = 0;
+		sectionLine = 0;
+		switch(missionCount){
+		case(1):
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission1Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+			break;
+		case(2):
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission2Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+			break;
+		case(3):
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission3Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+			break;
+		case(4):
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission4Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+			break;
+		case(5):
+			foreach(string Line in File.ReadAllLines("Assets/MissionFiles/Mission5Dialogue.txt")){
+				DialogueLines.Add(Line);
+			}
+			break;
+		default:
+			break;
+		}
+	}
 	public void readSection(int sectionNumber){
 		for(int i = 0; i<DialogueLines.Count; i++){
-			//Debug.Log(DialogueLines[i]);
 			if(DialogueLines[i].StartsWith("+"+sectionNumber.ToString())){
+//				Debug.Log(DialogueLines[i]);
+				//Debug.Log(section.ToString());
 				section++;
 				dialogueLine = 0;
 				sectionLine = i;
 			}
 			if(section == sectionNumber){
+				//Debug.Log(section.ToString());
 				if(DialogueLines[i].StartsWith("<")){
 					dialogueLine=i;
 					readLine(dialogueLine);
-					break;
+					return;
 				}
 				if(DialogueLines[i].StartsWith("-")){
 					dialogueLine = i;
 					readLine(dialogueLine);
-					break;
+					return;
 				}
 			}
 			if(DialogueLines[i].StartsWith("$")){
-				Debug.Log("End!");
-				break;
+				return;
 			}
 		}
 	}
@@ -104,8 +138,13 @@ public class DialogueReader : MonoBehaviour {
 			dialogue = DialogueLines[lineNumber].Substring(DialogueLines[lineNumber].IndexOf(":".ToCharArray()[0])+2, DialogueLines[lineNumber].IndexOf(";".ToCharArray()[0])-(DialogueLines[lineNumber].IndexOf(":".ToCharArray()[0])+2));
 		} else {
 			GameObject.FindGameObjectWithTag("GameController").GetComponent<gameManage>().setNarrativePanelOpen(false);
-			ScriptedEvents(section);
-			readSection(section+1);
+			string numberLine = Regex.Replace(DialogueLines[lineNumber],"[^0-9]","");
+			ScriptedEvents(int.Parse(numberLine));
+			if(lineNumber+1<=DialogueLines.Count){
+				if(!DialogueLines[lineNumber+1].StartsWith("$")){
+					readSection(section+1);
+				}
+			}
 			//If you reach the end. Might handle it another way.
 		}
 		if(charName == "Chef"){
@@ -137,13 +176,16 @@ public class DialogueReader : MonoBehaviour {
 			GameObject.Find("CharacterName").GetComponent<UILabel>().text = charName;
 			GameObject.Find("CharacterPortrait").GetComponent<UITexture>().material = null;
 		}
-		if(DialogueLines[lineNumber+1].StartsWith("-")){
-			buttonText.text = "End";
-		} else {
-			buttonText.text = "Next";
+		if(mReaderObject.recheck==false){
+			if(lineNumber+1<=DialogueLines.Count){
+				if(DialogueLines[lineNumber+1].StartsWith("-")){
+					buttonText.text = "End";
+				} else {
+					buttonText.text = "Next";
+				}
+			}
 		}
 		narrativeDialogue.text = dialogue;
-		//etc
 	}
 	
 	public void ScriptedEvents(int EventToPlay){
@@ -169,7 +211,7 @@ public class DialogueReader : MonoBehaviour {
 			}
 		}
 		if(Application.loadedLevelName == "Main"){
-			if(GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 1){
+			if(mReaderObject.currentMission == 1){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -215,15 +257,22 @@ public class DialogueReader : MonoBehaviour {
 				case 2:
 					break;
 				case 3:
-					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
-					GameObject.Find("A*").GetComponent<MissionReader>().mission2= true;
+					mReaderObject.currentMission = 2;
+					mReaderObject.recheck = false;
+					mReaderObject.newMission = true;
+					mReaderObject.mission2= true;
+					mReaderObject.layoutCompleted = false;
+					mReaderObject.checkmark.alpha = 0;
+					readDialogueFile(2);
+					readSection(0);
+					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 4:
 					break;
 				default:
 					break;
 				}
-			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 2){
+			} else if (mReaderObject.currentMission == 2){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -269,15 +318,22 @@ public class DialogueReader : MonoBehaviour {
 				case 2:
 					break;
 				case 3:
-					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
-					GameObject.Find("A*").GetComponent<MissionReader>().mission3= true;
+					mReaderObject.currentMission = 3;
+					mReaderObject.recheck = false;
+					mReaderObject.newMission = true;
+					mReaderObject.mission3 = true;
+					mReaderObject.layoutCompleted = false;
+					mReaderObject.checkmark.alpha = 0;
+					readDialogueFile(3);
+					readSection(0);
+					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 4:
 					break;
 				default:
 					break;
 				}
-			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 3){
+			} else if (mReaderObject.currentMission == 3){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -323,15 +379,22 @@ public class DialogueReader : MonoBehaviour {
 				case 2:
 					break;
 				case 3:
-					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
-					GameObject.Find("A*").GetComponent<MissionReader>().mission4= true;
+					mReaderObject.currentMission = 4;
+					mReaderObject.recheck = false;
+					mReaderObject.newMission = true;
+					mReaderObject.mission4= true;
+					mReaderObject.layoutCompleted = false;
+					mReaderObject.checkmark.alpha = 0;
+					readDialogueFile(4);
+					readSection(0);
+					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 4:
 					break;
 				default:
 					break;
 				}
-			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 4){
+			} else if (mReaderObject.currentMission == 4){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -377,15 +440,22 @@ public class DialogueReader : MonoBehaviour {
 				case 2:
 					break;
 				case 3:
-					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
-					GameObject.Find("A*").GetComponent<MissionReader>().mission5= true;
+					mReaderObject.currentMission = 5;
+					mReaderObject.recheck = false;
+					mReaderObject.newMission = true;
+					mReaderObject.mission5= true;
+					mReaderObject.layoutCompleted = false;
+					readDialogueFile(5);
+					gameManageObject.narrativePanelOpen = true;
+					readSection(0);
+					mReaderObject.checkmark.alpha = 0;
 					break;
 				case 4:
 					break;
 				default:
 					break;
 				}
-			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 5){
+			} else if (mReaderObject.currentMission == 5){
 				GameObject tempObject1 = null;
 				GameObject tempObject2 = null;
 				GameObject tempObject3 = null;
@@ -478,7 +548,6 @@ public class DialogueReader : MonoBehaviour {
 		{
 			if(mReaderObject.currentMission == 1 || mReaderObject.objective.Contains("Defend"))
 			{
-				Debug.Log("rawr");
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
@@ -491,7 +560,7 @@ public class DialogueReader : MonoBehaviour {
 				if(((mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[0].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[1].GetComponent<Grid>().heldUnit == character)) || ((mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit!=null)&&(mReaderObject.optionalTiles[2].GetComponent<Grid>().heldUnit == character)))
 				{
 					mReaderObject.checkmark.alpha = 255;
-					//gameManageObject.narrativePanelOpen = true;
+					gameManageObject.narrativePanelOpen = true;
 				}
 			}
 			else if(mReaderObject.objective.Contains("Rout"))
@@ -499,7 +568,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count < 3)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					//gameManageObject.narrativePanelOpen = true;
+					gameManageObject.narrativePanelOpen = true;
 				}
 			}
 			else if(mReaderObject.objective.Contains("escaping"))
@@ -508,7 +577,7 @@ public class DialogueReader : MonoBehaviour {
 				if(mReaderObject.enemyUnits.Count == 0)
 				{
 					mReaderObject.checkmark.alpha = 255;
-					//gameManageObject.narrativePanelOpen = true;
+					gameManageObject.narrativePanelOpen = true;
 				}
 			}
 		}

@@ -93,92 +93,94 @@ public class gameManage : MonoBehaviour {
 					}
 				}
 		if(narrativePanelOpen==false){
-			if(secondaryCameraObject.getActive()==false){
-				if(dialogueTimer<=0){
-					UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
-					if(randomUnit.tag!="Flower"){
-						switch(randomUnit.unitType){
-							case(0):
-							{
-								if(randomUnit.tag == "Enemy"){
-									soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
+			if(mReaderObject.allUnits.Count!=0){
+				if(secondaryCameraObject.getActive()==false){
+					if(dialogueTimer<=0){
+						UnitGenerics randomUnit = mReaderObject.allUnits[Random.Range(0,mReaderObject.allUnits.Count)].GetComponent<UnitGenerics>();
+						if(randomUnit.tag!="Flower"){
+							switch(randomUnit.unitType){
+								case(0):
+								{
+									if(randomUnit.tag == "Enemy"){
+										soundObject.soundEffectsIdle.clip = (soundObject.mowerAudio[1]);
+									}
+									if(randomUnit.tag == "PlayerUnit"){
+										soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
+									}
+									if(secondaryCameraObject.getActive()==false){
+										secondaryCameraObject.setFocus(randomUnit.gameObject);
+										secondaryCameraObject.setActive(true);
+									}
+									randomUnit.GetComponent<Animation>().Play("Quirk");
+									StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+									soundObject.soundEffectsIdle.Play();
+									dialogueTimer = initialCountdown;
+									break;
 								}
-								if(randomUnit.tag == "PlayerUnit"){
-									soundObject.soundEffectsIdle.clip = (soundObject.frierAudio[1]);
+								case(1):
+								{
+									if(randomUnit.tag == "Enemy"){
+										soundObject.soundEffectsIdle.clip = (soundObject.prunerAudio[1]);
+									}
+									if(randomUnit.tag == "PlayerUnit"){
+										soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
+									}
+									if(secondaryCameraObject.getActive()==false){
+										secondaryCameraObject.setFocus(randomUnit.gameObject);
+										secondaryCameraObject.setActive(true);
+									}
+									randomUnit.GetComponent<Animation>().Play("Quirk");
+									StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+									soundObject.soundEffectsIdle.Play();
+									dialogueTimer = initialCountdown;
+									break;
 								}
-								if(secondaryCameraObject.getActive()==false){
-									secondaryCameraObject.setFocus(randomUnit.gameObject);
-									secondaryCameraObject.setActive(true);
+								case(2):
+								{
+									if(randomUnit.tag == "Enemy"){
+										soundObject.soundEffectsIdle.clip = (soundObject.potterAudio[1]);
+									}
+									if(randomUnit.tag == "PlayerUnit"){
+										soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
+									}
+									if(secondaryCameraObject.getActive()==false){
+										secondaryCameraObject.setFocus(randomUnit.gameObject);
+										secondaryCameraObject.setActive(true);
+									}
+									randomUnit.GetComponent<Animation>().Play("Quirk");
+									StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+									soundObject.soundEffectsIdle.Play();
+									dialogueTimer = initialCountdown;
+									break;
 								}
-								randomUnit.GetComponent<Animation>().Play("Quirk");
-								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = initialCountdown;
-								break;
-							}
-							case(1):
-							{
-								if(randomUnit.tag == "Enemy"){
-									soundObject.soundEffectsIdle.clip = (soundObject.prunerAudio[1]);
+								case(3):
+								{
+									if(randomUnit.tag == "Enemy"){
+										soundObject.soundEffectsIdle.clip = (soundObject.floristAudio[1]);
+									}
+									if(randomUnit.tag == "PlayerUnit"){
+										soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
+									}
+									if(secondaryCameraObject.getActive()==false){
+										secondaryCameraObject.setFocus(randomUnit.gameObject);
+										secondaryCameraObject.setActive(true);
+									}
+									randomUnit.GetComponent<Animation>().Play("Quirk");
+									StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
+									soundObject.soundEffectsIdle.Play();
+									dialogueTimer = initialCountdown;
+									break;
 								}
-								if(randomUnit.tag == "PlayerUnit"){
-									soundObject.soundEffectsIdle.clip = (soundObject.ladlewightAudio[1]);
+								default:
+								{
+									dialogueTimer = initialCountdown;
+									break;
 								}
-								if(secondaryCameraObject.getActive()==false){
-									secondaryCameraObject.setFocus(randomUnit.gameObject);
-									secondaryCameraObject.setActive(true);
-								}
-								randomUnit.GetComponent<Animation>().Play("Quirk");
-								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = initialCountdown;
-								break;
-							}
-							case(2):
-							{
-								if(randomUnit.tag == "Enemy"){
-									soundObject.soundEffectsIdle.clip = (soundObject.potterAudio[1]);
-								}
-								if(randomUnit.tag == "PlayerUnit"){
-									soundObject.soundEffectsIdle.clip = (soundObject.bowlderAudio[1]);
-								}
-								if(secondaryCameraObject.getActive()==false){
-									secondaryCameraObject.setFocus(randomUnit.gameObject);
-									secondaryCameraObject.setActive(true);
-								}
-								randomUnit.GetComponent<Animation>().Play("Quirk");
-								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = initialCountdown;
-								break;
-							}
-							case(3):
-							{
-								if(randomUnit.tag == "Enemy"){
-									soundObject.soundEffectsIdle.clip = (soundObject.floristAudio[1]);
-								}
-								if(randomUnit.tag == "PlayerUnit"){
-									soundObject.soundEffectsIdle.clip = (soundObject.chefAudio[1]);
-								}
-								if(secondaryCameraObject.getActive()==false){
-									secondaryCameraObject.setFocus(randomUnit.gameObject);
-									secondaryCameraObject.setActive(true);
-								}
-								randomUnit.GetComponent<Animation>().Play("Quirk");
-								StartCoroutine(secondaryCameraHide("Quirk",randomUnit.gameObject));
-								soundObject.soundEffectsIdle.Play();
-								dialogueTimer = initialCountdown;
-								break;
-							}
-							default:
-							{
-								dialogueTimer = initialCountdown;
-								break;
 							}
 						}
+					} else {
+						dialogueTimer -= Time.deltaTime;
 					}
-				} else {
-					dialogueTimer -= Time.deltaTime;
 				}
 			}
 				NarrativeAnchorObject.SetActive(false);

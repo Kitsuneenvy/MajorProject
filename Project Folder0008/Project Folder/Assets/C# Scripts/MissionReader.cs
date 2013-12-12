@@ -13,6 +13,7 @@ public class MissionReader : MonoBehaviour {
 	
 	//whether new mission
 	public bool newMission = true;
+	public bool recheck = false;
 	
 	public int currentMission = 0;
 	
@@ -32,7 +33,7 @@ public class MissionReader : MonoBehaviour {
 	int rotationY = 0; //how much to rotate enemies by
 	
 	//has file been read and positions assigned
-	bool layoutCompleted = false;
+	public bool layoutCompleted = false;
 	
 	//name of text file containing mission data
 	string textFileName = "";
@@ -155,67 +156,68 @@ public class MissionReader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(newMission == true)
-		{
-			optionalTiles.Clear();
-			flowerUnits.Clear();
-			newMission = false;
-			layoutCompleted = false;
-			objective = "";
-			readNameList();
-			if(mission1 == true)
-			{
-				currentMission = 1;
-				objective = "Kill All Enemies";
-			}
-			else if (mission2 == true)
-			{
-				currentMission = 2;
-				objective = "Reach one tile \n right of fence";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
+		if(recheck == true){
+			if(newMission == true)
+			{	
+				optionalTiles.Clear();
+				flowerUnits.Clear();
+				newMission = false;
+				layoutCompleted = false;
+				objective = "";
+				readNameList();
+				if(mission1 == true)
+				{
+					currentMission = 1;
+					objective = "Kill All Enemies";
+				}
+				else if (mission2 == true)
+				{	
+					currentMission = 2;
+					objective = "Reach one tile \n right of fence";
+					aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+					aStarGrid.astarData.AddGraph("GridGraph");
+					aStarGrid.Scan();
+					aStarGrid.astarData.gridGraph.nodeSize = 5;
+				}
+				else if(mission3 == true)
+				{
+					currentMission = 3;
+					objective = "Rout Enemies";
+					aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+					aStarGrid.astarData.AddGraph("GridGraph");
+					aStarGrid.Scan();
+					aStarGrid.astarData.gridGraph.nodeSize = 5;
+	
+				}
+				else if (mission4 == true)
+				{
+					currentMission = 4;
+					objective = "Defend chef";
+					aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+					aStarGrid.astarData.AddGraph("GridGraph");
+					aStarGrid.Scan();
+					aStarGrid.astarData.gridGraph.nodeSize = 5;
+				}
+				else if (mission5 == true)
+				{
+					currentMission = 5;
+					objective = "Stop the florist \n from escaping";
+					aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
+					aStarGrid.astarData.AddGraph("GridGraph");
+					aStarGrid.Scan();
+					aStarGrid.astarData.gridGraph.nodeSize = 5;
+				}
+				Read();
 				
-
 			}
-			else if(mission3 == true)
-			{
-				currentMission = 3;
-				objective = "Rout Enemies";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
-
-			}
-			else if (mission4 == true)
-			{
-				currentMission = 4;
-				objective = "Defend chef";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
-			}
-			else if (mission5 == true)
-			{
-				currentMission = 5;
-				objective = "Stop the florist \n from escaping";
-				aStarGrid.astarData.RemoveGraph(aStarGrid.astarData.active.graphs[0]);
-				aStarGrid.astarData.AddGraph("GridGraph");
-				aStarGrid.Scan();
-				aStarGrid.astarData.gridGraph.nodeSize = 5;
-			}
-			Read();
-			
+		} else {
+			recheck = true;
 		}
 		if(Input.GetKeyDown(KeyCode.A))
 		{	
 			newMission = true;
 			if(counter == 1)
 			{
-				
 				mission2 = true;
 			}
 			if(counter == 2)
@@ -235,7 +237,6 @@ public class MissionReader : MonoBehaviour {
 			}
 			layoutCompleted = false;
 		}
-		
 	}
 	
 	void Read()
@@ -286,7 +287,7 @@ public class MissionReader : MonoBehaviour {
 			currentMission = 2;
 			newMission = false;
 			if(savFile.Exists == true)
-			{ 
+			{
 				List<string> holdLines = new List<string>();
 				fileLineCounter = 0;
 				foreach(string line in File.ReadAllLines(Application.persistentDataPath+"/AutoSaves/"+autoSavedMission+".sav"))
@@ -516,9 +517,9 @@ public class MissionReader : MonoBehaviour {
 			}
 		//layout completed
 			layoutCompleted = true;
-			if(mainCamera.GetComponent<CameraMovement>().noMove==false&&GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().cinematicComplete == true){
-				mainCamera.GetComponent<CameraMovement>().moveCamera = true;
-			}
+//			if(mainCamera.GetComponent<CameraMovement>().noMove==false&&GameObject.FindGameObjectWithTag("GameController").GetComponent<DialogueReader>().cinematicComplete == true){
+//				mainCamera.GetComponent<CameraMovement>().moveCamera = true;
+//			}
 				
 		}
 	
@@ -859,4 +860,27 @@ public class MissionReader : MonoBehaviour {
 			}
 		}
 	}
+	public void whatTheA(){
+			newMission = true;
+			if(counter == 1)
+			{
+				mission2 = true;
+			}
+			if(counter == 2)
+			{
+				
+				mission3 = true;
+			}
+			if(counter == 3)
+			{
+				
+				mission4 = true;
+			}
+			if(counter == 4)
+			{
+				
+				mission5 = true;
+			}
+			layoutCompleted = false;
+		}
 }
