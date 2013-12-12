@@ -1,10 +1,3 @@
-//Flower cultists have been attacking islands along King Meek's minor trade routes. These islands have been well regarded for their high flower 
-//density and their suitability for storing large quantities of cooking ingredients. While the cultists ignore the ingredients for the most part, their sole 
-//goal seems to be to gather the flowers on the islands and sacrifice them to their vulgar gods, Cataclysmo, Apocalypsmo, and mow. Tired of all the 
-//complaints he has been getting, King Meek decided to send his most useless kitchen hands, and the player, his most expendable 
-//chef/commander. These kitchen hands have been given a crash course in knighthood but are far from adept. They have thus been granted the 
-//title of ÅgNewly trained knightsÅh and then sent away to deal with this slight nuisance. Can you turn your band of Newly trained knights into a 
-//powerful force to repel the sinister flower cultists and stop their aesthetic ruining ways? No. No you canÅ't.
 -0
 +1
 <Narrator>: The newly trained knights make their way through the ravine, unaware of the dangers that lie ahead.;
@@ -31,7 +24,5 @@
 <Chef>: Calm down Pierre, this is a tactical advancement.;
 <Pierre>: Ah. Well then, let's hurry forward.;
 -3
-+4
--4
 $end;
 

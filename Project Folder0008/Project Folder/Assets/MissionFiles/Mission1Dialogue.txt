@@ -42,7 +42,5 @@
 <Pierre>: Quite convenient, a narrow path with very little chance of an ambush. Surely.;
 <Chef>: Follow me! Except for you, you go infront.;
 -3
-+4
--4
 $end;
 
