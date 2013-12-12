@@ -628,42 +628,99 @@ public class UnitGenerics : MonoBehaviour
 		//The target for whichever action the AI will take
 		GameObject chosenTarget = null;
 		float shortestDistance = Mathf.Infinity;
-		foreach(GameObject testUnit in missionReaderObject.allUnits){
-			if(testUnit.tag=="PlayerUnit"){
-				if(calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)<shortestDistance){
-					shortestDistance = calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject);
-					chosenTarget = testUnit;
-				} else if (calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)==shortestDistance){
-					if(calculateRating(chosenTarget, this.gameObject)<calculateRating(testUnit,this.gameObject)){
+		if(unitType == 3 && missionReaderObject.enemyUnits.Count > 1)
+		{
+			List<GameObject> needHealing = new List<GameObject>();
+			foreach(GameObject enemy in missionReaderObject.enemyUnits)
+			{
+				if(enemy.GetComponent<UnitGenerics>().health < enemy.GetComponent<UnitGenerics>().maxHealth && enemy != this.gameObject)
+				{
+					needHealing.Add(enemy);
+				}
+
+			}
+			if(needHealing.Count > 0)
+			{
+				foreach(GameObject enemy in needHealing)
+				{
+					if(calculateGridDistance(enemy.GetComponent<UnitGenerics>().onGrid.gameObject,onGrid.gameObject) < shortestDistance)
+					{
+						shortestDistance = calculateGridDistance(enemy.GetComponent<UnitGenerics>().onGrid.gameObject,onGrid.gameObject);
+						chosenTarget = enemy;
+					}
+				}
+			}
+			else
+			{
+				chosenTarget = null;
+			}
+		}
+		else
+		{
+			foreach(GameObject testUnit in missionReaderObject.allUnits){
+				if(testUnit.tag=="PlayerUnit"){
+					if(calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)<shortestDistance){
+						shortestDistance = calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject);
 						chosenTarget = testUnit;
+					} else if (calculateGridDistance(testUnit.GetComponent<UnitGenerics>().onGrid.gameObject,this.GetComponent<UnitGenerics>().onGrid.gameObject)==shortestDistance){
+						if(calculateRating(chosenTarget, this.gameObject)<calculateRating(testUnit,this.gameObject)){
+							chosenTarget = testUnit;
+						}
 					}
 				}
 			}
 		}
 		highestRating = calculateRating(chosenTarget, this.gameObject);
 		gameManageObject.setActions(chosenTarget,this.gameObject,highestRating);
-		
-		
-
-		
 	}
 	
 	float calculateRating(GameObject target, GameObject unit){
 		float ratingReturn = 0;
-		if(target.GetComponent<UnitGenerics>().health/target.GetComponent<UnitGenerics>().maxHealth<health/maxHealth){
-			ratingReturn = ratingReturn+2;
+		if(unitType == 3 && missionReaderObject.enemyUnits.Count > 1)
+		{
+			if(target != null)
+			{
+				if(moveableSquares.Contains(target.GetComponent<UnitGenerics>().onGrid.gameObject))
+				{
+					ratingReturn = 4;
+				}
+				else
+				{
+					foreach(GameObject tile in checkAdjacentGrids(target.GetComponent<UnitGenerics>().onGrid.gameObject))
+					{
+						if(tile == onGrid.gameObject)
+						{
+							ratingReturn = 4;
+						}
+					}
+					if(ratingReturn != 4)
+					{
+						ratingReturn = 0;
+					}
+				}
+			}
+			else
+			{
+				ratingReturn = 0;
+			}
 		}
-		if(target.GetComponent<UnitGenerics>().unitType==0&&unit.GetComponent<UnitGenerics>().unitType==2){
-			ratingReturn = ratingReturn+2;
-		}
-		if(target.GetComponent<UnitGenerics>().unitType==1&&unit.GetComponent<UnitGenerics>().unitType==0){
-			ratingReturn = ratingReturn+2;
-		}
-		if(target.GetComponent<UnitGenerics>().unitType==2&&unit.GetComponent<UnitGenerics>().unitType==1){
-			ratingReturn = ratingReturn+2;
-		}
-		if(target.GetComponent<UnitGenerics>().unitType==3&&unit.GetComponent<UnitGenerics>().unitType!=3){
-			ratingReturn = ratingReturn+3;
+		else
+		{
+			if(target.GetComponent<UnitGenerics>().health/target.GetComponent<UnitGenerics>().maxHealth<health/maxHealth){
+				ratingReturn = ratingReturn+2;
+			}
+			if(target.GetComponent<UnitGenerics>().unitType==0&&unit.GetComponent<UnitGenerics>().unitType==2){
+				ratingReturn = ratingReturn+2;
+			}
+			if(target.GetComponent<UnitGenerics>().unitType==1&&unit.GetComponent<UnitGenerics>().unitType==0){
+				ratingReturn = ratingReturn+2;
+			}
+			if(target.GetComponent<UnitGenerics>().unitType==2&&unit.GetComponent<UnitGenerics>().unitType==1){
+				ratingReturn = ratingReturn+2;
+			}
+			if(target.GetComponent<UnitGenerics>().unitType==3&&unit.GetComponent<UnitGenerics>().unitType!=3){
+				ratingReturn = ratingReturn+3;
+			}
 		}
 		return ratingReturn;
 	}
@@ -723,8 +780,10 @@ public class UnitGenerics : MonoBehaviour
 				returnAdjacent.Add(gridList[0]);
 			}
 			if(checkIndex!=0){
-				if(checkIndex%GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width!=0){
-					returnAdjacent.Add(gridList[checkIndex-1]);
+				if(gridList.Count>checkIndex-1){
+					if(checkIndex%GameObject.Find("A*").GetComponent<AstarPath>().astarData.gridGraph.width!=0){
+						returnAdjacent.Add(gridList[checkIndex-1]);
+					}
 				}
 			}
 		}
@@ -821,7 +880,7 @@ public class UnitGenerics : MonoBehaviour
 		targetChar.GetComponent<ParticleAnimator>().colorAnimation = animatorColours;
 		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxSize = 50;
 		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.minSize = 50;
-		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxEmission += 50;
+		targetChar.GetComponent("EllipsoidParticleEmitter").particleEmitter.maxEmission += 10;
 		yield return new WaitForSeconds(0.2f);
 	}
 }
