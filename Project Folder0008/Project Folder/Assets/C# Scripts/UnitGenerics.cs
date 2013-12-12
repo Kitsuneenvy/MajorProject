@@ -95,6 +95,33 @@ public class UnitGenerics : MonoBehaviour
 			dodge = 0;
 			movement = 0;
 		}
+		else if (type == 5)
+		{
+			health = 100;
+			attack = 0;
+			defence = 100;
+			accuracy = 0;
+			dodge = 0;
+			movement = 0;
+		}
+		else if (type == 6)
+		{
+			health = 100;
+			attack = 0;
+			defence = 100;
+			accuracy = 0;
+			dodge = 0;
+			movement = 0;
+		}else if (type == 7)
+		{
+			health = 100;
+			attack = 0;
+			defence = 100;
+			accuracy = 0;
+			dodge = 0;
+			movement = 0;
+		}
+		
 		maxHealth = health;
 		unitType = type;
 	}
@@ -110,7 +137,7 @@ public class UnitGenerics : MonoBehaviour
 				gameManageObject.resetInactive();
 				if (Physics.Raycast (Camera.main.ScreenPointToRay (Input.mousePosition), out info, Mathf.Infinity, gridMask.value)) {
 					if (info.collider.tag == "Square" && info.collider.GetComponent<Grid> ().returnUnit () != null) {
-						if (adjacentSquares.Contains (info.collider.gameObject) && ((info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag != this.tag || (info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag == this.tag && unitType == 3)))) {
+						if (adjacentSquares.Contains (info.collider.gameObject) && ((info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag != this.tag || (info.collider.gameObject.GetComponent<Grid> ().returnUnit ().gameObject.tag == this.tag && unitType == 3) || (info.collider.gameObject.GetComponent<Grid>().returnUnit().tag != "Object")))) {
 							launchAttack (info.collider.GetComponent<Grid> ().returnUnit ());
 							attackState = false;
 							AIThinkSquares.Clear();
@@ -418,7 +445,7 @@ public class UnitGenerics : MonoBehaviour
 					}
 					//destroy object
 					if(target.tag!="Flower"){
-						//Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death2"].length);
+						Destroy(targetGenerics.gameObject,targetGenerics.gameObject.animation["Death2"].length);
 					} else {
 						Destroy(targetGenerics.gameObject);
 						missionReaderObject.flowerUnits.Remove(targetGenerics.gameObject);
@@ -528,8 +555,6 @@ public class UnitGenerics : MonoBehaviour
 				int tilesAway = 0;
 				for(int i = 0; i<4; i++){
 					foreach(GameObject secondTest in checkAdjacentGrids(tile)){
-						if(currentCheckTile.name.Contains("48")){
-						}
 						if(currentCheckTile.GetComponent<Grid>().returnUnit()!=null&&currentCheckTile.GetComponent<Grid>().returnUnit()==this.gameObject){
 							if(tilesAway< movement){
 								if(!AIThinkSquares.Contains(secondTest)){
@@ -748,8 +773,6 @@ public class UnitGenerics : MonoBehaviour
 				int tilesAway = 0;
 				for(int i = 0; i<4; i++){
 					foreach(GameObject secondTest in checkAdjacentGrids(tile)){
-						if(currentCheckTile.name.Contains("48")){
-						}
 						if(currentCheckTile.GetComponent<Grid>().returnUnit()!=null&&currentCheckTile.GetComponent<Grid>().returnUnit()==this.gameObject){
 							if(tilesAway< movement){
 								if(!AIThinkSquares.Contains(secondTest)){

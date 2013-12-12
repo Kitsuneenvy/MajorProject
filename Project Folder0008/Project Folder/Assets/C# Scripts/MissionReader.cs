@@ -697,6 +697,49 @@ public class MissionReader : MonoBehaviour {
 										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
 									}
 								}
+								
+								//if unit object
+								else if(unitInfo[3] == 2)
+								{
+									switch(unitInfo[0])
+									{
+									case 5:
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("Fence")) as GameObject;
+										tempUnit.tag = "Object";
+										tempUnit.name = "Fence";
+										if(currentMission == 2)
+										{
+											tempUnit.transform.rotation = Quaternion.Euler(0,90,0);
+										}
+										else
+										{
+											tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+										}
+										break;
+									}
+									case 6:
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("Stand")) as GameObject;
+										tempUnit.tag = "Object";
+										tempUnit.name = "Stand";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+										break;
+									}
+									case 7:
+									{
+										tempUnit = GameObject.Instantiate(Resources.Load("Pot")) as GameObject;
+										tempUnit.tag = "Object";
+										tempUnit.name = "Pot";
+										tempUnit.transform.rotation = Quaternion.Euler(0,aStarGrid.astarData.gridGraph.rotation.y +rotationY,0);
+										break;
+									}
+									default:
+									{
+										break;
+									}
+									}
+								}
 								if(unitInfo[0] != 4){
 									tempUnit.AddComponent("EllipsoidParticleEmitter");
 									tempUnit.AddComponent("ParticleAnimator");
