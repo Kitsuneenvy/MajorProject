@@ -5,7 +5,7 @@
 //chef/commander. These kitchen hands have been given a crash course in knighthood but are far from adept. They have thus been granted the 
 //title of ÅgNewly trained knightsÅh and then sent away to deal with this slight nuisance. Can you turn your band of Newly trained knights into a 
 //powerful force to repel the sinister flower cultists and stop their aesthetic ruining ways? No. No you canÅ't.
-
+//-0
 +1
 <Tim>: I should not be awake this early. Why do I have to waste my time teaching you guys?;
 <Chef>: I absolutely agree! We are already top caliber. We don't need any teaching!;
