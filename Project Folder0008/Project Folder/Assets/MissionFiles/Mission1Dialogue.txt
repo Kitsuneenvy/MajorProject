@@ -6,8 +6,8 @@
 //title of ÅgNewly trained knightsÅh and then sent away to deal with this slight nuisance. Can you turn your band of Newly trained knights into a 
 //powerful force to repel the sinister flower cultists and stop their aesthetic ruining ways? No. No you canÅ't.
 -0
-<Narrator>: Our heroes arrive at their destination, beaten and weary from their misadventures along the way.;
 +1
+<Narrator>: Our heroes arrive at their destination, beaten and weary from their misadventures along the way.;
 <Chef>: Well we've landed on the island. Third times the charm.;
 <Pierre>: It would've been a lot faster if we hadn't gone in the wrong direction the first two times.;
 <Chef>: Pierre, where is your sense of adventure? Besides, we got some interesting ingredients!;

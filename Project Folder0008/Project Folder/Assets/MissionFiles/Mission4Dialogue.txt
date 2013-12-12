@@ -8,39 +8,32 @@
 -0
 +1
 <Narrator>: The commander has been seperated from his forces after chasing the fleeing enemy, right into another ambush.;
-<Chef>: Well we've landed on the island. Third times the charm.;
-<Pierre>: It would've been a lot faster if we hadn't gone in the wrong direction the first two times.;
-<Chef>: Pierre, where is your sense of adventure? Besides, we got some interesting ingredients!;
-<Pierre>: Interesting indeed. What was it? Three people sick?;
-<Makin'soop>: Hate to spoil the chit-chat, but we have company!;
-<Chef>: Oh? I haven't prepared any meals for our guests! Quick, Pierre, start boiling the pot!;
-<Pierre>: Er, not guests I'm afraid. Looks like they want to fight!;
-<Chef>: Fight? Fight who? Not us I hope!;
-<Pierre>: Time to hide. Run! Fleee!;
-<Chef>: No, grab your pan. To battle!;
-<Chef>: You first. I shouldn't exercise, I just ate. If you get your equipment too scratched, I'll clean it for you.;
-<Pierre>: Ah yes, you do have the ability to restore our equipment don't you? Just like attacking an enemy.;
-<Chef>: Correct! If any of my allies get too damaged, I'll simply move next to them and "attack" them.;
-<Pierre>: Now, to attack!;
+<Chef>: This does not bode well. It appears I have been surrounded. HEEEELP MEEE! Someone? Anyone? Your leader is in trouble!;
+<Pierre>: *Sigh* I warned him. Well looks like we have to save him. The enemy is focused on him so we can jus-;
+<Chef>: Woe is me! Is this where I am to meet my end?;
+<Ladlewight>: I'm on my way sir, just sit tight.;
+<Pierre>: If we manage to repel the enemy for long enough they should give up, their main force has already routed.;
+<Chef>: Still in trouble over here Pierre. Whenever you're done talking to yourself could you lend a hand?;
+<Pierre>: Oh! Right away.;
 -1
 +2
-<Pierre>: Oh, those flowers are lovely!;
-<Chef>: Indeed, although it seems our enemies find them a bit more exciting than we do.;
-<Pierre>: I see your point, they definitely seem more menacing when they are standing next to those flowers;
-<Chef>: We should probably remove the flowers before we deal with them, it may make it easier on us.;
-<Pierre>: Um, but sir, we were sent to SAVE the flowers...And the people, but we haven't seen any of them...Sir?;
-<Chef>: Onwaaaards, to glory! Leave no flower uncut, and no enemy un-battered.;
+<Chef>: Just protect me for a few rounds of combat and then we will give chase to their leader.;
+<Pierre>: We are still awaiting the rest of our force after your... er...'Charge', sir.;
+<Chef>: Those fools! Half rations for dinner tonight.;
+<Pierre>: Half rations?!;
+<Chef>: If they don't want to keep up, they obviously don't need all that energy. I think I'll take extra.;
+<Pierre>: You are a cruel man, sir.;
 -2
 +3
-<Chef>: Phew, that's all done now. I say, those people were not very friendly.;
-<Pierre>: I've got a few scratches on me, but I'll live. Hopefully.;
-<Chef>: Admirable hiding skills there, Pierre, I didn't even notice you behind the tree until one of them ran at you.;
-<Pierre>: Oh that? Haha, yeah. I wasn't hiding no. Not at all. It was er...A trap! Yes, that's it!;
-<Chef>: Then I am proud to have such a great tactician, the way you screamed like a little girl was empowering!;
-<Pierre>: Ahem...Perhaps we should just move along now?;
-<Chef>: Yes, up ahead there is the town we were sent to assist. Look over there, Pierre. A convienient path!;
-<Pierre>: Quite convenient, a narrow path with very little chance of an ambush. Surely.;
-<Chef>: Follow me! Except for you, you go infront.;
+<Chef>: Ah hah! Pierre, answer me this, what is the flight velocity of an unladen swallow?;
+<Pierre>: Europian or American, sir?;
+<Chef>: I don't know that. But whichever it is, it still isn't as fast as these cowards flee!;
+<Pierre>: Quite right, sir. We still have to give chase, however.;
+<Chef>: Let's get to it then, I do believe they are still loading their ships for departure.;
+<Pierre>: As we all know, the target is always the last to get on the escape vehicle.;
+<Chef>: Correct! In fact I think that is her there!;
+<Pierre>: Well that didn't take long.;
+<Chef>: Everyone! Kill the little girl!;
 -3
 +4
 -4

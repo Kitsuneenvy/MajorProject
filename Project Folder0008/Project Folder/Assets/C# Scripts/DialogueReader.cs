@@ -25,8 +25,10 @@ public class DialogueReader : MonoBehaviour {
 	StoreData storeDataObject;
 	public bool initText = false;
 	public bool cinematicComplete = false;
+	GameObject mainCameraObj;
 	// Use this for initialization
 	void Start () {
+		mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
 		buttonText = GameObject.Find("DialogueLabel").GetComponent<UILabel>();
 		narrativeAnchor = GameObject.FindGameObjectWithTag("NarrativeAnchor");
 		narrativeDialogue = GameObject.FindGameObjectWithTag("NarrativeDialogue").GetComponent<UILabel>();
@@ -191,10 +193,10 @@ public class DialogueReader : MonoBehaviour {
 					cinematicComplete = false;
 					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
 					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
-					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = true;
-					GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
-					GameObject.FindGameObjectWithTag("MainCamera").transform.LookAt(pivotFocus.transform);
-					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cullingMask = cinematicMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = true;
+					mainCameraObj.transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					mainCameraObj.transform.LookAt(pivotFocus.transform);
+					mainCameraObj.GetComponent<Camera>().cullingMask = cinematicMask;
 					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 1:
@@ -204,10 +206,10 @@ public class DialogueReader : MonoBehaviour {
 					DestroyImmediate(tempObject2);
 					DestroyImmediate(tempObject3);
 					DestroyImmediate(pivotFocus);
-					GameObject.FindGameObjectWithTag("MainCamera").transform.rotation = initialRotation;
-					GameObject.FindGameObjectWithTag("MainCamera").transform.position = initialPosition;
-					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cullingMask = everythingMask;
-					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().noMove = false;
+					mainCameraObj.transform.rotation = initialRotation;
+					mainCameraObj.transform.position = initialPosition;
+					mainCameraObj.GetComponent<Camera>().cullingMask = everythingMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = false;
 					gameManageObject.narrativePanelOpen = true;
 					break;
 				case 2:
@@ -215,6 +217,221 @@ public class DialogueReader : MonoBehaviour {
 				case 3:
 					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
 					GameObject.Find("A*").GetComponent<MissionReader>().mission2= true;
+					break;
+				case 4:
+					break;
+				default:
+					break;
+				}
+			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 2){
+				GameObject tempObject1 = null;
+				GameObject tempObject2 = null;
+				GameObject tempObject3 = null;
+				GameObject pivotFocus = null;
+				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
+						if(cineObject.name.Contains("Chef2")){
+							tempObject1 = cineObject;
+						}
+						if(cineObject.name.Contains("Frier2")){
+							tempObject2 = cineObject;
+						}
+						if(cineObject.name.Contains("Ladlewight2")){
+							tempObject3 = cineObject;
+						}
+						if(cineObject.name.Contains("Mission2")){
+							pivotFocus = cineObject;
+						}
+					}
+				switch(EventToPlay){
+				case 0:
+					cinematicComplete = false;
+					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = true;
+					mainCameraObj.transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					mainCameraObj.transform.LookAt(pivotFocus.transform);
+					mainCameraObj.GetComponent<Camera>().cullingMask = cinematicMask;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 1:
+					cinematicComplete = true;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().moveCamera = true;
+					DestroyImmediate(tempObject1);
+					DestroyImmediate(tempObject2);
+					DestroyImmediate(tempObject3);
+					DestroyImmediate(pivotFocus);
+					mainCameraObj.transform.rotation = initialRotation;
+					mainCameraObj.transform.position = initialPosition;
+					mainCameraObj.GetComponent<Camera>().cullingMask = everythingMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = false;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 2:
+					break;
+				case 3:
+					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
+					GameObject.Find("A*").GetComponent<MissionReader>().mission3= true;
+					break;
+				case 4:
+					break;
+				default:
+					break;
+				}
+			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 3){
+				GameObject tempObject1 = null;
+				GameObject tempObject2 = null;
+				GameObject tempObject3 = null;
+				GameObject pivotFocus = null;
+				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
+						if(cineObject.name.Contains("Chef3")){
+							tempObject1 = cineObject;
+						}
+						if(cineObject.name.Contains("Frier3")){
+							tempObject2 = cineObject;
+						}
+						if(cineObject.name.Contains("Bowlder3")){
+							tempObject3 = cineObject;
+						}
+						if(cineObject.name.Contains("Mission3")){
+							pivotFocus = cineObject;
+						}
+					}
+				switch(EventToPlay){
+				case 0:
+					cinematicComplete = false;
+					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = true;
+					mainCameraObj.transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					mainCameraObj.transform.LookAt(pivotFocus.transform);
+					mainCameraObj.GetComponent<Camera>().cullingMask = cinematicMask;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 1:
+					cinematicComplete = true;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().moveCamera = true;
+					DestroyImmediate(tempObject1);
+					DestroyImmediate(tempObject2);
+					DestroyImmediate(tempObject3);
+					DestroyImmediate(pivotFocus);
+					mainCameraObj.transform.rotation = initialRotation;
+					mainCameraObj.transform.position = initialPosition;
+					mainCameraObj.GetComponent<Camera>().cullingMask = everythingMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = false;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 2:
+					break;
+				case 3:
+					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
+					GameObject.Find("A*").GetComponent<MissionReader>().mission4= true;
+					break;
+				case 4:
+					break;
+				default:
+					break;
+				}
+			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 4){
+				GameObject tempObject1 = null;
+				GameObject tempObject2 = null;
+				GameObject tempObject3 = null;
+				GameObject pivotFocus = null;
+				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
+						if(cineObject.name.Contains("Chef4")){
+							tempObject1 = cineObject;
+						}
+						if(cineObject.name.Contains("Frier4")){
+							tempObject2 = cineObject;
+						}
+						if(cineObject.name.Contains("Bowlder4")){
+							tempObject3 = cineObject;
+						}
+						if(cineObject.name.Contains("Mission4")){
+							pivotFocus = cineObject;
+						}
+					}
+				switch(EventToPlay){
+				case 0:
+					cinematicComplete = false;
+					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = true;
+					mainCameraObj.transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					mainCameraObj.transform.LookAt(pivotFocus.transform);
+					mainCameraObj.GetComponent<Camera>().cullingMask = cinematicMask;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 1:
+					cinematicComplete = true;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().moveCamera = true;
+					DestroyImmediate(tempObject1);
+					DestroyImmediate(tempObject2);
+					DestroyImmediate(tempObject3);
+					DestroyImmediate(pivotFocus);
+					mainCameraObj.transform.rotation = initialRotation;
+					mainCameraObj.transform.position = initialPosition;
+					mainCameraObj.GetComponent<Camera>().cullingMask = everythingMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = false;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 2:
+					break;
+				case 3:
+					GameObject.Find("A*").GetComponent<MissionReader>().newMission = true;
+					GameObject.Find("A*").GetComponent<MissionReader>().mission5= true;
+					break;
+				case 4:
+					break;
+				default:
+					break;
+				}
+			} else if (GameObject.Find("A*").GetComponent<MissionReader>().currentMission == 5){
+				GameObject tempObject1 = null;
+				GameObject tempObject2 = null;
+				GameObject tempObject3 = null;
+				GameObject pivotFocus = null;
+				foreach(GameObject cineObject in GameObject.FindGameObjectsWithTag("Player")){
+						if(cineObject.name.Contains("Chef5")){
+							tempObject1 = cineObject;
+						}
+						if(cineObject.name.Contains("Frier5")){
+							tempObject2 = cineObject;
+						}
+						if(cineObject.name.Contains("Bowlder5")){
+							tempObject3 = cineObject;
+						}
+						if(cineObject.name.Contains("Mission5")){
+							pivotFocus = cineObject;
+						}
+					}
+				switch(EventToPlay){
+				case 0:
+					cinematicComplete = false;
+					initialPosition = GameObject.FindGameObjectWithTag("MainCamera").transform.position;
+					initialRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = true;
+					mainCameraObj.transform.position = new Vector3(pivotFocus.transform.position.x+4,pivotFocus.transform.position.y+4,pivotFocus.transform.position.z+4);
+					mainCameraObj.transform.LookAt(pivotFocus.transform);
+					mainCameraObj.GetComponent<Camera>().cullingMask = cinematicMask;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 1:
+					cinematicComplete = true;
+					GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMovement>().moveCamera = true;
+					DestroyImmediate(tempObject1);
+					DestroyImmediate(tempObject2);
+					DestroyImmediate(tempObject3);
+					DestroyImmediate(pivotFocus);
+					mainCameraObj.transform.rotation = initialRotation;
+					mainCameraObj.transform.position = initialPosition;
+					mainCameraObj.GetComponent<Camera>().cullingMask = everythingMask;
+					mainCameraObj.GetComponent<CameraMovement>().noMove = false;
+					gameManageObject.narrativePanelOpen = true;
+					break;
+				case 2:
+					break;
+				case 3:
+					//Do endgame stuff, maybe a nice fade then roll the credits.
 					break;
 				case 4:
 					break;
@@ -238,7 +455,6 @@ public class DialogueReader : MonoBehaviour {
 					gameManageObject.commandPoints = 0;
 					gameManageObject.narrativePanelOpen = true;
 				}
-				
 			}
 			else if(mReaderObject.objective.Contains("End"))
 			{
